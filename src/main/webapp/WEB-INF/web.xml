@@ -1,0 +1,163 @@
+<web-app version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>JavaSite</display-name>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- Описание корневого контейнера, разделяемого всеми сервлетами и фильтрами -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:/etc/spring/applicationContext.xml
+            classpath:/etc/spring/applicationContext.d/spring-data.xml
+            classpath:/etc/spring/applicationContext.d/spring-data-all.xml
+            classpath:/etc/spring/applicationContext.d/spring-security.xml
+            classpath:/etc/spring/applicationContext.d/message-source.xml
+            classpath:/etc/spring/applicationContext.d/locale-resolver.xml
+            classpath:/etc/spring/applicationContext.d/validator.xml
+            classpath:/etc/spring/applicationContext.d/mail.xml
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>SpringDAO.root</param-value>
+    </context-param>
+
+
+    <servlet>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                classpath:/etc/spring/servletContext.xml
+                classpath:/etc/spring/servletContext.d/controllers.xml
+                classpath:/etc/spring/servletContext.d/mvc-interceptors.xml
+                classpath:/etc/spring/servletContext.d/multipart-resolver.xml
+                classpath:/etc/spring/servletContext.d/resources.xml
+                classpath:/etc/spring/servletContext.d/view-resolver.xml
+                classpath:/etc/spring/applicationContext.d/validator.xml
+            </param-value>
+        </init-param>
+        <multipart-config>
+            <max-file-size>-1</max-file-size>
+            <file-size-threshold>-1</file-size-threshold>
+        </multipart-config>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Фильтр для перекодировки в utf8 -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>multipartFilter</filter-name>
+        <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>multipartFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- for REST architecture: to use PUT, DELETE-->
+    <filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>localizationFilter</filter-name>
+        <filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>localizationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--SPRING SECURITY-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
+
+    <!--
+    &lt;!&ndash;Error handler&ndash;&gt;
+    <error-page>
+        <error-code>400</error-code>
+        <location>/errors/400.html</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/errors/403.html</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>405</error-code>
+        <location>/errors/405.html</location>
+    </error-page>
+    <error-page>
+        <error-code>406</error-code>
+        <location>/errors/406.html</location>
+    </error-page>
+    <error-page>
+        <error-code>408</error-code>
+        <location>/errors/408.html</location>
+    </error-page>
+    <error-page>
+        <error-code>415</error-code>
+        <location>/errors/415.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errors/500.html</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/errors/503.html</location>
+    </error-page>
+-->
+
+</web-app>

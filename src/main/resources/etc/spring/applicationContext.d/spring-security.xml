@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+    <http pattern="/errors/**" security="none"/>
+    <http pattern="/resources/**" security="none"/>
+    <http access-denied-page="/errors/403.html" use-expressions="true" authentication-manager-ref="authenticationManager"
+          realm="UserList">
+        <!--realm="UserList" security-context-repository-ref="httpSessionSecurityContextRepository">-->
+        <custom-filter ref="localeContextFilter" after="FIRST" />
+        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
+
+        <intercept-url pattern="/" access="permitAll"/>
+        <intercept-url pattern="/login**" access="isAnonymous()"/>
+        <intercept-url pattern="/register**" access="isAnonymous()"/>
+
+        <intercept-url pattern="/test/**" access="permitAll"/>
+        <intercept-url pattern="/user/add**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+
+        <!--<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" requires-channel="any" />-->
+        <intercept-url pattern="/**" access="permitAll" requires-channel="any" />
+
+        <form-login login-page="/login"
+                    authentication-success-handler-ref="authenticationSuccessHandler"
+                    authentication-failure-handler-ref="authenticationFailureHandler"/>
+        <http-basic />
+        <logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"/>
+        <remember-me token-validity-seconds="1209600" user-service-ref="userServiceOverJdbc"/>
+
+        <csrf/>
+        <headers>
+            <cache-control />
+            <content-type-options />
+            <hsts />
+            <frame-options policy="SAMEORIGIN" />
+            <xss-protection />
+
+            <header name="X-Content-Security-Policy" value="default-src 'self'"/>
+            <header name="X-WebKit-CSP" value="default-src 'self'"/>
+        </headers>
+    </http>
+
+    <authentication-manager id="authenticationManager">
+        <authentication-provider user-service-ref="userServiceOverJdbc" />
+    </authentication-manager>
+
+    <jdbc-user-service id="userServiceOverJdbc" data-source-ref="dataSource"
+                       users-by-username-query="select login, password, enabled from users where login=?"
+                       authorities-by-username-query="select login,role from users where login=?"
+            />
+
+
+    <beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <!--<beans:property name="useReferer" value="true" />-->
+        <beans:property name="defaultTargetUrl" value="/" />
+    </beans:bean>
+    <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/login?login_error=1" />
+    </beans:bean>
+    <beans:bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+        <beans:property name="useReferer" value="true" />
+        <beans:property name="targetUrlParameter" value="logout=true" />
+        <beans:property name="defaultTargetUrl" value="/" />
+    </beans:bean>
+
+    <beans:bean id="localeContextFilter" class="ua.org.gostroy.internal.security.interceptor.LocaleContextFilter" >
+        <beans:property name="localeResolver" ref="localeResolver" />
+    </beans:bean>
+
+
+    <beans:bean id="httpSessionSecurityContextRepository" class='org.springframework.security.web.context.HttpSessionSecurityContextRepository'>
+        <beans:property name='allowSessionCreation' value='false' />
+    </beans:bean>
+
+</beans:beans>

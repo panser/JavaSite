@@ -18,7 +18,6 @@
         <param-value>
             classpath:/etc/spring/applicationContext.xml
             classpath:/etc/spring/applicationContext.d/spring-data.xml
-            classpath:/etc/spring/applicationContext.d/spring-data-all.xml
             classpath:/etc/spring/applicationContext.d/spring-security.xml
             classpath:/etc/spring/applicationContext.d/message-source.xml
             classpath:/etc/spring/applicationContext.d/locale-resolver.xml

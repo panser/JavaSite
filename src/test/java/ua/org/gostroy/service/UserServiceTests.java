@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.org.gostroy.entity.User;
@@ -14,8 +15,9 @@ import ua.org.gostroy.entity.User;
  * Created by panser on 5/21/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*",
-        "classpath:/etc/spring/servletContext.xml", "classpath:/etc/spring/servletContext.d/*"})
+@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml",
+        "classpath:/etc/spring/applicationContext.d/spring-data.xml",
+})
 public class UserServiceTests {
     @Autowired
     private UserService userService;

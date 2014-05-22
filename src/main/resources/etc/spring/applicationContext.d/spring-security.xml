@@ -10,8 +10,7 @@
 
     <http pattern="/errors/**" security="none"/>
     <http pattern="/resources/**" security="none"/>
-    <http access-denied-page="/errors/403.html" use-expressions="true" authentication-manager-ref="authenticationManager"
-          realm="UserList">
+    <http access-denied-page="/errors/403.html" use-expressions="true" authentication-manager-ref="authenticationManager" realm="UserList">
         <!--realm="UserList" security-context-repository-ref="httpSessionSecurityContextRepository">-->
         <custom-filter ref="localeContextFilter" after="FIRST" />
         <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
@@ -21,16 +20,17 @@
         <intercept-url pattern="/register**" access="isAnonymous()"/>
 
         <intercept-url pattern="/test/**" access="permitAll"/>
-        <intercept-url pattern="/user/add**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/user/list**" access="permitAll"/>
+        <intercept-url pattern="/user/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
         <!--<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" requires-channel="any" />-->
         <intercept-url pattern="/**" access="permitAll" requires-channel="any" />
 
-        <form-login login-page="/login"
+        <form-login login-page="/auth/login"
                     authentication-success-handler-ref="authenticationSuccessHandler"
                     authentication-failure-handler-ref="authenticationFailureHandler"/>
         <http-basic />
-        <logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"/>
+        <logout logout-url="/auth/logout" success-handler-ref="logoutSuccessHandler"/>
         <remember-me token-validity-seconds="1209600" user-service-ref="userServiceOverJdbc"/>
 
         <csrf/>
@@ -61,7 +61,7 @@
         <beans:property name="defaultTargetUrl" value="/" />
     </beans:bean>
     <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-        <beans:property name="defaultFailureUrl" value="/login?login_error=1" />
+        <beans:property name="defaultFailureUrl" value="/auth/login?login_error=1" />
     </beans:bean>
     <beans:bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
         <beans:property name="useReferer" value="true" />

@@ -28,6 +28,19 @@ public class UserService {
         return user;
     }
 
+    public User findByEmail(String email) {
+        log.trace("findByEmail ...");
+        User user = userRepository.findByEmail(email);
+        log.trace("findByEmail.");
+        return user;
+    }
+    public User findByLogin(String login) {
+        log.trace("findByLogin ...");
+        User user = userRepository.findByLogin(login);
+        log.trace("findByLogin.");
+        return user;
+    }
+
     public List<User> findAll() {
         log.trace("findAll ...");
         List<User>  users = userRepository.findAll();

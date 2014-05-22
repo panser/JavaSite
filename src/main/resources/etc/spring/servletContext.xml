@@ -6,6 +6,7 @@
     <mvc:annotation-driven validator="validator" content-negotiation-manager="contentNegotiationManager">
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
         </mvc:message-converters>
     </mvc:annotation-driven>
 

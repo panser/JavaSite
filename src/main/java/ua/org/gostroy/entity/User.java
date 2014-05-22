@@ -1,6 +1,8 @@
 package ua.org.gostroy.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,6 +21,7 @@ public class User {
     private Long version;
 
     private String email;
+    private String login;
     private String password;
     private boolean enabled;
     private String role;
@@ -37,7 +40,7 @@ public class User {
     private Date deleteDate;
 
     public User() {
-        role = "TEST_ROLE";
+        role = "ROLE_USER";
         sex = UserSex.male;
         enabled = false;
     }
@@ -64,6 +67,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public byte[] getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(byte[] avatarImage) {
+        this.avatarImage = avatarImage;
     }
 
     public String getPassword() {
@@ -104,14 +123,6 @@ public class User {
 
     public void setSex(UserSex sex) {
         this.sex = sex;
-    }
-
-    public byte[] getavatarImage() {
-        return avatarImage;
-    }
-
-    public void setavatarImage(byte[] avatarImage) {
-        this.avatarImage = avatarImage;
     }
 
     public Date getBirthDay() {

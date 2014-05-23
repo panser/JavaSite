@@ -17,8 +17,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import ua.org.gostroy.entity.User;
 import ua.org.gostroy.service.UserService;
 
@@ -29,7 +28,6 @@ import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,16 +50,6 @@ public class UserController {
     @Autowired
     VelocityEngine velocityEngine;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setBindEmptyMultipartFiles(false);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        dateFormat.setLenient(true);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
-
     @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
     public String listUser(Model model){
         log.trace("listUser() start ...");
@@ -69,6 +57,13 @@ public class UserController {
         return "user/userList";
     }
 
+/*
+    @InitBinder
+    @RequestMapping(value = {"/edit/{login}"})
+    protected void initBinder(WebDataBinder binder){
+        binder.setAllowedFields("id","version","login","email","password","avatarImage","birthDay");
+    }
+*/
     @RequestMapping(value = {"/edit/{login}"}, method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
@@ -76,38 +71,23 @@ public class UserController {
     }
     @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
     public String editUserDef(Model model){
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        log.trace("editUserDef: principal = " + principal);
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         return "redirect:/user/edit/" + login;
     }
     @RequestMapping(value = {"/edit/{login}"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
-                           @PathVariable(value = "login") String login,
-                           @RequestParam(value = "avatarImage", required = false)MultipartFile avatarImage) throws IOException{
+                           @PathVariable(value = "login") String login
+                           ) throws IOException{
         String viewName;
-//        if(userFromFormError.hasErrors()){
-//            log.debug("ERROR!!!!!!!!!!!!!!!!!!!\n\n\n");
-//            model.addAttribute("userFromFormError", userFromFormError);
-//            viewName = "user/userEdit";
-//        }
-//        else{
-            log.trace("RECEIVE IMAGE: " + avatarImage.getOriginalFilename());
-            User user = userService.findByLogin(login);
-            log.trace("RECEIVED user object from EditForm: " + userFromForm);
-            user.setLogin(userFromForm.getLogin());
-            user.setEmail(userFromForm.getEmail());
-            user.setPassword(userFromForm.getPassword());
-            user.setBirthDay(userFromForm.getBirthDay());
-            if (!avatarImage.isEmpty()) {
-                byte[] bytes = avatarImage.getBytes();
-                user.setAvatarImage(bytes);
-            }
-            log.trace("SAVED user object: " + user);
-
-            userService.save(user);
+        log.debug("editUser(), userFromForm.id = " + userFromForm.getId());
+        if(userFromFormError.hasErrors()){
+            model.addAttribute("userFromFormError", userFromFormError);
+            viewName = "user/userEdit";
+        }
+        else{
+            userService.save(userFromForm);
             viewName = "redirect:/user/list";
-//        }
+        }
         return viewName;
     }
 
@@ -119,18 +99,14 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result) throws MessagingException {
-        User user = new User();
-        user.setLogin(userFromForm.getLogin());
-        user.setPassword(userFromForm.getPassword());
-        user.setEnabled(true);
-
         String viewName;
         if(result.hasErrors()){
             viewName = "/user/userAdd";
         }
         else
         {
-            userService.save(user);
+            userFromForm.setEnabled(true);
+            userService.save(userFromForm);
             viewName = "/auth/login";
         }
 //        this.sendEmailOfRegistration(user);
@@ -141,9 +117,8 @@ public class UserController {
     @ResponseBody
     public BufferedImage getAvatar(@PathVariable String login) throws IOException{
         User user = userService.findByLogin(login);
-//        log.trace("getAvatar(), user = " + user);
         BufferedImage bufferedImage;
-        if(user.getAvatarImage()!=null){
+        if(user.getAvatarImage() != null && user.getAvatarImage().length != 0){
             bufferedImage = ImageIO.read(new ByteArrayInputStream(user.getAvatarImage()));
         }
         else{

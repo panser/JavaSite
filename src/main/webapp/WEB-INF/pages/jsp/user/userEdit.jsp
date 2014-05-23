@@ -18,8 +18,11 @@
 <div id="container">
     <font color = "red">${userFromFormError}</font>
     <sf:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data">
+            <sf:input type="hidden" path="id" id="id"/>
+            <sf:input type="hidden" path="version" id="version"/>
+
             <sf:label path="login"><spring:message code="label.login" /></sf:label>
-            <sf:input path="login" id="login"/>
+            <sf:input path="login" id="login" name="id" />
             <sf:errors path="login"/>
             <p/>
             <sf:label path="email"><spring:message code="label.email" /></sf:label>
@@ -31,7 +34,7 @@
             <sf:errors path="password"/>
             <p/>
             <sf:label path="avatarImage"><spring:message code="label.avatarImage" /></sf:label>
-            <input name="avatarImage" type="file">
+            <input id="avatarImage" name="avatarImage" type="file">
             <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
             <sf:errors path="avatarImage"/>
             <p/>

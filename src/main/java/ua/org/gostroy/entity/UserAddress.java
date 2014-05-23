@@ -1,13 +1,14 @@
 package ua.org.gostroy.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by panser on 5/20/14.
  */
 @Entity
 @Table(name = "userAddress")
-public class UserAddress {
+public class UserAddress implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

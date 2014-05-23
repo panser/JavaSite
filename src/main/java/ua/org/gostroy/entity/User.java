@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +32,8 @@ public class User {
     private List<UserAddress> userAddresses;
     private UserSex sex;
 
+//    @Lob
+//    private MultipartFile avatarImage;
     private byte[] avatarImage;
     @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date birthDay;
@@ -41,8 +44,12 @@ public class User {
 
     public User() {
         role = "ROLE_USER";
-        sex = UserSex.male;
-        enabled = false;
+        enabled = true;
+    }
+
+    public User(String role, boolean enabled) {
+        this.role = role;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -84,6 +91,16 @@ public class User {
     public void setAvatarImage(byte[] avatarImage) {
         this.avatarImage = avatarImage;
     }
+
+/*
+    public MultipartFile getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(MultipartFile avatarImage) {
+        this.avatarImage = avatarImage;
+    }
+*/
 
     public String getPassword() {
         return password;

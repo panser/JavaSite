@@ -17,6 +17,9 @@
 <div id="container">
 
     <sf:form name="f" method="POST" modelAttribute="user">
+            <sf:input type="hidden" path="id" id="id"/>
+            <sf:input type="hidden" path="version" id="version"/>
+
             <sf:label path="login"><spring:message code="label.login" /></sf:label>
             <sf:input path="login" id="login"/>
             <sf:errors path="login"/>

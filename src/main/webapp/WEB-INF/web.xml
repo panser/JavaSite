@@ -119,6 +119,10 @@
     </listener>
 
 
+    <error-page>
+        <exception-type>org.springframework.orm.ObjectOptimisticLockingFailureException</exception-type>
+        <location>/exception/optimisticLocking</location>
+    </error-page>
     <!--
     &lt;!&ndash;Error handler&ndash;&gt;
     <error-page>

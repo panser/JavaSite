@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="baseLayout" template="/WEB-INF/pages/tiles/layout/layout.jsp">
+        <put-attribute name="title" value="Simple Tiles page (baseLayout)" />
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/layout/header.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/pages/tiles/layout/footer.jsp" />
+    </definition>
+
+    <definition name="/user/userList" extends="baseLayout">
+        <put-attribute name="title" value="Tiles UserList" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/user/userList.jsp" />
+    </definition>
+    <definition name="/user/userEdit" extends="baseLayout">
+        <put-attribute name="title" value="Tiles UserEdit" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/user/userEdit.jsp" />
+    </definition>
+    <definition name="/user/userAdd" extends="baseLayout">
+        <put-attribute name="title" value="Tiles UserAdd" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/user/userAdd.jsp" />
+    </definition>
+
+    <definition name="/auth/login" extends="baseLayout">
+        <put-attribute name="title" value="Tiles Login" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/auth/login.jsp" />
+    </definition>
+</tiles-definitions>

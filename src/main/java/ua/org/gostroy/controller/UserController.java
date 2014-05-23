@@ -54,7 +54,7 @@ public class UserController {
     public String listUser(Model model){
         log.trace("listUser() start ...");
         model.addAttribute("users", userService.findAll());
-        return "user/userList";
+        return "/user/userList";
     }
 
 /*
@@ -67,7 +67,7 @@ public class UserController {
     @RequestMapping(value = {"/edit/{login}"}, method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
-        return "user/userEdit";
+        return "/user/userEdit";
     }
     @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
     public String editUserDef(Model model){
@@ -82,7 +82,7 @@ public class UserController {
         log.debug("editUser(), userFromForm.id = " + userFromForm.getId());
         if(userFromFormError.hasErrors()){
             model.addAttribute("userFromFormError", userFromFormError);
-            viewName = "user/userEdit";
+            viewName = "/user/userEdit";
         }
         else{
             userService.save(userFromForm);
@@ -94,7 +94,7 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registerGET(Model model){
         model.addAttribute("user", new User());
-        return "user/userAdd";
+        return "/user/userAdd";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

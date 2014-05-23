@@ -42,14 +42,22 @@ public class User implements Serializable {
     @DateTimeFormat
     private Date deleteDate;
 
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Article> articles;
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Comment> comments;
+
     public User() {
         role = "ROLE_USER";
         enabled = true;
     }
 
-    public User(String role, boolean enabled) {
-        this.role = role;
-        this.enabled = enabled;
+    public User(String login) {
+        this.login = login;
+        role = "ROLE_USER";
+        enabled = true;
     }
 
     public Long getId() {
@@ -166,4 +174,31 @@ public class User implements Serializable {
         this.deleteDate = deleteDate;
     }
 
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", version=" + version +
+                ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", articles=" + articles +
+                ", comments=" + comments +
+                '}';
+    }
 }

@@ -9,7 +9,8 @@
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <property name="definitions">
             <list>
-                <value>/WEB-INF/pages/tiles/tiles.xml</value>
+                <!--<value>/WEB-INF/pages/tiles/tiles.xml</value>-->
+                <value>/WEB-INF/pages/**/tiles.xml</value>
             </list>
         </property>
     </bean>
@@ -18,12 +19,10 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
         <property name="order" value="1"/>
     </bean>
-<!--
     <bean id="jsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/pages/jsp/"/>
         <property name="suffix" value=".jsp"/>
         <property name="order" value="10"/>
     </bean>
--->
 </beans>

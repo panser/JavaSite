@@ -21,6 +21,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public User find(Long id) {
         log.trace("find ...");
         User user = userRepository.findOne(id);
@@ -28,12 +29,14 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         log.trace("findByEmail ...");
         User user = userRepository.findByEmail(email);
         log.trace("findByEmail.");
         return user;
     }
+    @Transactional(readOnly = true)
     public User findByLogin(String login) {
         log.trace("findByLogin ...");
         User user = userRepository.findByLogin(login);
@@ -41,6 +44,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         log.trace("findAll ...");
         List<User>  users = userRepository.findAll();
@@ -48,6 +52,7 @@ public class UserService {
         return users;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Long save(User user) {
         log.trace("save ...");
         userRepository.save(user);
@@ -55,12 +60,14 @@ public class UserService {
         return user.getId();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void update(User user) {
         log.trace("update ...");
         userRepository.save(user);
         log.trace("update.");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void delete(User user) {
         log.trace("delete ...");
         userRepository.delete(user);

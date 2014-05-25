@@ -7,15 +7,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf8"%>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title><spring:message code="userEdit.title" /></title>
-</head>
 
-<body onload="document.f.login.focus();">
-<h2><spring:message code="userEdit.header" /></h2>
+
 <div id="container">
+    <h2><spring:message code="userEdit.header" /></h2>
     <font color = "red">${userFromFormError}</font>
     <sf:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data">
             <sf:input type="hidden" path="id" id="id"/>
@@ -50,6 +45,3 @@
 
 
 </div>
-
-</body>
-</html>

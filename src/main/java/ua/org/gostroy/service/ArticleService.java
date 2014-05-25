@@ -21,6 +21,7 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Transactional(readOnly = true)
     public Article find(Long id) {
         log.trace("find ...");
         Article article = articleRepository.findOne(id);
@@ -28,6 +29,7 @@ public class ArticleService {
         return article;
     }
 
+    @Transactional(readOnly = true)
     public List<Article> findAll() {
         log.trace("findAll ...");
         List<Article>  articles = articleRepository.findAll();
@@ -35,6 +37,7 @@ public class ArticleService {
         return articles;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Long save(Article article) {
         log.trace("save ...");
         articleRepository.save(article);
@@ -42,16 +45,17 @@ public class ArticleService {
         return article.getId();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void update(Article article) {
         log.trace("update ...");
         articleRepository.save(article);
         log.trace("update.");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Article article) {
         log.trace("delete ...");
         articleRepository.delete(article);
         log.trace("delete.");
     }
-
 }

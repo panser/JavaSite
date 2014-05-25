@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS articles (
   version   BIGINT(11) DEFAULT NULL,
   title     VARCHAR(250) DEFAULT NULL,
   text     VARCHAR(20000) DEFAULT NULL,
-  user_id   BIGINT(11) DEFAULT NULL,
+  author_id   BIGINT(11) DEFAULT NULL,
   visible TINYINT DEFAULT 1,
   allowComments TINYINT DEFAULT 1,
   createDate   TIMESTAMP DEFAULT NOW(),
@@ -56,11 +56,11 @@ CREATE TABLE IF NOT EXISTS comments (
   id        BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   version   BIGINT(11) DEFAULT NULL,
   text     VARCHAR(250) DEFAULT NULL,
-  user_id   BIGINT(11),
+  author_id   BIGINT(11),
   email     VARCHAR(50) DEFAULT NULL,
   article_id   BIGINT(11),
   visible TINYINT DEFAULT 1,
-  comment_id   BIGINT(11),
+#   comment_id   BIGINT(11),
   createDate   TIMESTAMP DEFAULT NOW(),
   deleteDate  DATETIME DEFAULT NULL
 )
@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS comments (
 ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (user_id) REFERENCES users(id)
+ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES users(id)
+ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id)

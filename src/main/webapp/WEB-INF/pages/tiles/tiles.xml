@@ -4,8 +4,15 @@
     <definition name="baseLayout" template="/WEB-INF/pages/tiles/layout/layout.jsp">
         <put-attribute name="title" value="Simple Tiles page (baseLayout)" />
         <put-attribute name="header" value="/WEB-INF/pages/tiles/layout/header.jsp" />
+        <put-attribute name="sigin" value="/WEB-INF/pages/tiles/layout/sigin.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/pages/tiles/layout/menu.jsp" />
         <put-attribute name="body" value="" />
         <put-attribute name="footer" value="/WEB-INF/pages/tiles/layout/footer.jsp" />
+    </definition>
+
+    <definition name="/auth/login" extends="baseLayout">
+        <put-attribute name="title" value="Tiles Login" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/auth/login.jsp" />
     </definition>
 
     <definition name="/user/userList" extends="baseLayout">
@@ -21,8 +28,13 @@
         <put-attribute name="body" value="/WEB-INF/pages/jsp/user/userAdd.jsp" />
     </definition>
 
-    <definition name="/auth/login" extends="baseLayout">
-        <put-attribute name="title" value="Tiles Login" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/auth/login.jsp" />
+    <definition name="/article/articleList" extends="baseLayout">
+        <put-attribute name="title" value="Tiles ArticleList" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/article/articleList.jsp" />
     </definition>
+    <definition name="/article/articleMod" extends="baseLayout">
+        <put-attribute name="title" value="Tiles ArticleMod" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/article/articleMod.jsp" />
+    </definition>
+
 </tiles-definitions>

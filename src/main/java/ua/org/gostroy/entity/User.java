@@ -43,6 +43,7 @@ public class User implements Serializable {
     private Date deleteDate;
 
     @ElementCollection(fetch=FetchType.LAZY)
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private List<Article> articles;
     @ElementCollection(fetch=FetchType.LAZY)
@@ -197,8 +198,14 @@ public class User implements Serializable {
                 ", version=" + version +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
-                ", articles=" + articles +
-                ", comments=" + comments +
+//                ", articles=" + articles +
+//                ", comments=" + comments +
                 '}';
     }
+
+/*
+    public void addArticle(Article article){
+        articles.add(article);
+    }
+*/
 }

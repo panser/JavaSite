@@ -6,15 +6,8 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title>Register Form</title>
-</head>
-
-<body onload="document.f.login.focus();">
-<h2>Register:</h2>
 <div id="container">
+    <h2>Register:</h2>
 
     <sf:form name="f" method="POST" modelAttribute="user">
             <sf:input type="hidden" path="id" id="id"/>
@@ -36,6 +29,3 @@
     </sf:form>
 
 </div>
-
-</body>
-</html>

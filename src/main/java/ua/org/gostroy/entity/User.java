@@ -44,10 +44,10 @@ public class User implements Serializable {
 
     @ElementCollection(fetch=FetchType.LAZY)
 //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "author")
     private List<Article> articles;
     @ElementCollection(fetch=FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "author")
     private List<Comment> comments;
 
     public User() {

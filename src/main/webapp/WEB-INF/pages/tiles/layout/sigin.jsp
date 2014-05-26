@@ -14,9 +14,10 @@
 </security:authorize>
 <security:authorize access="isAuthenticated()">
     <p>
+        <c:set var="login"><security:authentication property="principal.username" /></c:set>
         Hello,
-        <a href="<c:url value="/user/edit"/>">
-        <security:authentication property="principal.username"/>,
+        <a href="<s:url value="/user/${login}"/>">
+        ${login},
         </a>
 
         <a href="javascript:formSubmit()">

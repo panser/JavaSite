@@ -1,12 +1,9 @@
-<%@ page session="false" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf8"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div id="container">
     <h2>Register:</h2>
 
     <sf:form name="f" method="POST" modelAttribute="user">
@@ -27,5 +24,3 @@
             <input name="commit" type="submit" value="<spring:message code="button.register" />" />
             <security:csrfInput />
     </sf:form>
-
-</div>

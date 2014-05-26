@@ -3,6 +3,8 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.org.gostroy.entity.User;
@@ -52,6 +54,7 @@ public class UserService {
         return users;
     }
 
+    @PreAuthorize("#user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long save(User user) {
         log.trace("save ...");
@@ -60,13 +63,8 @@ public class UserService {
         return user.getId();
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void update(User user) {
-        log.trace("update ...");
-        userRepository.save(user);
-        log.trace("update.");
-    }
-
+//    @PreAuthorize("#user.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public void delete(User user) {
         log.trace("delete ...");

@@ -4,20 +4,17 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import ua.org.gostroy.entity.User;
 import ua.org.gostroy.service.UserService;
 
@@ -29,8 +26,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +45,7 @@ public class UserController {
     @Autowired
     VelocityEngine velocityEngine;
 
-    @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listUser(Model model){
         log.trace("listUser() start ...");
         model.addAttribute("users", userService.findAll());
@@ -64,29 +59,33 @@ public class UserController {
         binder.setAllowedFields("id","version","login","email","password","avatarImage","birthDay");
     }
 */
-    @RequestMapping(value = {"/edit/{login}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}"}, method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
         return "/user/userEdit";
     }
-    @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
-    public String editUserDef(Model model){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
-        return "redirect:/user/edit/" + login;
-    }
-    @RequestMapping(value = {"/edit/{login}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/{login}"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
                            @PathVariable(value = "login") String login
                            ) throws IOException{
         String viewName;
-        log.debug("editUser(), userFromForm.id = " + userFromForm.getId());
+        log.debug("editUser(), userFromForm.login = " + login);
         if(userFromFormError.hasErrors()){
             model.addAttribute("userFromFormError", userFromFormError);
             viewName = "/user/userEdit";
         }
         else{
-            userService.save(userFromForm);
-            viewName = "redirect:/user/list";
+//            userService.save(userFromForm);
+            User user = userService.findByLogin(login);
+            user.setEmail(userFromForm.getEmail());
+            user.setPassword(userFromForm.getPassword());
+            if(userFromForm.getAvatarImage()!=null){
+                user.setAvatarImage(userFromForm.getAvatarImage());
+            }
+            user.setBirthDay(userFromForm.getBirthDay());
+            log.trace("editUser(), user = " + user);
+            userService.save(user);
+            viewName = "redirect:/user/";
         }
         return viewName;
     }
@@ -113,7 +112,15 @@ public class UserController {
         return viewName;
     }
 
-    @RequestMapping(value = "/avatar/{login}", method = RequestMethod.GET)
+    @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
+    public String deleteUser(Model model, @PathVariable String id){
+        User deleteUser = userService.find(Long.parseLong(id));
+        userService.delete(deleteUser);
+        return "redirect:/user/";
+    }
+
+
+    @RequestMapping(value = "/{login}/avatar", method = RequestMethod.GET)
     @ResponseBody
     public BufferedImage getAvatar(@PathVariable String login) throws IOException{
         User user = userService.findByLogin(login);

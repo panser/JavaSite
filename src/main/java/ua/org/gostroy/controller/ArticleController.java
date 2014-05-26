@@ -34,44 +34,24 @@ public class ArticleController {
     @Autowired(required = true)
     private UserService userService;
 
-    @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listArticle(Model model){
         log.trace("listArticle() start ...");
         model.addAttribute("articles", articleService.findAll());
         return "/article/articleList";
     }
 
-    @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.GET)
-    public String editArticle(Model model, @PathVariable String id){
-        model.addAttribute("article", articleService.find(Long.parseLong(id)));
-        return "/article/articleMod";
-    }
-    @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.POST)
-    public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
-                           @PathVariable(value = "id") String id
-    ) throws IOException {
-        String viewName;
-        log.debug("editArticle(), articleFromForm.id = " + articleFromForm.getId());
-        if(articleFromFormError.hasErrors()){
-            model.addAttribute("articleFromFormError", articleFromFormError);
-            viewName = "/article/articleMod";
-        }
-        else{
-            articleService.save(articleFromForm);
-            viewName = "redirect:/article/list";
-        }
-        return viewName;
-    }
-
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String newGET(Model model){
+        log.trace("newGET(), RequestMethod.GET");
         model.addAttribute("article", new Article());
+        model.addAttribute("formMethod", "POST");
         return "/article/articleMod";
     }
-
 //    @Transactional(rollbackFor = Exception.class)
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String newPOST(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult result) throws MessagingException {
+        log.trace("newGET(), RequestMethod.POST");
         String viewName;
         if(result.hasErrors()){
             viewName = "/article/articleMod";
@@ -91,9 +71,42 @@ public class ArticleController {
             log.trace("newPOST(), articleFromForm2: " + articleFromForm);
             articleService.save(articleFromForm);
 
-            viewName = "redirect:/article/list";
+            viewName = "redirect:/article/";
         }
         return viewName;
     }
 
+    @RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)
+    public String editArticle(Model model, @PathVariable String id){
+        model.addAttribute("article", articleService.find(Long.parseLong(id)));
+        model.addAttribute("formMethod", "PUT");
+        return "/article/articleMod";
+    }
+    @RequestMapping(value = {"/{id}"}, method = RequestMethod.PUT)
+    public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
+                              @PathVariable(value = "id") String id
+    ) throws IOException {
+        String viewName;
+        log.debug("editArticle(), articleFromForm.id = " + articleFromForm.getId());
+        if(articleFromFormError.hasErrors()){
+            model.addAttribute("articleFromFormError", articleFromFormError);
+            viewName = "/article/articleMod";
+        }
+        else{
+//            articleService.save(articleFromForm);
+            Article article = articleService.find(Long.parseLong(id));
+            article.setText(articleFromForm.getText());
+            article.setTitle(articleFromForm.getTitle());
+            articleService.save(article);
+            viewName = "redirect:/article/";
+        }
+        return viewName;
+    }
+
+    @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
+    public String deleteArticle(Model model, @PathVariable String id){
+        Article deleteArticle = articleService.find(Long.parseLong(id));
+        articleService.delete(deleteArticle);
+        return "redirect:/article/";
+    }
 }

@@ -9,6 +9,11 @@
     <title><tiles:insertAttribute name="title" ignore="true"/></title>
     <style type="text/css">
         /*body { margin: 0; padding: 0; }*/
+        textarea{
+            width: 40%;
+            /*min-width: 20%;*/
+            height: 400px;
+        }
     </style>
 </head>
 <body>

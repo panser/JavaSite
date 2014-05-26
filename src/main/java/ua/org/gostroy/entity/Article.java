@@ -21,8 +21,8 @@ public class Article implements Serializable{
 
     private String title;
     private String text;
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-//    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+//    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
     @ElementCollection(fetch=FetchType.LAZY)

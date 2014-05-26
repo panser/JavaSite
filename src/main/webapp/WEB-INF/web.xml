@@ -23,6 +23,7 @@
             classpath:/etc/spring/applicationContext.d/locale-resolver.xml
             classpath:/etc/spring/applicationContext.d/validator.xml
             classpath:/etc/spring/applicationContext.d/mail.xml
+            classpath:/etc/spring/applicationContext.d/exception.xml
         </param-value>
     </context-param>
     <context-param>
@@ -130,12 +131,17 @@
     </filter-mapping>
 
 
+<!--
     <error-page>
         <exception-type>org.springframework.orm.ObjectOptimisticLockingFailureException</exception-type>
-        <location>/exception/optimisticLocking</location>
+        <location>/exception/objectOptimisticLockingFailureException</location>
     </error-page>
-    <!--
-    &lt;!&ndash;Error handler&ndash;&gt;
+    <error-page>
+        <exception-type>org.springframework.security.access.AccessDeniedException</exception-type>
+        <location>/exception/accessDeniedException</location>
+    </error-page>
+
+    Error handler
     <error-page>
         <error-code>400</error-code>
         <location>/errors/400.html</location>

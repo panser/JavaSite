@@ -32,7 +32,7 @@
 
     <logger name="ua.org.gostroy" level="trace" />
 
-    <logger name="org.springframework" level="warn" />
+    <!--<logger name="org.springframework" level="trace" />-->
     <!--<logger name="org.springframework.security" level="debug" />-->
     <!--<logger name="org.springframework.transaction" level="trace" />-->
     <!--<logger name="org.springframework.web.client.RestTemplate" level="DEBUG" />-->

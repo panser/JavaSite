@@ -12,7 +12,7 @@
 </head>
 <body>
 <b1>
-    Please, reload page, because object changed by this time (ObjectOptimisticLockingFailureException)
+<b>Exception: </b>    ${exception}
 </b1>
 </body>
 </html>

@@ -7,6 +7,8 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <global-method-security pre-post-annotations="enabled" />
+
 
     <http pattern="/errors/**" security="none"/>
     <http pattern="/resources/**" security="none"/>
@@ -20,9 +22,9 @@
         <intercept-url pattern="/register**" access="isAnonymous()"/>
 
         <intercept-url pattern="/test/**" access="permitAll"/>
-        <intercept-url pattern="/user/list**" access="permitAll"/>
+        <intercept-url pattern="/user/" access="permitAll"/>
         <intercept-url pattern="/user/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <intercept-url pattern="/article/new**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/article/create**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
         <!--<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" requires-channel="any" />-->
         <intercept-url pattern="/**" access="permitAll" requires-channel="any" />

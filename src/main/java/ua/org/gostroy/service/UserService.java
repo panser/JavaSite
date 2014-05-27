@@ -54,7 +54,6 @@ public class UserService {
         return users;
     }
 
-    @PreAuthorize("#user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long save(User user) {
         log.trace("save ...");
@@ -63,7 +62,6 @@ public class UserService {
         return user.getId();
     }
 
-//    @PreAuthorize("#user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public void delete(User user) {

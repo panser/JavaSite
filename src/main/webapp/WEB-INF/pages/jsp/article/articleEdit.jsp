@@ -6,14 +6,20 @@
 
     <h2>Article:</h2>
     <sf:form name="f" method="${formMethod}" modelAttribute="article">
-        <sf:input type="hidden" path="id" id="id"/>
-        <sf:input type="hidden" path="version" id="version"/>
+        <%--<sf:input type="hidden" path="id" id="id"/>--%>
+        <%--<sf:input type="hidden" path="version" id="version"/>--%>
 
-        <sf:label path="title"><spring:message code="article.title" /></sf:label>
+        <%--<sf:label path="title"><spring:message code="article.title" /></sf:label>--%>
         <sf:input path="title" id="title"/>
         <sf:errors path="title"/>
         <p/>
-        <sf:label path="text"><spring:message code="article.text" /></sf:label>
+        <%--<sf:label path="description"><spring:message code="article.description" /></sf:label>--%>
+        <sf:textarea path="description" id="description"/>
+        <sf:errors path="description"/>
+        <p/>
+        <br/>
+        <p/>
+        <%--<sf:label path="text"><spring:message code="article.text" /></sf:label>--%>
         <sf:textarea path="text" id="text"/>
         <sf:errors path="text"/>
         <p/>

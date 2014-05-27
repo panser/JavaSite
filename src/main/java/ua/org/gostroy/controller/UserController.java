@@ -64,6 +64,7 @@ public class UserController {
         model.addAttribute("user", userService.findByLogin(login));
         return "/user/userEdit";
     }
+    @PreAuthorize("#userFromForm.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{login}"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
                            @PathVariable(value = "login") String login

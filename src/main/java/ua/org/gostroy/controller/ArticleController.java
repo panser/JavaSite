@@ -3,6 +3,8 @@ package ua.org.gostroy.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,14 +14,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.ServletContextAware;
 import ua.org.gostroy.entity.Article;
 import ua.org.gostroy.entity.User;
+import ua.org.gostroy.entity.Visitor;
 import ua.org.gostroy.service.ArticleService;
 import ua.org.gostroy.service.UserService;
+import ua.org.gostroy.service.VisitorService;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by panser on 5/23/14.
@@ -33,6 +42,8 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired(required = true)
     private UserService userService;
+    @Autowired(required = true)
+    VisitorService visitorService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listArticle(Model model){
@@ -77,12 +88,35 @@ public class ArticleController {
     }
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)
+    public String readArticle(Model model, @PathVariable String id,
+                          HttpEntity<byte[]> requestEntity, ServletRequest servletRequest){
+        Article article = articleService.find(Long.parseLong(id));
+        String userAgent = requestEntity.getHeaders().getFirst("USER-AGENT");
+        String ipAddress = requestEntity.getHeaders().getFirst("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = servletRequest.getRemoteAddr();
+        }
+
+        Visitor visitor = new Visitor();
+        visitor.setIp(ipAddress);
+        visitor.setUserAgent(userAgent);
+        visitor.setArticle(article);
+        visitor.setCreateDate(new Date());
+        visitorService.save(visitor);
+
+        model.addAttribute("article", article);
+        model.addAttribute("countUniqueVisitors", visitorService.findCountUniqueVisitor(article));
+        model.addAttribute("countVisitors", visitorService.findByArticle(article).size());
+        return "/article/articleRead";
+    }
+
+    @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.GET)
     public String editArticle(Model model, @PathVariable String id){
         model.addAttribute("article", articleService.find(Long.parseLong(id)));
         model.addAttribute("formMethod", "PUT");
-        return "/article/articleMod";
+        return "/article/articleEdit";
     }
-    @RequestMapping(value = {"/{id}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.PUT)
     public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
                               @PathVariable(value = "id") String id
     ) throws IOException {
@@ -90,12 +124,13 @@ public class ArticleController {
         log.debug("editArticle(), articleFromForm.id = " + articleFromForm.getId());
         if(articleFromFormError.hasErrors()){
             model.addAttribute("articleFromFormError", articleFromFormError);
-            viewName = "/article/articleMod";
+            viewName = "/article/articleEdit";
         }
         else{
 //            articleService.save(articleFromForm);
             Article article = articleService.find(Long.parseLong(id));
             article.setText(articleFromForm.getText());
+            article.setDescription(articleFromForm.getDescription());
             article.setTitle(articleFromForm.getTitle());
             articleService.save(article);
             viewName = "redirect:/article/";

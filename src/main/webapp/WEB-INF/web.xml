@@ -8,9 +8,11 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+<!--
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
+-->
 
     <!-- Описание корневого контейнера, разделяемого всеми сервлетами и фильтрами -->
     <context-param>
@@ -23,7 +25,7 @@
             classpath:/etc/spring/applicationContext.d/locale-resolver.xml
             classpath:/etc/spring/applicationContext.d/validator.xml
             classpath:/etc/spring/applicationContext.d/mail.xml
-            classpath:/etc/spring/applicationContext.d/exception.xml
+            <!--classpath:/etc/spring/applicationContext.d/exception.xml-->
         </param-value>
     </context-param>
     <context-param>

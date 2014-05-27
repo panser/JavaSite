@@ -4,11 +4,14 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:annotation-config />
+    <context:annotation-config/>
 
     <!--<context:component-scan base-package="ua.org.gostroy.repository"/>-->
-    <context:component-scan base-package="ua.org.gostroy.service"/>
-    <!--<context:component-scan base-package="ua.org.gostroy.controller"/>-->
+    <!--<context:component-scan base-package="ua.org.gostroy.service"/>-->
+    <context:component-scan base-package="ua.org.gostroy">
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+        <context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
+    </context:component-scan>
 
     <context:property-placeholder properties-ref="deployProperties"/>
     <bean id="deployProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">

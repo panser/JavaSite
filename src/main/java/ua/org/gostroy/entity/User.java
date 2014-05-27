@@ -43,7 +43,6 @@ public class User implements Serializable {
     private Date deleteDate;
 
     @ElementCollection(fetch=FetchType.LAZY)
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "author")
     private List<Article> articles;
     @ElementCollection(fetch=FetchType.LAZY)

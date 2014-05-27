@@ -20,6 +20,7 @@ public class Article implements Serializable{
     private Long version;
 
     private String title;
+    private String description;
     private String text;
 //    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
@@ -28,6 +29,10 @@ public class Article implements Serializable{
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
     private List<Comment> comments;
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "article")
+    private List<Visitor> visitors;
+
     private Boolean visible;
     private Boolean allowComments;
     @DateTimeFormat
@@ -68,6 +73,14 @@ public class Article implements Serializable{
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public User getAuthor() {
@@ -116,6 +129,14 @@ public class Article implements Serializable{
 
     public void setDeleteDate(Date deleteDate) {
         this.deleteDate = deleteDate;
+    }
+
+    public List<Visitor> getVisitors() {
+        return visitors;
+    }
+
+    public void setVisitors(List<Visitor> visitors) {
+        this.visitors = visitors;
     }
 
     @Override

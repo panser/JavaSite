@@ -27,11 +27,15 @@
         <tiles:insertAttribute name="sigin"/>
     </div>
 
-    <div id="menu" style="background-color:lightcyan;width:10%;float:left;">
+    <div id="menu" style="background-color:green;width:100%;height:30px;float:left;">
         <tiles:insertAttribute name="menu"/>
     </div>
+
     <div id="content" style="background-color:#eeeeee;width:90%;float:left;">
         <tiles:insertAttribute name="body"/>
+    </div>
+    <div id="category" style="background-color:lightcyan;width:10%;float:left;">
+        <tiles:insertAttribute name="category"/>
     </div>
 
     <div id="footer" style="background-color:lightcyan;clear:both;text-align:center;">

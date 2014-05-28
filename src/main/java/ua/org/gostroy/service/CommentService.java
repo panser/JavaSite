@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.org.gostroy.entity.Article;
 import ua.org.gostroy.entity.Comment;
+import ua.org.gostroy.entity.Visitor;
 import ua.org.gostroy.repository.CommentRepository;
 
 import java.util.List;
@@ -29,6 +31,15 @@ public class CommentService {
         log.trace("find.");
         return comment;
     }
+
+    @Transactional(readOnly = true)
+    public List<Comment> findByArticle(Article article) {
+        log.trace("findByArticle ...");
+        List<Comment> comments = commentRepository.findByArticle(article);
+        log.trace("findByArticle.");
+        return comments;
+    }
+
 
     @Transactional(readOnly = true)
     public List<Comment> findAll() {

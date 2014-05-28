@@ -41,6 +41,8 @@ public class Article implements Serializable{
     private Date deleteDate;
 
     public Article() {
+        visible = true;
+        createDate = new Date();
     }
 
     public Long getId() {

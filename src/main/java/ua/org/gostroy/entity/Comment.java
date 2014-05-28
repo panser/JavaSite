@@ -1,5 +1,6 @@
 package ua.org.gostroy.entity;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,6 +24,8 @@ public class Comment implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
+    private String name;
+    @Email
     private String email;
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", referencedColumnName = "id")
@@ -36,6 +39,8 @@ public class Comment implements Serializable {
     private Date deleteDate;
 
     public Comment() {
+        this.visible = true;
+        this.createDate = new Date();
     }
 
     public Long getId() {
@@ -68,6 +73,14 @@ public class Comment implements Serializable {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -128,5 +141,15 @@ public class Comment implements Serializable {
         this.deleteDate = deleteDate;
     }
 
-
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+//                ", article=" + article.getId() +
+                ", createDate=" + createDate +
+                '}';
+    }
 }

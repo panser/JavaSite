@@ -30,6 +30,7 @@ public class Visitor implements Serializable {
     private Date createDate;
 
     public Visitor() {
+        createDate = new Date();
     }
 
     public Long getId() {

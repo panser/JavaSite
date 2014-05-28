@@ -52,12 +52,14 @@ public class User implements Serializable {
     public User() {
         role = "ROLE_USER";
         enabled = true;
+        createDate = new Date();
     }
 
     public User(String login) {
-        this.login = login;
+        login = login;
         role = "ROLE_USER";
         enabled = true;
+        createDate = new Date();
     }
 
     public Long getId() {

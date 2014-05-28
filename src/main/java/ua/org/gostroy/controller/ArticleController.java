@@ -10,21 +10,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.entity.Article;
+import ua.org.gostroy.entity.Comment;
 import ua.org.gostroy.entity.User;
 import ua.org.gostroy.entity.Visitor;
 import ua.org.gostroy.service.ArticleService;
+import ua.org.gostroy.service.CommentService;
 import ua.org.gostroy.service.UserService;
 import ua.org.gostroy.service.VisitorService;
 
 import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
@@ -44,6 +45,8 @@ public class ArticleController {
     private UserService userService;
     @Autowired(required = true)
     VisitorService visitorService;
+    @Autowired(required = true)
+    CommentService commentService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listArticle(Model model){
@@ -107,6 +110,12 @@ public class ArticleController {
         model.addAttribute("article", article);
         model.addAttribute("countUniqueVisitors", visitorService.findCountUniqueVisitor(article));
         model.addAttribute("countVisitors", visitorService.findByArticle(article).size());
+
+        if(!model.containsAttribute("comment")){
+            model.addAttribute("comment", new Comment());
+        }
+        model.addAttribute("comments", commentService.findByArticle(article));
+
         return "/article/articleRead";
     }
 
@@ -144,4 +153,25 @@ public class ArticleController {
         articleService.delete(deleteArticle);
         return "redirect:/article/";
     }
+
+    @RequestMapping(value = {"/{id}/comment/"}, method = RequestMethod.POST)
+    public String addComment(Model model, @Valid @ModelAttribute("comment") Comment commentFromForm,
+                             BindingResult commentFromFormError, RedirectAttributes redirectAttributes,
+                             @PathVariable String id)
+            throws IOException {
+        Article article = articleService.find(Long.parseLong(id));
+        if(commentFromFormError.hasErrors()){
+            log.debug("addComment(), commentFromFormError: " + commentFromFormError.toString());
+//            redirectAttributes.addFlashAttribute("flashMessageAdd", messageSource.getMessage("flashMessageAdd", null, LocaleContextHolder.getLocale()));
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.comment", commentFromFormError);
+            redirectAttributes.addFlashAttribute("comment", commentFromForm);
+        }
+        else{
+            log.debug("addComment(), commentFromForm: " + commentFromForm);
+            commentFromForm.setArticle(article);
+            commentService.save(commentFromForm);
+        }
+        return "redirect:/article/" + article.getId();
+    }
+
 }

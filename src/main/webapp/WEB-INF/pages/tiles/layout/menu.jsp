@@ -3,6 +3,3 @@
 <div id="article" style="width:10%;float:left;">
     <a href="<c:url value="/article/"/>">articles</a>
 </div>
-<div id="user" style="width:10%;float:left;">
-    <a href="<c:url value="/user/"/>">user</a>
-</div>

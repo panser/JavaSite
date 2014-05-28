@@ -23,7 +23,7 @@
 <p>
     ${article.text}
 </p>
-<p>
+<p style="color: coral">
     <div id="date" style="width:50%;float:left;">
         <label>Create date: </label>
         <fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/>
@@ -42,3 +42,51 @@
     <td><a href="<c:url value="/article/${article.id}/edit"/>">Edit</a></td>
     <td><a href="<c:url value="/article/${article.id}/delete"/>">Delete</a></td>
 </c:if>
+
+<br/>
+<br/>
+<br/>
+<div id="comments">
+    <c:set var="commentPutUrl"><c:url value="${article.id}/comment/"/></c:set>
+    <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}">
+        <b>Add Comment</b>
+        <br/>
+
+        <sf:label path="name">Name: </sf:label>
+        <sf:input path="name" id="name"/>
+        <sf:errors path="name"/>
+        <p/>
+
+        <sf:label path="email">Email: </sf:label>
+        <sf:input path="email" id="email"/>
+        <sf:errors path="email"/>
+        <p/>
+
+        <sf:label path="text">Comment: </sf:label>
+        <sf:textarea path="text" id="text"/>
+        <sf:errors path="text"/>
+        <p/>
+
+        <input name="commit" type="submit" value="Send Comment"/>
+        <security:csrfInput />
+    </sf:form>
+
+    <b>Comments:</b>
+    <c:forEach items="${comments}" var="comment">
+        <fieldset>
+            <p>
+                <div id="nameComment" style="width:50%;float:left;">
+                    <label>Name: </label>
+                    ${comment.name}
+                </div>
+                <div id="dateComment" style="width:50%;float:right;">
+                    <label>Date: </label>
+                        <fmt:formatDate value="${comment.createDate}" type="both" dateStyle="short" timeStyle="short"/>
+                </div>
+            </p>
+            <p>
+                ${comment.text}
+            </p>
+        </fieldset>
+    </c:forEach>
+</div>

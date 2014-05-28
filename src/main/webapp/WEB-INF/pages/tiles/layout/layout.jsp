@@ -10,9 +10,9 @@
     <style type="text/css">
         /*body { margin: 0; padding: 0; }*/
         textarea{
-            width: 40%;
+            width: 30%;
             /*min-width: 20%;*/
-            height: 400px;
+            height: 100px;
         }
     </style>
 </head>

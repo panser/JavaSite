@@ -37,6 +37,7 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="txManagerJPA" />
+    <!--<tx:annotation-driven transaction-manager="txManagerJPA" proxy-target-class="true"/>-->
 
     <bean id="persistenceExceptionTranslationPostProcessor"
           class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>

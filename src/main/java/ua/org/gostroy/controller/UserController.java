@@ -11,11 +11,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.entity.User;
 import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.service.UserService;
@@ -48,6 +56,9 @@ public class UserController {
     JavaMailSender mailSender;
     @Autowired
     VelocityEngine velocityEngine;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listUser(Model model){
@@ -120,12 +131,12 @@ public class UserController {
             log.trace("registerPOST(), userFromForm: " + userFromForm);
             userService.save(userFromForm);
             sendEmailOfRegistration(userFromForm);
-            viewName = "/auth/login";
+            viewName = "redirect:/";
         }
         return viewName;
     }
     @RequestMapping(value = "/confirm/{randomString}", method = RequestMethod.GET)
-    public String confirmRegister(HttpServletRequest request) throws EntityNotFound {
+    public String confirmRegister(HttpServletRequest request,RedirectAttributes redirectAttributes) throws EntityNotFound {
         String requestURL = request.getRequestURL().toString();
         User user = userService.findByRegUrI(requestURL);
         if(user == null){
@@ -135,7 +146,14 @@ public class UserController {
         user.setEnabled(true);
         user.setRegUrI("!" + user.getRegUrI());
         userService.save(user);
-        return "/user/confirmRegistration";
+
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
+        Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authenticationResult);
+
+        redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! You confirm your registration.");
+        return "redirect:/user/" + user.getLogin();
+//        return "/user/confirmRegistration";
     }
 
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)

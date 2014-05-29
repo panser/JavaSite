@@ -8,6 +8,8 @@
 
 <h2><spring:message code="userEdit.header"/></h2>
 <font color="red">${userFromFormError}</font>
+<font color="red">${confirmRegistration}</font>
+<br/>
 
 <%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>

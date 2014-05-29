@@ -23,16 +23,16 @@
 <p>
     ${article.text}
 </p>
-<p style="color: coral">
-    <div id="date" style="width:50%;float:left;">
+<p>
+    <div id="date" style="width:50%;float:left;color:coral">
         <label>Create date: </label>
         <fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/>
     </div>
-    <div id="countUniqueVisitors" style="width:25%;float:right;">
+    <div id="countUniqueVisitors" style="width:25%;float:right;color:coral">
         <label>Unique visitors: </label>
         ${countUniqueVisitors}
     </div>
-    <div id="countVisitors" style="width:25%;float:right;">
+    <div id="countVisitors" style="width:25%;float:right;color:coral">
         <label>Views: </label>
         ${countVisitors}
     </div>
@@ -47,46 +47,72 @@
 <br/>
 <br/>
 <div id="comments">
-    <c:set var="commentPutUrl"><c:url value="${article.id}/comment/"/></c:set>
-    <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}">
-        <b>Add Comment</b>
-        <br/>
+    <div id="addCommentDiv">
+    <%--<div id="addCommentDiv" hidden="true">--%>
+        <fieldset>
+        <c:set var="commentPutUrl"><c:url value="${article.id}/comment"/></c:set>
+        <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}?parentComment=${parentComment}">
+            <h2>Add Comment</h2>
 
-        <sf:label path="name">Name: </sf:label>
-        <sf:input path="name" id="name"/>
-        <sf:errors path="name"/>
-        <p/>
+            <ul class="comment-block">
+                <li>
+                <sf:label path="name">Name: </sf:label>
+                <sf:input path="name" id="name"/>
+                <sf:errors path="name"/>
+                </li>
+                <li>
+                <sf:label path="email">Email: </sf:label>
+                <sf:input path="email" id="email"/>
+                <sf:errors path="email"/>
+                </li>
+                <li>
+                <sf:label path="text">Comment: </sf:label>
+                <sf:textarea path="text" id="text"/>
+                <sf:errors path="text"/>
+                </li>
+            </ul>
 
-        <sf:label path="email">Email: </sf:label>
-        <sf:input path="email" id="email"/>
-        <sf:errors path="email"/>
-        <p/>
+            <input name="commit" type="submit" value="Send Comment"/>
+            <security:csrfInput />
+        </sf:form>
+        </fieldset>
+    </div>
 
-        <sf:label path="text">Comment: </sf:label>
-        <sf:textarea path="text" id="text"/>
-        <sf:errors path="text"/>
-        <p/>
-
-        <input name="commit" type="submit" value="Send Comment"/>
-        <security:csrfInput />
-    </sf:form>
+    <input type="submit" id="addComment" value="Add Comment" commentIndex="${comment.id}"/><br/>
 
     <b>Comments:</b>
     <c:forEach items="${comments}" var="comment">
         <fieldset>
-            <p>
-                <div id="nameComment" style="width:50%;float:left;">
-                    <label>Name: </label>
-                    ${comment.name}
+        <%--<fieldset class="depth${comment.depth}">--%>
+            <div>
+                <p>
+                    <div id="nameComment" style="width:50%;float:left;">
+                        <label>Name: </label>
+                        ${comment.name}
+                    </div>
+                    <div id="dateComment" style="width:50%;float:right;">
+                        <label>Date: </label>
+                            <fmt:formatDate value="${comment.createDate}" type="both" dateStyle="short" timeStyle="short"/>
+                    </div>
+                </p>
+                <p>
+                    ${comment.text}
+                </p>
                 </div>
-                <div id="dateComment" style="width:50%;float:right;">
-                    <label>Date: </label>
-                        <fmt:formatDate value="${comment.createDate}" type="both" dateStyle="short" timeStyle="short"/>
-                </div>
-            </p>
-            <p>
-                ${comment.text}
-            </p>
+                <input type="submit" id="addComment" value="Add Comment" commentIndex="${comment.id}"/><br/><br/>
         </fieldset>
     </c:forEach>
 </div>
+
+<script type="text/javascript">
+    $("input[id*='addComment']").click(function() {
+                var index = $(this).attr('commentIndex');
+                var html = $("#addCommentDiv").clone();
+                var attrAction = $(html.find('#comment')).attr('action');
+                $(html.find('#comment')).attr('action', attrAction+index);
+//                $(html).show();
+
+                $(this).after(html);
+            }
+    );
+</script>

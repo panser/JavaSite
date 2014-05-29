@@ -5,8 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by panser on 5/23/14.
@@ -31,7 +31,12 @@ public class Comment implements Serializable {
     @JoinColumn(name = "article_id", referencedColumnName = "id")
     private Article article;
     private Boolean visible;
-//    private Comment parent;
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    private Comment parent;
+    private Integer depth;
+//    @ElementCollection(fetch=FetchType.LAZY)
+//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "id")
 //    private List<Comment> children;
     @DateTimeFormat
     private Date createDate;
@@ -39,8 +44,9 @@ public class Comment implements Serializable {
     private Date deleteDate;
 
     public Comment() {
-        this.visible = true;
-        this.createDate = new Date();
+        visible = true;
+        createDate = new Date();
+        depth = 0;
     }
 
     public Long getId() {
@@ -107,7 +113,6 @@ public class Comment implements Serializable {
         this.visible = visible;
     }
 
-/*
     public Comment getParent() {
         return parent;
     }
@@ -116,6 +121,15 @@ public class Comment implements Serializable {
         this.parent = parent;
     }
 
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
+    }
+
+    /*
     public List<Comment> getChildren() {
         return children;
     }
@@ -152,4 +166,24 @@ public class Comment implements Serializable {
                 ", createDate=" + createDate +
                 '}';
     }
+
+    public static Comparator<Comment> CommentDepthComparator = new Comparator<Comment>(){
+        @Override
+        public int compare(Comment o1, Comment o2) {
+            Long date1 = o1.getCreateDate().getTime();
+            Long date2 = o2.getCreateDate().getTime();
+
+            int tmp = 1;
+            if(date1 < date2){
+                tmp = -1;
+                if(o2.getParent() != null) {
+                    if (o2.getParent().getCreateDate().getTime() > o1.getCreateDate().getTime()) {
+                        tmp = 1;
+                    }
+                }
+            }
+            return tmp;
+        }
+    };
+
 }

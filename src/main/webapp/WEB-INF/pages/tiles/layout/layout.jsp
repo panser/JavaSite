@@ -7,12 +7,28 @@
 <html>
 <head>
     <title><tiles:insertAttribute name="title" ignore="true"/></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <style type="text/css">
         /*body { margin: 0; padding: 0; }*/
         textarea{
             width: 30%;
             /*min-width: 20%;*/
             height: 100px;
+        }
+        .depth1{
+            margin-left: 40px;
+        }
+        .depth2{
+            margin-left: 80px;
+        }
+        .depth3{
+            margin-left: 120px;
+        }
+        .depth4{
+            margin-left: 160px;
+        }
+        .comment-block li{
+            display: block;
         }
     </style>
 </head>

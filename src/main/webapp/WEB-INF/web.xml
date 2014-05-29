@@ -99,6 +99,7 @@
     </filter-mapping>
 
 
+<!--
     <filter>
         <filter-name>localizationFilter</filter-name>
         <filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
@@ -107,6 +108,7 @@
         <filter-name>localizationFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+-->
 
     <!--SPRING SECURITY-->
     <filter>

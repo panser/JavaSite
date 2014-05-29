@@ -3,9 +3,9 @@ DEFAULT CHARACTER SET utf8;
 
 USE javasite;
 SET FOREIGN_KEY_CHECKS = 0;
-#DROP TABLE IF EXISTS users;
-#DROP TABLE IF EXISTS userAddress;
-#DROP TABLE IF EXISTS articles;
+# DROP TABLE IF EXISTS users;
+# DROP TABLE IF EXISTS userAddress;
+# DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS comments;
 # DROP TABLE IF EXISTS visitors;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS comments (
   email     VARCHAR(50) DEFAULT NULL,
   article_id   BIGINT(11),
   visible TINYINT DEFAULT 1,
-#   comment_id   BIGINT(11),
+  parent_id   BIGINT(11),
+  depth   INT(11),
   createDate   DATETIME,
   deleteDate  DATETIME DEFAULT NULL
 )
@@ -81,15 +82,15 @@ CREATE TABLE IF NOT EXISTS visitors (
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
 
-/*# ADD FOREIGN KEYS
-ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id)
-  ON UPDATE CASCADE;
-ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id)
-  ON UPDATE CASCADE;
-ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id)
-  ON UPDATE CASCADE;
-ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id)
-  ON UPDATE CASCADE;
-ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id)
-  ON UPDATE CASCADE;
-*/
+# ADD FOREIGN KEYS
+# ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id)
+#   ON UPDATE CASCADE;
+# ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id)
+#   ON UPDATE CASCADE;
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id)
+#   ON UPDATE CASCADE;
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id)
+#   ON UPDATE CASCADE;
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
+# ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id)
+#   ON UPDATE CASCADE;

@@ -3,15 +3,12 @@ package ua.org.gostroy.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.entity.Article;
 import ua.org.gostroy.entity.Comment;
@@ -23,13 +20,10 @@ import ua.org.gostroy.service.UserService;
 import ua.org.gostroy.service.VisitorService;
 
 import javax.mail.MessagingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by panser on 5/23/14.
@@ -114,7 +108,11 @@ public class ArticleController {
         if(!model.containsAttribute("comment")){
             model.addAttribute("comment", new Comment());
         }
-        model.addAttribute("comments", commentService.findByArticle(article));
+
+        List<Comment> comments = commentService.findByArticle(article);
+//        Collections.sort(comments, Comment.CommentDepthComparator);
+//        List<Comment> comments2= sortWithParent(comments);
+        model.addAttribute("comments", comments);
 
         return "/article/articleRead";
     }
@@ -154,24 +152,54 @@ public class ArticleController {
         return "redirect:/article/";
     }
 
-    @RequestMapping(value = {"/{id}/comment/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/{id}/comment"}, method = RequestMethod.POST)
     public String addComment(Model model, @Valid @ModelAttribute("comment") Comment commentFromForm,
                              BindingResult commentFromFormError, RedirectAttributes redirectAttributes,
-                             @PathVariable String id)
+                             @PathVariable String id, @RequestParam("parentComment") String parentComment)
             throws IOException {
         Article article = articleService.find(Long.parseLong(id));
+        log.trace("addComment(), parentComment: " + parentComment);
         if(commentFromFormError.hasErrors()){
             log.debug("addComment(), commentFromFormError: " + commentFromFormError.toString());
 //            redirectAttributes.addFlashAttribute("flashMessageAdd", messageSource.getMessage("flashMessageAdd", null, LocaleContextHolder.getLocale()));
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.comment", commentFromFormError);
             redirectAttributes.addFlashAttribute("comment", commentFromForm);
+            redirectAttributes.addFlashAttribute("parentComment", parentComment);
         }
         else{
             log.debug("addComment(), commentFromForm: " + commentFromForm);
             commentFromForm.setArticle(article);
+            if(parentComment != null) {
+                Comment comment = commentService.find(Long.parseLong(parentComment));
+                commentFromForm.setParent(comment);
+                commentFromForm.setDepth(comment.getDepth() + 1);
+            }
             commentService.save(commentFromForm);
         }
         return "redirect:/article/" + article.getId();
     }
 
+/*
+    List<Comment> sortWithParent(List<Comment> comments) {
+        ArrayList<Comment> comments2 = new ArrayList<Comment>();
+        if (!comments.isEmpty()) {
+            comments2.add(comments.get(0));
+            comments.remove(0);
+
+            do {
+                Long parentId = comments2.get(comments2.size() - 1).getId();
+                for (Comment comment : comments) {
+                    if (comment.getParent().getId() == parentId) {
+                        comments2.add(comment);
+                        comments.remove(comment);
+                    }
+                }
+            } while (comments.size() != 0);
+
+            return comments2;
+        } else {
+            return null;
+        }
+    }
+*/
 }

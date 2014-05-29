@@ -1,8 +1,10 @@
 package ua.org.gostroy.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +21,11 @@ public class Article implements Serializable{
     @Version
     private Long version;
 
+    @NotEmpty(message="{validation.article.title.NotEmpty.message}")
+    @Size(min=5, max=60, message="{validation.article.title.Size.message}")
     private String title;
+    @NotEmpty(message="{validation.article.description.NotEmpty.message}")
+    @Size(min=5, max=500, message="{validation.article.description.Size.message}")
     private String description;
     private String text;
 //    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})

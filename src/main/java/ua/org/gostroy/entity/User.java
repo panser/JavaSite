@@ -1,10 +1,13 @@
 package ua.org.gostroy.entity;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
@@ -22,19 +25,28 @@ public class User implements Serializable {
     @Version
     private Long version;
 
-    private String email;
+    @NotEmpty(message="{validation.user.login.NotEmpty.message}")
+    @Size(min=3, max=60, message="{validation.user.login.Size.message}")
     private String login;
+    @NotEmpty(message="{validation.user.email.NotEmpty.message}")
+    @Email(message = "{validation.user.email.Email.message}")
+    private String email;
+    @NotEmpty(message="{validation.user.password.NotEmpty.message}")
+    @Size(min=3, max=20, message="{validation.user.password.Size.message}")
     private String password;
     private boolean enabled;
     private String regUrI;
     private String role;
+    private UserSex sex;
 
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UserAddress> userAddresses;
-    private UserSex sex;
 
+    @Basic(fetch=FetchType.LAZY)
+    @Lob
     private byte[] avatarImage;
+
     @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date birthDay;
     @DateTimeFormat

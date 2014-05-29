@@ -101,7 +101,7 @@ public class UserController {
             user.setBirthDay(userFromForm.getBirthDay());
             log.trace("editUser(), user = " + user);
             userService.save(user);
-            viewName = "redirect:/user/";
+            viewName = "redirect:/";
         }
         return viewName;
     }

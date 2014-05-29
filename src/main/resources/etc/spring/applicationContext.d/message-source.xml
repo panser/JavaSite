@@ -6,8 +6,9 @@
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
             <list>
+                <!--<value>classpath:/i18n/*</value>-->
                 <value>classpath:/i18n/messages</value>
-                <!--<value>classpath:/i18n/my-ValidationMessages</value>-->
+                <value>classpath:/i18n/validation</value>
                 <!--<value>classpath:/i18n/my-spring-security-core</value>-->
             </list>
         </property>

@@ -1,9 +1,11 @@
 package ua.org.gostroy.entity;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
@@ -20,12 +22,16 @@ public class Comment implements Serializable {
     @Version
     private Long version;
 
+    @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
+    @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")
     private String text;
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
+    @NotEmpty(message="{validation.comment.name.NotEmpty.message}")
+    @Size(min=3, max=50, message="{validation.comment.name.Size.message}")
     private String name;
-    @Email
+    @Email(message = "{validation.comment.email.Email.message}")
     private String email;
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", referencedColumnName = "id")

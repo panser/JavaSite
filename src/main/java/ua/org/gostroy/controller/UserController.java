@@ -195,7 +195,7 @@ public class UserController {
         String emailText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/mail/emailRegisterTemplate.vm", "UTF-8", model);
 
         helper.setText(emailText, true);
-        ClassPathResource image = new ClassPathResource("templates/image/site_logo.png");
+        ClassPathResource image = new ClassPathResource("templates/image/site_logo.jpg");
         helper.addInline("siteLogo", image); // Встроенное изображение
         mailSender.send(message);
     }

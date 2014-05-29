@@ -10,6 +10,7 @@
 <font color="red">${userFromFormError}</font>
 <font color="red">${confirmRegistration}</font>
 <br/>
+<br/>
 
 <%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>

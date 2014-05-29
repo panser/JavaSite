@@ -24,7 +24,7 @@
             <p/>
             <br/>
 
-            <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />" />
             <input name="commit" type="submit" value="<spring:message code="button.register" />" />
+            <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />" />
             <security:csrfInput />
     </sf:form>

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,20 +50,21 @@ public class ArticleController {
         return "/article/articleList";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String newGET(Model model){
         log.trace("newGET(), RequestMethod.GET");
         model.addAttribute("article", new Article());
         model.addAttribute("formMethod", "POST");
-        return "/article/articleMod";
+        return "/article/articleEdit";
     }
-//    @Transactional(rollbackFor = Exception.class)
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String newPOST(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult result) throws MessagingException {
         log.trace("newGET(), RequestMethod.POST");
         String viewName;
         if(result.hasErrors()){
-            viewName = "/article/articleMod";
+            viewName = "/article/articleEdit";
         }
         else{
             log.trace("newPOST(), articleFromForm1: " + articleFromForm);
@@ -117,12 +119,14 @@ public class ArticleController {
         return "/article/articleRead";
     }
 
+    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.GET)
     public String editArticle(Model model, @PathVariable String id){
         model.addAttribute("article", articleService.find(Long.parseLong(id)));
         model.addAttribute("formMethod", "PUT");
         return "/article/articleEdit";
     }
+    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.PUT)
     public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
                               @PathVariable(value = "id") String id
@@ -134,7 +138,6 @@ public class ArticleController {
             viewName = "/article/articleEdit";
         }
         else{
-//            articleService.save(articleFromForm);
             Article article = articleService.find(Long.parseLong(id));
             article.setText(articleFromForm.getText());
             article.setDescription(articleFromForm.getDescription());
@@ -145,6 +148,7 @@ public class ArticleController {
         return viewName;
     }
 
+    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
     public String deleteArticle(Model model, @PathVariable String id){
         Article deleteArticle = articleService.find(Long.parseLong(id));

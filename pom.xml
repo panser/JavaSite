@@ -270,13 +270,11 @@
         </dependency>
 
 
-<!--
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>3.1</version>
         </dependency>
--->
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>el-api</artifactId>

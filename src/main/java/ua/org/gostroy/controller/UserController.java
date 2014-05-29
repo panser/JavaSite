@@ -61,6 +61,7 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String listUser(Model model){
         log.trace("listUser() start ...");
         model.addAttribute("users", userService.findAll());
@@ -151,11 +152,12 @@ public class UserController {
         Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authenticationResult);
 
-        redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! You confirm your registration.");
+        redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! We confirm your registration.");
         return "redirect:/user/" + user.getLogin();
 //        return "/user/confirmRegistration";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
     public String deleteUser(Model model, @PathVariable String id){
         User deleteUser = userService.find(Long.parseLong(id));

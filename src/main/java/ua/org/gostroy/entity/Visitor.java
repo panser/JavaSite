@@ -22,7 +22,7 @@ public class Visitor implements Serializable {
     private String ip;
     private String userAgent;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", referencedColumnName = "id")
     Article article;
 

@@ -36,7 +36,7 @@ public class Article implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
     private List<Comment> comments;
     @ElementCollection(fetch=FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "article")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
     private List<Visitor> visitors;
 
     private Boolean visible;

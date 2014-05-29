@@ -28,9 +28,9 @@
             </tr>
             <tr>
                 <td>
+                    <input type="submit" value="<spring:message code="button.login" />" />
                     <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />" />
                     <a href="<c:url value="/user/register"/> "><spring:message code="button.register" /></a>
-                    <input type="submit" value="<spring:message code="button.login" />" />
                 </td>
             </tr>
         </table>

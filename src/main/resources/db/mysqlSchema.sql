@@ -3,11 +3,11 @@ DEFAULT CHARACTER SET utf8;
 
 USE javasite;
 SET FOREIGN_KEY_CHECKS = 0;
-# DROP TABLE IF EXISTS users;
-# DROP TABLE IF EXISTS userAddress;
-# DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS userAddress;
+DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS comments;
-# DROP TABLE IF EXISTS visitors;
+DROP TABLE IF EXISTS visitors;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   login     VARCHAR(50) UNIQUE DEFAULT NULL,
   password  VARCHAR(50) DEFAULT NULL,
   enabled TINYINT DEFAULT 1,
+  regUrI VARCHAR(250) UNIQUE,
   role VARCHAR(45) NOT NULL,
   sex TINYINT DEFAULT 1,
   avatarImage  LONGBLOB DEFAULT NULL,
@@ -83,14 +84,14 @@ CREATE TABLE IF NOT EXISTS visitors (
   DEFAULT CHARSET =utf8;
 
 # ADD FOREIGN KEYS
-# ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id)
-#   ON UPDATE CASCADE;
-# ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id)
-#   ON UPDATE CASCADE;
-# ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id)
-#   ON UPDATE CASCADE;
-# ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id)
-#   ON UPDATE CASCADE;
-# ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
-# ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id)
-#   ON UPDATE CASCADE;
+ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id)
+  ON UPDATE CASCADE;
+ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id)
+  ON UPDATE CASCADE;
+ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id)
+  ON UPDATE CASCADE;
+ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id)
+  ON UPDATE CASCADE;
+ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
+ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id)
+  ON UPDATE CASCADE;

@@ -6,6 +6,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class User implements Serializable {
     private String login;
     private String password;
     private boolean enabled;
+    private String regUrI;
     private String role;
 
     @ElementCollection(fetch=FetchType.LAZY)
@@ -32,8 +34,6 @@ public class User implements Serializable {
     private List<UserAddress> userAddresses;
     private UserSex sex;
 
-//    @Lob
-//    private MultipartFile avatarImage;
     private byte[] avatarImage;
     @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date birthDay;
@@ -50,16 +50,23 @@ public class User implements Serializable {
     private List<Comment> comments;
 
     public User() {
-        role = "ROLE_USER";
-        enabled = true;
-        createDate = new Date();
+        this.role = "ROLE_USER";
+        this.enabled = false;
+        this.createDate = new Date();
     }
 
     public User(String login) {
-        login = login;
-        role = "ROLE_USER";
-        enabled = true;
-        createDate = new Date();
+        this.login = login;
+        this.role = "ROLE_USER";
+        this.enabled = false;
+        this.createDate = new Date();
+    }
+
+    public User(String login, String role) {
+        this.login = login;
+        this.role = role;
+        this.enabled = false;
+        this.createDate = new Date();
     }
 
     public Long getId() {
@@ -102,16 +109,6 @@ public class User implements Serializable {
         this.avatarImage = avatarImage;
     }
 
-/*
-    public MultipartFile getAvatarImage() {
-        return avatarImage;
-    }
-
-    public void setAvatarImage(MultipartFile avatarImage) {
-        this.avatarImage = avatarImage;
-    }
-*/
-
     public String getPassword() {
         return password;
     }
@@ -126,6 +123,14 @@ public class User implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getRegUrI() {
+        return regUrI;
+    }
+
+    public void setRegUrI(String regUrI) {
+        this.regUrI = regUrI;
     }
 
     public String getRole() {
@@ -199,6 +204,7 @@ public class User implements Serializable {
                 ", version=" + version +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
+                ", regUrI='" + regUrI + '\'' +
 //                ", articles=" + articles +
 //                ", comments=" + comments +
                 '}';

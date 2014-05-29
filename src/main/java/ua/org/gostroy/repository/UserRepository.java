@@ -11,4 +11,5 @@ import ua.org.gostroy.entity.User;
 public interface UserRepository  extends JpaRepository<User, Long> {
     User findByEmail(String email);
     User findByLogin(String email);
+    User findByRegUrI(String regUrI);
 }

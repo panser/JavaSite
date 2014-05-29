@@ -32,7 +32,8 @@ public class ArticleServiceTests {
     @Before
     public void setup(){
         testArticle = new Article();
-        User user = new User("jUnitUser");
+        User user = new User("jUnitUser", "ROLE_ADMIN");
+        user.setEnabled(true);
 //        userService.save(user);
         testArticle.setAuthor(user);
         articleService.save(testArticle);
@@ -55,7 +56,7 @@ public class ArticleServiceTests {
     @Test
     public void update(){
         Article updateArticle = articleService.find(testArticle.getId());
-        articleService.update(updateArticle);
+        articleService.save(updateArticle);
         Assert.assertEquals(updateArticle.getId(), testArticle.getId());
     }
 }

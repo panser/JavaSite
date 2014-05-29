@@ -44,9 +44,9 @@ public class Comment implements Serializable {
     private Date deleteDate;
 
     public Comment() {
-        visible = true;
-        createDate = new Date();
-        depth = 0;
+        this.visible = true;
+        this.createDate = new Date();
+        this.depth = 0;
     }
 
     public Long getId() {

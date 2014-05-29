@@ -1,14 +1,15 @@
 package ua.org.gostroy.controller;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,16 +17,19 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.org.gostroy.entity.User;
+import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.service.UserService;
 
 import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,19 +102,40 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result) throws MessagingException {
+    public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result,
+                               HttpEntity<byte[]> requestEntity, HttpServletRequest request)
+            throws MessagingException, URISyntaxException {
         String viewName;
         if(result.hasErrors()){
             viewName = "/user/userAdd";
         }
         else
         {
-            userFromForm.setEnabled(true);
+            String randomString = RandomStringUtils.random(30,true,true);
+            String requestURL = request.getRequestURL().toString();
+            requestURL = requestURL.replaceAll("register","");
+            requestURL = requestURL + "confirm/" + randomString;
+//            log.trace("registerPOST(), requestURL: " + requestURL);
+            userFromForm.setRegUrI(requestURL);
+            log.trace("registerPOST(), userFromForm: " + userFromForm);
             userService.save(userFromForm);
+            sendEmailOfRegistration(userFromForm);
             viewName = "/auth/login";
         }
-//        this.sendEmailOfRegistration(user);
         return viewName;
+    }
+    @RequestMapping(value = "/confirm/{randomString}", method = RequestMethod.GET)
+    public String confirmRegister(HttpServletRequest request) throws EntityNotFound {
+        String requestURL = request.getRequestURL().toString();
+        User user = userService.findByRegUrI(requestURL);
+        if(user == null){
+            throw new EntityNotFound("Entity:User not found to confirm registration");
+        }
+
+        user.setEnabled(true);
+        user.setRegUrI("!" + user.getRegUrI());
+        userService.save(user);
+        return "/user/confirmRegistration";
     }
 
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
@@ -130,7 +155,7 @@ public class UserController {
             bufferedImage = ImageIO.read(new ByteArrayInputStream(user.getAvatarImage()));
         }
         else{
-            Resource resource = new ClassPathResource("/template/image/avatar.jpg");
+            Resource resource = new ClassPathResource("/templates/image/avatar.jpg");
             bufferedImage = ImageIO.read(resource.getFile());
         }
         Graphics g = bufferedImage.getGraphics();
@@ -142,17 +167,18 @@ public class UserController {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom("noreply@gostroy.org.ua");
-        helper.setTo("gostroy@gmail.com");
-        helper.setSubject("Account data");
+        helper.setTo(user.getEmail());
+        helper.setSubject("Account confirm");
 
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("login", user.getLogin());
         model.put("password", user.getPassword());
-        String emailText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/emailRegisterTemplate.vm", "UTF-8", model);
+        model.put("regURI", user.getRegUrI());
+        String emailText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/mail/emailRegisterTemplate.vm", "UTF-8", model);
 
         helper.setText(emailText, true);
-        ClassPathResource image = new ClassPathResource("templates/avator_default.jpg");
-        helper.addInline("accountLogo", image); // Встроенное изображение
+        ClassPathResource image = new ClassPathResource("templates/image/site_logo.png");
+        helper.addInline("siteLogo", image); // Встроенное изображение
         mailSender.send(message);
     }
 }

@@ -1,0 +1,18 @@
+<html>
+<body>
+<img src='cid:siteLogo'>
+<table>
+    <tr>
+        <td>login: </td>
+        <td>${login}</td>
+    </tr>
+    <tr>
+        <td>password: </td>
+        <td>${password}</td>
+    </tr>
+    <tr>
+        <td>Confirm email: </td>
+        <td>${regURI}</td>
+    </tr>
+</table></body>
+</html>

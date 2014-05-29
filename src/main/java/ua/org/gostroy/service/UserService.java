@@ -45,6 +45,13 @@ public class UserService {
         log.trace("findByLogin.");
         return user;
     }
+    @Transactional(readOnly = true)
+    public User findByRegUrI(String regUrI) {
+        log.trace("findByRegUrI ...");
+        User user = userRepository.findByRegUrI(regUrI);
+        log.trace("findByRegUrI.");
+        return user;
+    }
 
     @Transactional(readOnly = true)
     public List<User> findAll() {

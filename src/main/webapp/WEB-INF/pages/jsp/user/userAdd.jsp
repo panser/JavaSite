@@ -14,6 +14,10 @@
             <sf:input path="login" id="login"/>
             <sf:errors path="login"/>
             <p/>
+            <sf:label path="email"><spring:message code="label.email" /></sf:label>
+            <sf:input path="email" id="email"/>
+            <sf:errors path="email"/>
+            <p/>
             <sf:label path="password"><spring:message code="label.password" /></sf:label>
             <sf:password path="password" id="password" showPassword="true"/>
             <sf:errors path="password"/>

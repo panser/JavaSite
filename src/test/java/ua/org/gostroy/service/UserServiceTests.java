@@ -26,6 +26,7 @@ public class UserServiceTests {
     @Before
     public void setup(){
         testUser = new User();
+        testUser.setEnabled(true);
         userService.save(testUser);
     }
     @After
@@ -42,7 +43,7 @@ public class UserServiceTests {
     @Test
     public void update(){
         User updateUser = userService.find(testUser.getId());
-        userService.update(updateUser);
+        userService.save(updateUser);
         Assert.assertEquals(updateUser.getId(), testUser.getId());
     }
 }

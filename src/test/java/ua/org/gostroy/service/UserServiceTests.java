@@ -6,6 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,18 +19,22 @@ import ua.org.gostroy.entity.User;
  * Created by panser on 5/21/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml",
-        "classpath:/etc/spring/applicationContext.d/spring-data.xml",
-})
+@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*"})
+
 public class UserServiceTests {
     @Autowired
     private UserService userService;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     private User testUser;
     @Before
     public void setup(){
         testUser = new User();
+        testUser.setLogin("jUnitUser");
+        testUser.setEmail("jUnitUser@gostroy.org.ua");
         testUser.setEnabled(true);
+        testUser.setPassword("jUnitUser");
         userService.save(testUser);
     }
     @After

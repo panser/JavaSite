@@ -17,9 +17,7 @@ import ua.org.gostroy.entity.User;
  * Created by panser on 5/23/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml",
-        "classpath:/etc/spring/applicationContext.d/spring-data.xml",
-})
+@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*"})
 public class ArticleServiceTests {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -32,12 +30,17 @@ public class ArticleServiceTests {
     @Before
     public void setup(){
         testArticle = new Article();
-        User user = new User("jUnitUser", "ROLE_ADMIN");
-        user.setEnabled(true);
-//        userService.save(user);
-        testArticle.setAuthor(user);
+        testArticle.setTitle("jUnitArticle");
+        testArticle.setDescription("jUnitArticle");
+        User testUser = new User();
+        testUser.setLogin("jUnitUser");
+        testUser.setEmail("jUnitUser@gostroy.org.ua");
+        testUser.setEnabled(true);
+        testUser.setPassword("jUnitUser");
+        testUser.setRole("ROLE_ADMIN");
+        testArticle.setAuthor(testUser);
         articleService.save(testArticle);
-        log.trace("setup(), user: " + user);
+        log.trace("setup(), user: " + testUser);
         log.trace("setup(), testArticle.getAuthor(): " + testArticle.getAuthor());
     }
     @After

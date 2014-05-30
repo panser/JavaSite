@@ -15,9 +15,7 @@ import ua.org.gostroy.entity.User;
  * Created by panser on 5/21/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml",
-        "classpath:/etc/spring/applicationContext.d/spring-data.xml",
-        })
+@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*"})
 public class UserRepositoryTests {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -28,6 +26,10 @@ public class UserRepositoryTests {
     @Before
     public void setup(){
         testUser = new User();
+        testUser.setLogin("jUnitUser");
+        testUser.setEmail("jUnitUser@gostroy.org.ua");
+        testUser.setEnabled(true);
+        testUser.setPassword("jUnitUser");
         userRepository.save(testUser);
     }
     @After

@@ -362,6 +362,25 @@
                     <address>0.0.0.0</address>
                 </configuration>
                 <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>start-tomcat</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <fork>true</fork>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-tomcat</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>shutdown</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -370,6 +389,26 @@
                 <configuration>
                     <skipTests>false</skipTests>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.12.4</version>
+<!--
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest*</include>
+                    </includes>
+                </configuration>
+-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

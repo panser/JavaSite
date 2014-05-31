@@ -112,8 +112,7 @@ public class ArticleController {
         }
 
         List<Comment> comments = commentService.findByArticle(article);
-//        Collections.sort(comments, Comment.CommentDepthComparator);
-//        List<Comment> comments2= sortWithParent(comments);
+        Collections.sort(comments, Comment.CommentDepthComparator);
         model.addAttribute("comments", comments);
 
         return "/article/articleRead";
@@ -180,28 +179,4 @@ public class ArticleController {
         }
         return "redirect:/article/" + article.getId();
     }
-
-/*
-    List<Comment> sortWithParent(List<Comment> comments) {
-        ArrayList<Comment> comments2 = new ArrayList<Comment>();
-        if (!comments.isEmpty()) {
-            comments2.add(comments.get(0));
-            comments.remove(0);
-
-            do {
-                Long parentId = comments2.get(comments2.size() - 1).getId();
-                for (Comment comment : comments) {
-                    if (comment.getParent().getId() == parentId) {
-                        comments2.add(comment);
-                        comments.remove(comment);
-                    }
-                }
-            } while (comments.size() != 0);
-
-            return comments2;
-        } else {
-            return null;
-        }
-    }
-*/
 }

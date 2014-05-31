@@ -2,6 +2,8 @@ package ua.org.gostroy.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 public class Comment implements Serializable {
+    private transient final Logger log = LoggerFactory.getLogger(getClass());
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +29,7 @@ public class Comment implements Serializable {
     @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
     @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")
     private String text;
+    private Float sortId;
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
@@ -77,6 +82,31 @@ public class Comment implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+/*
+    public Float getSortId() {
+//        log.trace("getSortId() before, id:" + getId() + ", sortId:" + getSortId());
+        if(sortId != null) return sortId;
+        sortId = (float)id;
+        Comment tmpObject = this;
+        for(int i = 1; i <= depth; i++){
+            tmpObject = tmpObject.getParent();
+            sortId += tmpObject.getId()/(10*i);
+            log.trace("getSortId() in for, id:" + getId() + ", sortId:" + getSortId());
+        }
+        setSortId(sortId);
+        log.trace("getSortId() after, id:" + getId() + ", sortId:" + getSortId());
+        return sortId;
+    }
+*/
+
+    public Float getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(Float sortId) {
+        this.sortId = sortId;
     }
 
     public User getAuthor() {
@@ -135,16 +165,6 @@ public class Comment implements Serializable {
         this.depth = depth;
     }
 
-    /*
-    public List<Comment> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Comment> children) {
-        this.children = children;
-    }
-*/
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -174,21 +194,34 @@ public class Comment implements Serializable {
     }
 
     public static Comparator<Comment> CommentDepthComparator = new Comparator<Comment>(){
+        private transient final Logger log = LoggerFactory.getLogger(getClass());
         @Override
         public int compare(Comment o1, Comment o2) {
-            Long date1 = o1.getCreateDate().getTime();
-            Long date2 = o2.getCreateDate().getTime();
-
-            int tmp = 1;
-            if(date1 < date2){
-                tmp = -1;
-                if(o2.getParent() != null) {
-                    if (o2.getParent().getCreateDate().getTime() > o1.getCreateDate().getTime()) {
-                        tmp = 1;
-                    }
-                }
+            if(hashCodeByDepthId(o1) > hashCodeByDepthId(o2)){
+                return 1;
             }
-            return tmp;
+            return -1;
+        }
+
+        public float hashCodeByDepthId(Comment obj) {
+            if(obj.getSortId() != null){
+//            if(obj.getSortId() != 0 && obj.getSortId() != null){
+                return obj.getSortId();
+            }
+
+            long id = obj.getId();
+            int depth = obj.getDepth();
+            int idLength = String.valueOf(id).length();
+//            log.trace("hashCodeByDepthId() idLength: " + idLength);
+            float sortId = (float)id;
+//            log.trace("hashCodeByDepthId() id: " + id + "start. depthId:" + sortId);
+            for(int i = 1; i <= depth; ++i){
+                obj = obj.getParent();
+                sortId = sortId/(int)(Math.pow(10,idLength)) + obj.getId();
+//                log.trace("hashCodeByDepthId() id: " + id + "in FOR depthId:" + sortId);
+            }
+//            log.trace("hashCodeByDepthId() id: " + id + "finish. depthId:" + sortId);
+            return sortId;
         }
     };
 

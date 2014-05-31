@@ -47,8 +47,8 @@
 <br/>
 <br/>
 <div id="comments">
-    <div id="addCommentDiv">
-    <%--<div id="addCommentDiv" hidden="true">--%>
+    <%--<div id="addCommentDiv">--%>
+    <div id="addCommentDiv" hidden="true">
         <fieldset>
         <c:set var="commentPutUrl"><c:url value="${article.id}/comment"/></c:set>
         <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}?parentComment=${parentComment}">
@@ -82,8 +82,8 @@
 
     <b>Comments:</b>
     <c:forEach items="${comments}" var="comment">
-        <fieldset>
-        <%--<fieldset class="depth${comment.depth}">--%>
+        <%--<fieldset>--%>
+        <fieldset class="depth${comment.depth}">
             <div>
                 <p>
                     <div id="nameComment" style="width:50%;float:left;">
@@ -106,11 +106,12 @@
 
 <script type="text/javascript">
     $("input[id*='addComment']").click(function() {
+                $('div#addCommentDiv').hide();
                 var index = $(this).attr('commentIndex');
                 var html = $("#addCommentDiv").clone();
                 var attrAction = $(html.find('#comment')).attr('action');
                 $(html.find('#comment')).attr('action', attrAction+index);
-//                $(html).show();
+                $(html).show();
 
                 $(this).after(html);
             }

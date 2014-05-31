@@ -1,4 +1,4 @@
-package ua.org.gostroy.entity;
+package ua.org.gostroy.domain;
 
 /**
  * Created by panser on 5/20/14.

@@ -1,15 +1,12 @@
-package ua.org.gostroy.entity;
+package ua.org.gostroy.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +35,9 @@ public class User implements Serializable {
     private String regUrI;
     private String role;
     private UserSex sex;
+
+    private boolean receiveNewsletter;
+    String [] roles;
 
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -207,6 +207,22 @@ public class User implements Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean isReceiveNewsletter() {
+        return receiveNewsletter;
+    }
+
+    public void setReceiveNewsletter(boolean receiveNewsletter) {
+        this.receiveNewsletter = receiveNewsletter;
+    }
+
+    public String[] getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = roles;
     }
 
     @Override

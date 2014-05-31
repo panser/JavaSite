@@ -3,12 +3,10 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.org.gostroy.entity.Article;
-import ua.org.gostroy.entity.Comment;
-import ua.org.gostroy.entity.Visitor;
+import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.domain.Comment;
 import ua.org.gostroy.repository.CommentRepository;
 
 import java.util.List;
@@ -49,7 +47,8 @@ public class CommentService {
         return comments;
     }
 
-    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long save(Comment comment) {
         log.trace("save ...");
@@ -59,7 +58,7 @@ public class CommentService {
     }
 
 
-    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public void delete(Comment comment) {
         log.trace("delete ...");

@@ -1,4 +1,4 @@
-package ua.org.gostroy.entity;
+package ua.org.gostroy.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;

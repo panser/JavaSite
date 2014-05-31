@@ -2,14 +2,12 @@ package ua.org.gostroy.repository;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.org.gostroy.entity.User;
+import ua.org.gostroy.domain.User;
 
 /**
  * Created by panser on 5/21/14.

@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.org.gostroy.entity.Article;
-import ua.org.gostroy.entity.User;
+import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.domain.User;
 
 /**
  * Created by panser on 5/23/14.

@@ -2,9 +2,8 @@ package ua.org.gostroy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ua.org.gostroy.entity.Article;
-import ua.org.gostroy.entity.Comment;
-import ua.org.gostroy.entity.User;
+import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.domain.Comment;
 
 import java.util.List;
 

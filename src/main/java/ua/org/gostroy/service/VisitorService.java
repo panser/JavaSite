@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.org.gostroy.entity.Article;
-import ua.org.gostroy.entity.Visitor;
+import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.domain.Visitor;
 import ua.org.gostroy.repository.VisitorRepository;
 
 import java.util.List;

@@ -21,6 +21,7 @@
             classpath:/etc/spring/applicationContext.xml
             classpath:/etc/spring/applicationContext.d/spring-data.xml
             classpath:/etc/spring/applicationContext.d/spring-security.xml
+            classpath:/etc/spring/applicationContext.d/spring-security-acl.xml
             classpath:/etc/spring/applicationContext.d/message-source.xml
             classpath:/etc/spring/applicationContext.d/locale-resolver.xml
             classpath:/etc/spring/applicationContext.d/validator.xml

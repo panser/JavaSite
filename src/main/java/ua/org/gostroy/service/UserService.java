@@ -3,11 +3,10 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.org.gostroy.entity.User;
+import ua.org.gostroy.domain.User;
 import ua.org.gostroy.repository.UserRepository;
 
 import java.util.List;

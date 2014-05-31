@@ -1,4 +1,4 @@
-package ua.org.gostroy.entity;
+package ua.org.gostroy.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;

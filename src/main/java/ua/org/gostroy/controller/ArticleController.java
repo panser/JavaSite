@@ -11,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.entity.Article;
-import ua.org.gostroy.entity.Comment;
-import ua.org.gostroy.entity.User;
-import ua.org.gostroy.entity.Visitor;
+import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.domain.Comment;
+import ua.org.gostroy.domain.User;
+import ua.org.gostroy.domain.Visitor;
 import ua.org.gostroy.service.ArticleService;
 import ua.org.gostroy.service.CommentService;
 import ua.org.gostroy.service.UserService;
@@ -119,7 +119,6 @@ public class ArticleController {
         return "/article/articleRead";
     }
 
-    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.GET)
     public String editArticle(Model model, @PathVariable String id){
         model.addAttribute("article", articleService.find(Long.parseLong(id)));
@@ -148,7 +147,6 @@ public class ArticleController {
         return viewName;
     }
 
-    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
     public String deleteArticle(Model model, @PathVariable String id){
         Article deleteArticle = articleService.find(Long.parseLong(id));

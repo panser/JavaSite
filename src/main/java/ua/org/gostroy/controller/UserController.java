@@ -14,17 +14,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.entity.User;
+import ua.org.gostroy.domain.User;
 import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.service.UserService;
 
@@ -76,11 +73,12 @@ public class UserController {
     }
 */
     @RequestMapping(value = {"/{login}"}, method = RequestMethod.GET)
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
         return "/user/userEdit";
     }
-    @PreAuthorize("#userFromForm.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{login}"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
                            @PathVariable(value = "login") String login

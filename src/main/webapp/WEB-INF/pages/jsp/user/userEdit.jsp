@@ -23,29 +23,39 @@
 </security:authorize>
 
 <sf:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data">
-    <%--<sf:input type="hidden" path="id" id="id"/>--%>
-    <%--<sf:input type="hidden" path="version" id="version"/>--%>
+    <%--<sf:input type="hidden" path="id" />--%>
+    <%--<sf:input type="hidden" path="version"/>--%>
 
-    <sf:label path="login"><spring:message code="label.login"/></sf:label>
-    <sf:input path="login" id="login" disabled="true"/>
-    <p/>
-    <sf:label path="email"><spring:message code="label.email"/></sf:label>
-    <sf:input path="email" id="email" disabled="${disabledEdit}"/>
-    <sf:errors path="email"/>
-    <p/>
-    <sf:label path="password"><spring:message code="label.password"/></sf:label>
-    <sf:password path="password" showPassword="true" id="password" disabled="${disabledEdit}"/>
-    <sf:errors path="password"/>
-    <p/>
-    <sf:label path="avatarImage"><spring:message code="label.avatarImage"/></sf:label>
-    <sf:input type="file" path="avatarImage" id="avatarImage" disabled="${disabledEdit}"/>
-    <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
-    <sf:errors path="avatarImage"/>
-    <p/>
-    <sf:label path="birthDay"><spring:message code="label.birthDay"/></sf:label>
-    <form:input path="birthDay" id="birthDay" placeholder="dd.MM.yyyy" disabled="${disabledEdit}"/>
-    <sf:errors path="birthDay"/>
-    <p/>
+    <tr>
+        <td><sf:label path="login"><spring:message code="label.login"/></sf:label></td>
+        <td><sf:input path="login" disabled="true"/></td>
+    </tr>
+    <tr>
+        <td><sf:label path="email"><spring:message code="label.email"/></sf:label></td>
+        <td><sf:input path="email" disabled="${disabledEdit}"/></td>
+        <td><sf:errors path="email"/></td>
+    </tr>
+    <tr>
+        <td><sf:label path="password"><spring:message code="label.password"/></sf:label></td>
+        <td><sf:password path="password" showPassword="true" disabled="${disabledEdit}"/></td>
+        <td><sf:errors path="password"/></td>
+    </tr>
+    <tr>
+        <td><sf:label path="avatarImage"><spring:message code="label.avatarImage"/></sf:label></td>
+        <td><sf:input type="file" path="avatarImage" disabled="${disabledEdit}"/></td>
+        <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
+        <td><sf:errors path="avatarImage"/>
+    </tr>
+    <tr>
+        <td><sf:label path="birthDay"><spring:message code="label.birthDay"/></sf:label></td>
+        <td><sf:input path="birthDay" placeholder="dd.MM.yyyy" disabled="${disabledEdit}"/></td>
+        <td><sf:errors path="birthDay"/></td>
+    </tr>
+    <tr>
+        <td>Subscribe to newsletter? : </td>
+        <td><sf:checkbox path="receiveNewsletter" /></td>
+        <td><sf:errors path="receiveNewsletter" cssClass="error" /></td>
+    </tr>
 
     <input name="commit" type="submit" value="<spring:message code="button.save" />"/>
     <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>

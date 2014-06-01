@@ -38,6 +38,7 @@ public class ArticleService {
         return articles;
     }
 
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long save(Article article) {

@@ -1,5 +1,12 @@
 USE javasite;
 
+/*SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE acl_sid;
+DROP TABLE acl_class;
+DROP TABLE acl_object_identity;
+DROP TABLE acl_entry;
+SET FOREIGN_KEY_CHECKS = 1;
+*/
 CREATE TABLE IF NOT EXISTS acl_sid (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     principal BOOLEAN NOT NULL,

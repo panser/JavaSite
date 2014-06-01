@@ -83,8 +83,8 @@
     <b>Comments:</b>
     <c:forEach items="${comments}" var="comment">
         <%--<fieldset>--%>
-        <fieldset class="depth${comment.depth}">
-            <div>
+        <fieldset class="depth${comment.depth} parent-${comment.parent.id}">
+            <div class="comment-${comment.id}">
                 <p>
                     <div id="nameComment" style="width:50%;float:left;">
                         <label>Name: </label>

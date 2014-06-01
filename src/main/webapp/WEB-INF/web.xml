@@ -26,7 +26,6 @@
             classpath:/etc/spring/applicationContext.d/locale-resolver.xml
             classpath:/etc/spring/applicationContext.d/validator.xml
             classpath:/etc/spring/applicationContext.d/mail.xml
-            classpath:/etc/spring/applicationContext.d/aspectj.xml
             <!--classpath:/etc/spring/applicationContext.d/exception.xml-->
         </param-value>
     </context-param>

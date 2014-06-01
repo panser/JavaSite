@@ -37,6 +37,7 @@
         <property name="entityManagerFactory" ref="myEntityManager"/>
     </bean>
 
+    <!--<tx:annotation-driven transaction-manager="transactionManagerJDBC" />-->
     <tx:annotation-driven transaction-manager="txManagerJPA" />
     <!--<tx:annotation-driven transaction-manager="txManagerJPA" proxy-target-class="true"/>-->
 

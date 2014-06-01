@@ -66,6 +66,7 @@ public class ArticleService {
         acl.insertAce(2, BasePermission.READ, new GrantedAuthoritySid("ROLE_USER"), true);
         mutableAclService.updateAcl(acl);
 
+
         log.trace("save.");
         return article.getId();
     }

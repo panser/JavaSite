@@ -110,7 +110,7 @@ public class ArticleController {
         }
 
         List<Comment> comments = commentService.findByArticle(article);
-        Collections.sort(comments, Comment.CommentDepthComparator);
+        Collections.sort(comments, Comment.сommentDepthComparator);
         model.addAttribute("comments", comments);
 
         return "/article/articleRead";

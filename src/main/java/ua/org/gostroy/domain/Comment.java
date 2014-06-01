@@ -193,7 +193,8 @@ public class Comment implements Serializable {
                 '}';
     }
 
-    public static Comparator<Comment> CommentDepthComparator = new Comparator<Comment>(){
+
+    public static Comparator<Comment> сommentDepthComparator = new Comparator<Comment>(){
         private transient final Logger log = LoggerFactory.getLogger(getClass());
         @Override
         public int compare(Comment o1, Comment o2) {

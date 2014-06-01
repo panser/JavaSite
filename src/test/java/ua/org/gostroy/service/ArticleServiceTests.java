@@ -54,7 +54,7 @@ public class ArticleServiceTests {
         testUser.setRole("ROLE_USER");
 //        testUser.setRole("ROLE_ADMIN");
         testArticle.setAuthor(testUser);
-        articleService.save(testArticle);
+        articleService.create(testArticle);
         log.trace("setup(), user: " + testUser);
         log.trace("setup(), testArticle.getAuthor(): " + testArticle.getAuthor());
 
@@ -78,7 +78,7 @@ public class ArticleServiceTests {
     @Test
     public void update(){
         Article updateArticle = articleService.find(testArticle.getId());
-        articleService.save(updateArticle);
+        articleService.update(updateArticle);
         Assert.assertEquals(updateArticle.getId(), testArticle.getId());
     }
 }

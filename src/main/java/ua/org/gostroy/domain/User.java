@@ -35,24 +35,20 @@ public class User implements Serializable {
     private String regUrI;
     private String role;
     private UserSex sex;
-
     private boolean receiveNewsletter;
-    String [] roles;
-
-    @ElementCollection(fetch=FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<UserAddress> userAddresses;
-
     @Basic(fetch=FetchType.LAZY)
     @Lob
     private byte[] avatarImage;
-
     @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date birthDay;
     @DateTimeFormat
     private Date createDate;
     @DateTimeFormat
     private Date deleteDate;
+
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<UserAddress> userAddresses;
 
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "author")
@@ -215,14 +211,6 @@ public class User implements Serializable {
 
     public void setReceiveNewsletter(boolean receiveNewsletter) {
         this.receiveNewsletter = receiveNewsletter;
-    }
-
-    public String[] getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String[] roles) {
-        this.roles = roles;
     }
 
     @Override

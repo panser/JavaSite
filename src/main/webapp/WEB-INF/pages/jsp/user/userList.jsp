@@ -17,7 +17,7 @@
         </security:authorize>
 
         <tr>
-            <td><a href="<c:url value="/user/${user.login}"/>">
+            <td><a href="<c:url value="/user/${user.login}/profile"/>">
                 <img src="<c:url value="/user/${user.login}/avatar"/>" width="48" height="48"/>
             </a></td>
             <td>${user.id}</td>
@@ -26,7 +26,7 @@
             <td>${user.password}</td>
             <td><fmt:formatDate value="${user.birthDay}" pattern="dd.MM.yyyy"/></td>
             <c:if test="${enabledEdit}">
-                <td><a href="<c:url value="/user/${user.id}/delete"/>">Delete</a></td>
+                <td><a href="<c:url value="/user/${user.login}/delete"/>">Delete</a></td>
             </c:if>
 
         </tr>

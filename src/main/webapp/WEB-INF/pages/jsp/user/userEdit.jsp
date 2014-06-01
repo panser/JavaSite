@@ -29,34 +29,65 @@
     <tr>
         <td><sf:label path="login"><spring:message code="label.login"/></sf:label></td>
         <td><sf:input path="login" disabled="true"/></td>
+        <br/>
     </tr>
     <tr>
         <td><sf:label path="email"><spring:message code="label.email"/></sf:label></td>
         <td><sf:input path="email" disabled="${disabledEdit}"/></td>
         <td><sf:errors path="email"/></td>
+        <br/>
     </tr>
     <tr>
         <td><sf:label path="password"><spring:message code="label.password"/></sf:label></td>
         <td><sf:password path="password" showPassword="true" disabled="${disabledEdit}"/></td>
         <td><sf:errors path="password"/></td>
+        <br/>
     </tr>
     <tr>
         <td><sf:label path="avatarImage"><spring:message code="label.avatarImage"/></sf:label></td>
         <td><sf:input type="file" path="avatarImage" disabled="${disabledEdit}"/></td>
         <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
         <td><sf:errors path="avatarImage"/>
+        <br/>
     </tr>
     <tr>
         <td><sf:label path="birthDay"><spring:message code="label.birthDay"/></sf:label></td>
         <td><sf:input path="birthDay" placeholder="dd.MM.yyyy" disabled="${disabledEdit}"/></td>
         <td><sf:errors path="birthDay"/></td>
+        <br/>
+    </tr>
+    <tr>
+        <td>Sex : </td>
+        <td>
+            <sf:radiobutton path="sex" value="Male" disabled="${disabledEdit}"/>Male
+            <sf:radiobutton path="sex" value="Female" disabled="${disabledEdit}"/>Female
+        </td>
+        <td><sf:errors path="sex" cssClass="error" /></td>
+        <br/>
     </tr>
     <tr>
         <td>Subscribe to newsletter? : </td>
         <td><sf:checkbox path="receiveNewsletter" /></td>
         <td><sf:errors path="receiveNewsletter" cssClass="error" /></td>
+        <br/>
     </tr>
 
+
+    <security:authorize access="hasRole('ROLE_ADMIN')">
+        <tr>
+            <td>Role : </td>
+            <td>
+                <sf:select path="role">
+                    <%--<sf:option value="NONE" label="--- Select ---"/>--%>
+                    <sf:options items="${roleList}" />
+                </sf:select>
+            </td>
+            <td><sf:errors path="role" cssClass="error" /></td>
+            <br/>
+        </tr>
+    </security:authorize>
+
+    <br/>
     <input name="commit" type="submit" value="<spring:message code="button.save" />"/>
     <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
     <security:csrfInput/>

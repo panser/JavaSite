@@ -35,8 +35,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by panser on 5/22/14.
@@ -71,12 +71,13 @@ public class UserController {
         binder.setAllowedFields("id","version","login","email","password","avatarImage","birthDay");
     }
 */
-    @RequestMapping(value = {"/{login}"}, method = RequestMethod.GET)
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
         return "/user/userEdit";
     }
-    @RequestMapping(value = {"/{login}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
                            @PathVariable(value = "login") String login
                            ) throws IOException{
@@ -95,6 +96,9 @@ public class UserController {
                 user.setAvatarImage(userFromForm.getAvatarImage());
             }
             user.setBirthDay(userFromForm.getBirthDay());
+            user.setReceiveNewsletter(userFromForm.isReceiveNewsletter());
+            user.setSex(userFromForm.getSex());
+            user.setRole(userFromForm.getRole());
             log.trace("editUser(), user = " + user);
             userService.update(user);
             viewName = "redirect:/";
@@ -152,9 +156,10 @@ public class UserController {
 //        return "/user/confirmRegistration";
     }
 
-    @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
-    public String deleteUser(Model model, @PathVariable String id){
-        User deleteUser = userService.find(Long.parseLong(id));
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = {"/{login}/delete"}, method = RequestMethod.GET)
+    public String deleteUser(Model model, @PathVariable String login){
+        User deleteUser = userService.findByLogin(login);
         userService.delete(deleteUser);
         return "redirect:/user/";
     }
@@ -195,4 +200,14 @@ public class UserController {
         helper.addInline("siteLogo", image); // Встроенное изображение
         mailSender.send(message);
     }
+
+
+    @ModelAttribute("roleList")
+    public Map<String,String> populateRoleList() {
+        Map<String,String> role = new LinkedHashMap<String,String>();
+        role.put("ROLE_ADMIN", "admin");
+        role.put("ROLE_USER", "user");
+        return role;
+    }
+
 }

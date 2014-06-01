@@ -50,7 +50,7 @@ public class TestControllerTests {
         testUser.setEnabled(true);
         testUser.setPassword("jUnitUser");
         testUser.setRole("ROLE_ADMIN");
-        userService.save(testUser);
+        userService.create(testUser);
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(testUser.getLogin(), testUser.getPassword());
         Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);

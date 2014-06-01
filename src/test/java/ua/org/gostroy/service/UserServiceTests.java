@@ -31,7 +31,7 @@ public class UserServiceTests {
         testUser.setEmail("jUnitUser@gostroy.org.ua");
         testUser.setEnabled(true);
         testUser.setPassword("jUnitUser");
-        userService.save(testUser);
+        userService.create(testUser);
     }
     @After
     public void destroy(){
@@ -47,7 +47,7 @@ public class UserServiceTests {
     @Test
     public void update(){
         User updateUser = userService.find(testUser.getId());
-        userService.save(updateUser);
+        userService.update(updateUser);
         Assert.assertEquals(updateUser.getId(), testUser.getId());
     }
 }

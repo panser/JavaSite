@@ -24,8 +24,9 @@
         <intercept-url pattern="/test/**" access="permitAll"/>
         <intercept-url pattern="/user/" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/user/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/user/**/profile**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="/article/create**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <!--<intercept-url pattern="/article/*/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>-->
+        <intercept-url pattern="/article/*/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
         <!--<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" requires-channel="any" />-->
         <intercept-url pattern="/**" access="permitAll" requires-channel="any" />

@@ -16,7 +16,7 @@
     <p>
         <c:set var="login"><security:authentication property="principal.username" /></c:set>
         Hello,
-        <a href="<s:url value="/user/${login}"/>">
+        <a href="<s:url value="/user/${login}/profile"/>">
         ${login},
         </a>
 

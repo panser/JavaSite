@@ -3,6 +3,7 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.org.gostroy.domain.Article;
@@ -47,18 +48,24 @@ public class CommentService {
         return comments;
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
-    public Long save(Comment comment) {
-        log.trace("save ...");
+    public Long create(Comment comment) {
+        log.trace("create ...");
         commentRepository.save(comment);
-        log.trace("save.");
+        log.trace("create.");
         return comment.getId();
     }
 
+    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @Transactional(rollbackFor = Exception.class)
+    public Long update(Comment comment) {
+        log.trace("update ...");
+        commentRepository.save(comment);
+        log.trace("update.");
+        return comment.getId();
+    }
 
-//    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("#comment.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public void delete(Comment comment) {
         log.trace("delete ...");

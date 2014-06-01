@@ -61,10 +61,19 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long save(User user) {
-        log.trace("save ...");
+    public Long create(User user) {
+        log.trace("create ...");
         userRepository.save(user);
-        log.trace("save.");
+        log.trace("create.");
+        return user.getId();
+    }
+
+    @PreAuthorize("#user.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @Transactional(rollbackFor = Exception.class)
+    public Long update(User user) {
+        log.trace("update ...");
+        userRepository.save(user);
+        log.trace("update.");
         return user.getId();
     }
 

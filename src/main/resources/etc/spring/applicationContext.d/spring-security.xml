@@ -7,14 +7,7 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <!--<global-method-security pre-post-annotations="enabled" secured-annotations="enabled"-->
-                            <!--access-decision-manager-ref="aclAccessDecisionManager">-->
-<!--
-    <global-method-security pre-post-annotations="enabled" secured-annotations="enabled">
-        &lt;!&ndash;<expression-handler ref="methodAclExpressionHandler" />&ndash;&gt;
-    </global-method-security>
--->
-
+    <!--<global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>-->
 
 
     <http pattern="/errors/**" security="none"/>
@@ -29,7 +22,7 @@
         <intercept-url pattern="/register**" access="isAnonymous()"/>
 
         <intercept-url pattern="/test/**" access="permitAll"/>
-        <intercept-url pattern="/user/" access="permitAll"/>
+        <intercept-url pattern="/user/" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/user/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="/article/create**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <!--<intercept-url pattern="/article/*/edit**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>-->

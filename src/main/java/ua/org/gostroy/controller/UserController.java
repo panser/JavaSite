@@ -58,7 +58,6 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String listUser(Model model){
         log.trace("listUser() start ...");
         model.addAttribute("users", userService.findAll());
@@ -73,12 +72,10 @@ public class UserController {
     }
 */
     @RequestMapping(value = {"/{login}"}, method = RequestMethod.GET)
-    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
     public String editUser(Model model, @PathVariable String login){
         model.addAttribute("user", userService.findByLogin(login));
         return "/user/userEdit";
     }
-    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{login}"}, method = RequestMethod.PUT)
     public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
                            @PathVariable(value = "login") String login
@@ -99,7 +96,7 @@ public class UserController {
             }
             user.setBirthDay(userFromForm.getBirthDay());
             log.trace("editUser(), user = " + user);
-            userService.save(user);
+            userService.update(user);
             viewName = "redirect:/";
         }
         return viewName;
@@ -128,7 +125,7 @@ public class UserController {
 //            log.trace("registerPOST(), requestURL: " + requestURL);
             userFromForm.setRegUrI(requestURL);
             log.trace("registerPOST(), userFromForm: " + userFromForm);
-            userService.save(userFromForm);
+            userService.create(userFromForm);
             sendEmailOfRegistration(userFromForm);
             viewName = "redirect:/";
         }
@@ -144,7 +141,7 @@ public class UserController {
 
         user.setEnabled(true);
         user.setRegUrI("!" + user.getRegUrI());
-        userService.save(user);
+        userService.create(user);
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
         Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);
@@ -155,7 +152,6 @@ public class UserController {
 //        return "/user/confirmRegistration";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/delete"}, method = RequestMethod.GET)
     public String deleteUser(Model model, @PathVariable String id){
         User deleteUser = userService.find(Long.parseLong(id));

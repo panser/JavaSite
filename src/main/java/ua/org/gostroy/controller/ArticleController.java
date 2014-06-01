@@ -50,7 +50,6 @@ public class ArticleController {
         return "/article/articleList";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String newGET(Model model){
         log.trace("newGET(), RequestMethod.GET");
@@ -58,7 +57,6 @@ public class ArticleController {
         model.addAttribute("formMethod", "POST");
         return "/article/articleEdit";
     }
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String newPOST(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult result) throws MessagingException {
         log.trace("newGET(), RequestMethod.POST");
@@ -79,7 +77,7 @@ public class ArticleController {
 //            User author = new User();
             articleFromForm.setAuthor(author);
             log.trace("newPOST(), articleFromForm2: " + articleFromForm);
-            articleService.save(articleFromForm);
+            articleService.create(articleFromForm);
 
             viewName = "redirect:/article/";
         }
@@ -124,7 +122,6 @@ public class ArticleController {
         model.addAttribute("formMethod", "PUT");
         return "/article/articleEdit";
     }
-    @PreAuthorize("#article.author.login == authentication.name or hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.PUT)
     public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
                               @PathVariable(value = "id") String id
@@ -140,7 +137,7 @@ public class ArticleController {
             article.setText(articleFromForm.getText());
             article.setDescription(articleFromForm.getDescription());
             article.setTitle(articleFromForm.getTitle());
-            articleService.save(article);
+            articleService.update(article);
             viewName = "redirect:/article/";
         }
         return viewName;
@@ -175,7 +172,7 @@ public class ArticleController {
                 commentFromForm.setParent(comment);
                 commentFromForm.setDepth(comment.getDepth() + 1);
             }
-            commentService.save(commentFromForm);
+            commentService.create(commentFromForm);
         }
         return "redirect:/article/" + article.getId();
     }

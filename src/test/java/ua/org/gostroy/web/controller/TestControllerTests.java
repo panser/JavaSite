@@ -1,4 +1,4 @@
-package ua.org.gostroy.controller;
+package ua.org.gostroy.web.controller;
 
 import org.junit.After;
 import org.junit.Before;

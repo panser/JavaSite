@@ -1,4 +1,4 @@
-package ua.org.gostroy.controller;
+package ua.org.gostroy.web.controller;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.velocity.app.VelocityEngine;
@@ -36,7 +36,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by panser on 5/22/14.
@@ -71,25 +70,24 @@ public class UserController {
         binder.setAllowedFields("id","version","login","email","password","avatarImage","birthDay");
     }
 */
-    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.GET)
-    public String editUser(Model model, @PathVariable String login){
-        model.addAttribute("user", userService.findByLogin(login));
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = {"add"}, method = RequestMethod.GET)
+    public String addUser(Model model){
+        model.addAttribute("user", new User());
         return "/user/userEdit";
     }
-    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.PUT)
-    public String editUser(Model model, @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
-                           @PathVariable(value = "login") String login
-                           ) throws IOException{
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = {"add"}, method = RequestMethod.PUT)
+    public String addUser(Model model, @Valid @ModelAttribute("user") User userFromForm, BindingResult userFromFormError) throws IOException{
         String viewName;
-        log.debug("editUser(), userFromForm.login = " + login);
+        log.debug("addUser()");
         if(userFromFormError.hasErrors()){
-            model.addAttribute("userFromFormError", userFromFormError);
             viewName = "/user/userEdit";
         }
         else{
 //            userService.save(userFromForm);
-            User user = userService.findByLogin(login);
+            User user = new User();
+            user.setLogin(userFromForm.getLogin());
             user.setEmail(userFromForm.getEmail());
             user.setPassword(userFromForm.getPassword());
             if(userFromForm.getAvatarImage()!=null){
@@ -97,11 +95,49 @@ public class UserController {
             }
             user.setBirthDay(userFromForm.getBirthDay());
             user.setReceiveNewsletter(userFromForm.isReceiveNewsletter());
+            user.setEnabled(userFromForm.isEnabled());
+            user.setSex(userFromForm.getSex());
+            user.setRole(userFromForm.getRole());
+            log.trace("addUser(), user = " + user);
+            userService.create(user);
+            viewName = "redirect:/user/";
+        }
+        return viewName;
+    }
+
+
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.GET)
+    public String editUser(Model model, @PathVariable String login){
+        model.addAttribute("user", userService.findByLogin(login));
+        return "/user/userEdit";
+    }
+    @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.PUT)
+    public String editUser(Model model, @Valid @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
+                           @PathVariable(value = "login") String login
+                           ) throws IOException{
+        String viewName;
+        log.debug("editUser(), userFromForm.login = " + login);
+        if(userFromFormError.hasErrors()){
+            viewName = "/user/userEdit";
+        }
+        else{
+//            userService.save(userFromForm);
+            User user = userService.findByLogin(login);
+            user.setLogin(userFromForm.getLogin());
+            user.setEmail(userFromForm.getEmail());
+            user.setPassword(userFromForm.getPassword());
+            if(userFromForm.getAvatarImage()!=null){
+                user.setAvatarImage(userFromForm.getAvatarImage());
+            }
+            user.setBirthDay(userFromForm.getBirthDay());
+            user.setReceiveNewsletter(userFromForm.isReceiveNewsletter());
+            user.setEnabled(userFromForm.isEnabled());
             user.setSex(userFromForm.getSex());
             user.setRole(userFromForm.getRole());
             log.trace("editUser(), user = " + user);
             userService.update(user);
-            viewName = "redirect:/";
+            viewName = "redirect:/user/";
         }
         return viewName;
     }
@@ -152,7 +188,7 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authenticationResult);
 
         redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! We confirm your registration.");
-        return "redirect:/user/" + user.getLogin();
+        return "redirect:/user/" + user.getLogin() + "/profile";
 //        return "/user/confirmRegistration";
     }
 

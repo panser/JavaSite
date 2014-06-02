@@ -1,4 +1,4 @@
-package ua.org.gostroy.controller;
+package ua.org.gostroy.web.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

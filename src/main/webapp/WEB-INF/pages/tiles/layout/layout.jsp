@@ -2,11 +2,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf8" %>
 
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <html>
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="<c:url value="/resources/css/ui-lightness/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet">
+    <script src="<c:url value="/resources/js/jquery-1.10.2.js"/>"></script>
+    <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js"/>"></script>
+    <script src="<c:url value="/resources/js/ckeditor/ckeditor.js"/>"></script>
+    <script src="<c:url value="/resources/js/ckeditor/adapters/jquery.js"/>"></script>
+
+    <%--<link href="/prospring3/resources/jqgrid/css/ui.jqgrid.css" media="screen" type="text/css" rel="stylesheet"/>--%>
+    <%--<script src="/prospring3/resources/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>--%>
+    <%--<script src="/prospring3/resources/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>--%>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">

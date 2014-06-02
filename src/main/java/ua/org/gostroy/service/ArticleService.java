@@ -3,6 +3,8 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
@@ -45,6 +47,14 @@ public class ArticleService {
         log.trace("findAll ...");
         List<Article>  articles = articleRepository.findAll();
         log.trace("findAll.");
+        return articles;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Article> findAllByPage(Pageable pageable) {
+        log.trace("findAllByPage ...");
+        Page<Article>  articles = articleRepository.findAll(pageable);
+        log.trace("findAllByPage.");
         return articles;
     }
 

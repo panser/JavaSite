@@ -3,10 +3,18 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
+<%--
 <c:if test="${not empty param.login_error}">
     <font color="red"> <spring:message code="springSecurity.loginerror" />
         : <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/> </font>
 </c:if>
+--%>
+<font color="red">
+    <c:if test="${not empty message_error}">
+        <div id="message" class="${message_error.type}">${message_error.message}</div>
+    </c:if>
+</font>
+
 
 <c:url var="authUrl" value="/j_spring_security_check" />
 <form name="f" method="post" class="signin" action="${authUrl}">

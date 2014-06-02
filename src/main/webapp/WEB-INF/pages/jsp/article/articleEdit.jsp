@@ -4,6 +4,18 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<script type="text/javascript">
+    $(function(){
+        $("#text").ckeditor(
+                {
+                    toolbar : 'Basic',
+                    uiColor : '#CCCCCC'
+                }
+        );
+    });
+</script>
+
+
     <h2>Article:</h2>
     <sf:form name="f" method="${formMethod}" modelAttribute="article">
         <%--<sf:input type="hidden" path="id" id="id"/>--%>

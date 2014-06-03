@@ -2,6 +2,7 @@ package ua.org.gostroy.domain;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -28,8 +29,8 @@ public class Image {
     private String description;
     private long size;
     private String path;
-    @Lob
-    private byte[] file;
+    private String file;
+    private transient MultipartFile multipartFile;
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     public Album album;
@@ -119,12 +120,20 @@ public class Image {
         this.size = size;
     }
 
-    public byte[] getFile() {
+    public String getFile() {
         return file;
     }
 
-    public void setFile(byte[] file) {
+    public void setFile(String file) {
         this.file = file;
+    }
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
+
+    public void setMultipartFile(MultipartFile multipartFile) {
+        this.multipartFile = multipartFile;
     }
 
     public Album getAlbum() {
@@ -142,6 +151,7 @@ public class Image {
                 ", name='" + name + '\'' +
                 ", size=" + size +
                 ", path='" + path + '\'' +
+                ", file='" + file + '\'' +
                 '}';
     }
 }

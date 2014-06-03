@@ -374,6 +374,7 @@
                 <configuration>
                     <port>8082</port>
                     <address>0.0.0.0</address>
+                    <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
                 <version>2.2</version>
                 <executions>

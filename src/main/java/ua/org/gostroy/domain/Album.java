@@ -1,5 +1,6 @@
 package ua.org.gostroy.domain;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Album {
 
     private String name;
     private String description;
+    private boolean publicAccess = true;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
     private List<Image> images;
@@ -100,6 +102,14 @@ public class Album {
 
     public void setDeleteDate(Date deleteDate) {
         this.deleteDate = deleteDate;
+    }
+
+    public boolean isPublicAccess() {
+        return publicAccess;
+    }
+
+    public void setPublicAccess(boolean publicAccess) {
+        this.publicAccess = publicAccess;
     }
 
     @Override

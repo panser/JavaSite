@@ -10,7 +10,15 @@
 
 <h2><spring:message code="userList.header"/></h2>
 
-<table border="10px">
+<table border="1">
+    <tr>
+        <td></td>
+        <td>Login</td>
+        <td>Email</td>
+        <td>Password</td>
+        <td>BirthDay</td>
+        <td></td>
+    </tr>
     <c:forEach items="${users}" var="user">
         <%--<c:set var="enabledEdit">true</c:set>--%>
         <c:set var="enabledEdit">false</c:set>

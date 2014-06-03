@@ -150,7 +150,7 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result,
-                               HttpEntity<byte[]> requestEntity, HttpServletRequest request)
+                               HttpServletRequest request)
             throws MessagingException, URISyntaxException {
         String viewName;
         if(result.hasErrors()){

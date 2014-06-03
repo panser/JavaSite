@@ -95,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `images` (
   description     VARCHAR(50) DEFAULT NULL,
   size   BIGINT(11) DEFAULT NULL,
   path  VARCHAR(2000) DEFAULT NULL,
-  file  LONGBLOB DEFAULT NULL,
+  file  VARCHAR(2000) DEFAULT NULL,
+#   data  LONGBLOB DEFAULT NULL,
   album_id  BIGINT(11) DEFAULT NULL,
   createDate   DATETIME,
   deleteDate  DATETIME DEFAULT NULL
@@ -109,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `albums` (
   user_id  BIGINT(11) NOT NULL,
   name     VARCHAR(50) DEFAULT NULL,
   description     VARCHAR(50) DEFAULT NULL,
+  publicAccess TINYINT,
   createDate   DATETIME,
   deleteDate  DATETIME DEFAULT NULL
 )
@@ -124,6 +126,6 @@ ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) 
 ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
 ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id);
 ALTER TABLE images ADD CONSTRAINT fk_image_user FOREIGN KEY (user_id) REFERENCES users(id);
-*/
 ALTER TABLE images ADD CONSTRAINT fk_image_album FOREIGN KEY (album_id) REFERENCES albums(id);
 ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES users(id);
+*/

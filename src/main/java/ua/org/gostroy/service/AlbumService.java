@@ -33,10 +33,18 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public List<Album> findByUser(User user) {
-        log.trace("findByUser ...");
-        List<Album> albums = albumRepository.findByUser(user);
-        log.trace("findByUser.");
+    public List<Album> findByUserLogin(String userLogin) {
+        log.trace("findByUserLogin ...");
+        List<Album> albums = albumRepository.findByUserLogin(userLogin);
+        log.trace("findByUserLogin.");
+        return albums;
+    }
+
+    @Transactional(readOnly = true)
+    public Album findByUserLoginAndName(String userLogin, String name) {
+        log.trace("findByUserLoginAndName ...");
+        Album albums = albumRepository.findByUserLoginAndName(userLogin, name);
+        log.trace("findByUserLoginAndName.");
         return albums;
     }
 

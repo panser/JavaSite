@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by panser on 5/20/14.
@@ -56,6 +58,13 @@ public class User implements Serializable {
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "author")
     private List<Comment> comments;
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Image> images;
+    @ElementCollection(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Album> albums;
+
 
     public User() {
         this.role = "ROLE_USER";
@@ -211,6 +220,22 @@ public class User implements Serializable {
 
     public void setReceiveNewsletter(boolean receiveNewsletter) {
         this.receiveNewsletter = receiveNewsletter;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 
     @Override

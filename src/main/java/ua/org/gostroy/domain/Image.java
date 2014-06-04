@@ -31,9 +31,11 @@ public class Image {
     private String path;
     private String file;
     private transient MultipartFile multipartFile;
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     public Album album;
+    @OneToOne(mappedBy = "defImage")
+    private Album defAlbum;
 
     @DateTimeFormat
     private Date createDate = new Date();
@@ -142,6 +144,14 @@ public class Image {
 
     public void setAlbum(Album album) {
         this.album = album;
+    }
+
+    public Album getDefAlbum() {
+        return defAlbum;
+    }
+
+    public void setDefAlbum(Album defAlbum) {
+        this.defAlbum = defAlbum;
     }
 
     @Override

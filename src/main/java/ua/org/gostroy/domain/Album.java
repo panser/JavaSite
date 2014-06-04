@@ -28,6 +28,9 @@ public class Album {
     private String name;
     private String description;
     private boolean publicAccess = true;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "defImage_id")
+    private Image defImage;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
     private List<Image> images;
@@ -110,6 +113,14 @@ public class Album {
 
     public void setPublicAccess(boolean publicAccess) {
         this.publicAccess = publicAccess;
+    }
+
+    public Image getDefImage() {
+        return defImage;
+    }
+
+    public void setDefImage(Image defImage) {
+        this.defImage = defImage;
     }
 
     @Override

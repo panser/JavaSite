@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,8 +26,12 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*",
-        "classpath:/etc/spring/servletContext.xml", "classpath:/etc/spring/servletContext.d/*"})
+//@ContextConfiguration({"classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*",
+//        "classpath:/etc/spring/servletContext.xml", "classpath:/etc/spring/servletContext.d/*"})
+@ContextHierarchy({
+        @ContextConfiguration(locations = { "classpath:/etc/spring/applicationContext.xml", "classpath:/etc/spring/applicationContext.d/*" }),
+        @ContextConfiguration(locations = { "classpath:/etc/spring/servletContext.xml", "classpath:/etc/spring/servletContext.d/*" })
+})
 @DirtiesContext
 public class TestControllerTests {
     private MockMvc mockMvc;

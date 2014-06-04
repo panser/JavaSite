@@ -91,8 +91,8 @@ CREATE TABLE IF NOT EXISTS `images` (
   ID        BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   version   BIGINT(11) DEFAULT NULL,
   user_id  BIGINT(11) NOT NULL,
-  name     VARCHAR(50) DEFAULT NULL,
-  description     VARCHAR(50) DEFAULT NULL,
+  name     VARCHAR(2000) DEFAULT NULL,
+  description     VARCHAR(500) DEFAULT NULL,
   size   BIGINT(11) DEFAULT NULL,
   path  VARCHAR(2000) DEFAULT NULL,
   file  VARCHAR(2000) DEFAULT NULL,
@@ -108,8 +108,9 @@ CREATE TABLE IF NOT EXISTS `albums` (
   ID        BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   version   BIGINT(11) DEFAULT NULL,
   user_id  BIGINT(11) NOT NULL,
-  name     VARCHAR(50) DEFAULT NULL,
-  description     VARCHAR(50) DEFAULT NULL,
+  defImage_id  BIGINT(11) DEFAULT NULL,
+  name     VARCHAR(200) DEFAULT NULL,
+  description     VARCHAR(100) DEFAULT NULL,
   publicAccess TINYINT,
   createDate   DATETIME,
   deleteDate  DATETIME DEFAULT NULL
@@ -117,15 +118,15 @@ CREATE TABLE IF NOT EXISTS `albums` (
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
 
-/*
 # ADD FOREIGN KEYS
-ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id);
-ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id);
-ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id);
-ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id);
-ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
-ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id);
+# ALTER TABLE userAddress ADD CONSTRAINT fk_userAddress_user FOREIGN KEY (user_id) REFERENCES users(id);
+# ALTER TABLE articles ADD CONSTRAINT fk_atricle_user FOREIGN KEY (author_id) REFERENCES users(id);
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_user FOREIGN KEY (author_id) REFERENCES users(id);
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id);
+# ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
+# ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id);
 ALTER TABLE images ADD CONSTRAINT fk_image_user FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE images ADD CONSTRAINT fk_image_album FOREIGN KEY (album_id) REFERENCES albums(id);
 ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES users(id);
-*/
+ALTER TABLE albums ADD CONSTRAINT fk_album_defImage FOREIGN KEY (defImage_id) REFERENCES images(id);
+

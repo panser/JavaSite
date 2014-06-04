@@ -1,0 +1,105 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<spring:message code="date_format_pattern" var="dateFormatPattern"/>
+
+<c:set var="disabledEdit">false</c:set>
+<%--
+<c:set var="disabledEdit">true</c:set>
+<security:authorize access="isAuthenticated()">
+    <c:set var="username"><security:authentication property="principal.username"/></c:set>
+    <c:if test="${login != username}" var="disabledEdit" />
+</security:authorize>
+<security:authorize access="hasRole('ROLE_ADMIN')">
+    <c:set var="disabledEdit">false</c:set>
+</security:authorize>
+--%>
+
+
+
+<sf:form name="f" method="PUT" modelAttribute="image" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td>
+                <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/full"/>">
+                    <img src="<c:url value="/gallery/${login}/${album.name}/${image.name}/full"/>" width="240" height="240"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td><label>URL: </label></td>
+            <td>
+                <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/full"/>">
+                    <c:url value="${requestURL}/full"/><br/>
+                    <%--<c:url value="${pageContext.request.serverName}/gallery/${login}/${album.name}/${image.name}/full"/><br/>--%>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td><sf:label path="name">Name: </sf:label></td>
+            <td><sf:input path="name" disabled="${disabledEdit}"/></td>
+            <td><sf:errors path="name"/></td>
+        </tr>
+        <tr>
+            <td><sf:label path="description">Description: </sf:label></td>
+            <td><sf:input path="description" disabled="${disabledEdit}"/></td>
+            <td><sf:errors path="description"/></td>
+        </tr>
+        <tr>
+            <td>Album : </td>
+            <td>
+                <sf:select path="album" disabled="${disabledEdit}">
+                    <%--<sf:option value="NONE" label="--- Select ---"/>--%>
+                    <sf:options items="${albumList}" />
+                </sf:select>
+            </td>
+            <td><sf:errors path="album" cssClass="error" /></td>
+        </tr>
+        <tr>
+            <td><sf:label path="size">Size: </sf:label></td>
+            <td><fmt:formatNumber type="number" maxFractionDigits="3" value="${image.size}" />B</td>
+            <%--<td>${image.size}</td>--%>
+        </tr>
+        <tr>
+            <td><sf:label path="createDate">CreateDate: </sf:label></td>
+            <td><fmt:formatDate value="${image.createDate}" pattern="${dateFormatPattern}"/>   </td>
+        </tr>
+
+        <c:if test="${disabledEdit=='false'}">
+            <tr>
+                <td><sf:label path="multipartFile">Image: </sf:label></td>
+                <td><sf:input type="file" path="multipartFile"/></td>
+                    <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
+                <td><sf:errors path="multipartFile"/>
+            </tr>
+            <tr>
+                <td>Use like title for album: </td>
+                <td>
+                    <sf:select path="defAlbum">
+                        <sf:option value="NONE" label="--- Not use ---"/>
+                        <sf:options items="${albumList}" />
+                    </sf:select>
+                </td>
+                <td><sf:errors path="defAlbum" cssClass="error" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}?delete"/>">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        </c:if>
+    </table>
+
+    <br/>
+    <input name="commit" type="submit" value="Save"/>
+    <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
+    <security:csrfInput/>
+
+</sf:form>
+

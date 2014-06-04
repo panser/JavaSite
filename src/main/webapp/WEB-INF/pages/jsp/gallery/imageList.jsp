@@ -18,7 +18,10 @@
 --%>
 
 <div>
-    List of image in <b>${album.name}</b> for <b>${login}</b>
+    List of image in <b>${album.name}</b> for
+    <a href="<c:url value="/gallery/${login}/"/>">
+        <b>${login}</b>
+    </a>
 </div>
 
 <div>
@@ -31,6 +34,16 @@
 
 <div>
     <c:if test="${disabledEdit=='false'}">
-        <a href="<c:url value="/gallery/${login}/${album.name}/upload"/>">Upload image</a>
+        <%--<a href="<c:url value="/gallery/${login}/${album.name}/upload"/>">Upload image</a>--%>
+        <sf:form name="f" method="POST" modelAttribute="imageNew" enctype="multipart/form-data">
+            <sf:label path="multipartFile">Upload image</sf:label>
+            <sf:input type="file" path="multipartFile" disabled="${disabledEdit}"/>
+            <%--<input id="multipartFile" name="multipartFile" type="file" value=""/>--%>
+            <sf:errors path="multipartFile"/>
+            <br/>
+            <input name="commit" type="submit" value="Upload"/>
+            <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
+            <security:csrfInput/>
+        </sf:form>
     </c:if>
 </div>

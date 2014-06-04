@@ -19,7 +19,13 @@
 </security:authorize>
 --%>
 
-
+<div>
+    Image <b>${image.name}</b> in
+    <a href="<c:url value="/gallery/${login}/${album.name}/"/>">
+        <b>${album.name}</b>
+    </a>
+    for <b>${login}</b>
+</div>
 
 <sf:form name="f" method="PUT" modelAttribute="image" enctype="multipart/form-data">
     <table>
@@ -76,19 +82,16 @@
                     <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
                 <td><sf:errors path="multipartFile"/>
             </tr>
+            <%--<c:if test="${not empty image.defAlbum}" var="isDefForAlbum"/>--%>
+            <%--<h1>isDefForAlbum: <c:out value="${isDefForAlbum}"/></h1><br/>--%>
             <tr>
                 <td>Use like title for album: </td>
-                <td>
-                    <sf:select path="defAlbum">
-                        <sf:option value="NONE" label="--- Not use ---"/>
-                        <sf:options items="${albumList}" />
-                    </sf:select>
-                </td>
+                <td><sf:checkbox path="defAlbum"  value="${album}"/></td>
                 <td><sf:errors path="defAlbum" cssClass="error" /></td>
             </tr>
             <tr>
                 <td>
-                    <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}?delete"/>">
+                    <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/delete"/>">
                         Delete
                     </a>
                 </td>

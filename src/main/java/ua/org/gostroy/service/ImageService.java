@@ -87,7 +87,8 @@ public class ImageService {
         log.trace(String.format("create(), root: %s", root));
         log.trace(String.format("create(), image.getOriginalFilename().getName(): %s", image.getMultipartFile().getOriginalFilename()));
         if (image.getMultipartFile() == null || root == null){
-            throw new IllegalArgumentException("A picture cannot be stored if the file or repository doesn't exists.");
+            log.trace("create(), UploadStatus.INVALID1");
+            return UploadStatus.INVALID;
         }
 
         StringBuffer target = new StringBuffer();
@@ -131,7 +132,7 @@ public class ImageService {
 
         try{
             if (ImageIO.read(image.getMultipartFile().getInputStream()) == null ){
-                log.trace("create(), UploadStatus.INVALID");
+                log.trace("create(), UploadStatus.INVALID2");
                 return UploadStatus.INVALID;
             }
         }catch (IOException e){

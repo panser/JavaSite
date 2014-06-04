@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.domain.Album;
+import ua.org.gostroy.domain.Comment;
 import ua.org.gostroy.domain.Image;
 import ua.org.gostroy.domain.User;
 import ua.org.gostroy.exception.EntityNotFound;
@@ -47,23 +49,103 @@ public class GalleryController {
     private UserService userService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String listAlbums(Model model, @PathVariable String login){
+    public String listAlbumsGET(Model model, @PathVariable String login){
         model.addAttribute("login", login);
         model.addAttribute("albums", albumService.findByUserLogin(login));
+        model.addAttribute("albumNew", new Album());
         return "/gallery/albumList";
     }
 
-    @RequestMapping(value = {"/{albumName}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.POST)
+    public String listAlbumsPOST(@Valid @ModelAttribute("albumNew") Album albumFromForm, BindingResult result,
+                                 @PathVariable String login) {
+        String viewName;
+        if (result.hasErrors()) {
+            viewName = "/gallery/albumList";
+        } else {
+            User user = userService.findByLogin(login);
+            albumFromForm.setUser(user);
+            albumService.create(albumFromForm);
+            viewName = "redirect:/gallery/" + login + "/";
+        }
+        return viewName;
+    }
+    @RequestMapping(value = {"/{albumName}/delete"}, method = RequestMethod.GET)
+    public String listAlbumsDELETE(@PathVariable String login, @PathVariable String albumName){
+        Album album = albumService.findByUserLoginAndName(login,albumName);
+        albumService.delete(album);
+        return "redirect:/gallery/" + login + "/";
+    }
+
+
+
+    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.GET)
     public String listImages(Model model, @PathVariable String login, @PathVariable String albumName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
         model.addAttribute("login", login);
         model.addAttribute("album", album);
         model.addAttribute("images", imageService.findByUserLoginAndAlbumName(login, albumName));
+        if(!model.containsAttribute("imageNew")){
+            model.addAttribute("imageNew", new Image());
+        }
         return "/gallery/imageList";
     }
+/*
+    @RequestMapping(value = {"/{albumName}/upload"}, method = RequestMethod.GET)
+    public String uploadImagesGET(Model model, @PathVariable String login){
+        model.addAttribute("image", new Image());
+        return "/gallery/imageUpload";
+    }
+*/
+    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.POST)
+    public String uploadImagesPOST(@Valid @ModelAttribute("imageNew") Image imageFromForm, BindingResult result, RedirectAttributes redirectAttributes,
+                                   @PathVariable String login, @PathVariable String albumName){
+        if(imageFromForm.getMultipartFile() == null){
+            result.rejectValue("multipartFile", "error.upload.notselected");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
+            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
+        }
+        else if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
+            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
+        }
+        else {
+            Image image = new Image();
+            User user = userService.findByLogin(login);
+            Album album = albumService.findByUserLoginAndName(login, albumName);
+            if(album == null){
+                album = new Album();
+                album.setName(albumName);
+                album.setUser(user);
+                album.setDefImage(image);
+            }
+
+            image.setUser(user);
+            image.setAlbum(album);
+
+            String originalFilename = imageFromForm.getMultipartFile().getOriginalFilename();
+            originalFilename = originalFilename.replace('.','_');
+            image.setName(originalFilename);
+            image.setMultipartFile(imageFromForm.getMultipartFile());
+
+            UploadStatus uploadStatus = imageService.create(image);
+            if (uploadStatus.equals(UploadStatus.EXISTS)){
+                result.rejectValue("multipartFile", "error.upload.exists");
+            } else if (uploadStatus.equals(UploadStatus.INVALID)){
+                result.rejectValue("multipartFile", "error.upload.invalid");
+            } else if (uploadStatus.equals(UploadStatus.FAILED)) {
+                result.rejectValue("multipartFile", "error.upload.failed");
+            }
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
+            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
+        }
+        return "redirect:/gallery/" + login + "/" + albumName + "/";
+    }
+
+
 
     @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.GET)
-    public String viewImage(Model model, HttpServletRequest request,
+    public String editImageGET(Model model, HttpServletRequest request,
                             @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
@@ -73,18 +155,26 @@ public class GalleryController {
 
         List<Album> albums = albumService.findByUserLogin(login);
         Map<Album, String> albumList = new LinkedHashMap<Album, String>();
-//        Map<String,Album> albumList = new LinkedHashMap<String,Album>();
         for(Album album1 : albums){
             albumList.put(album1, album1.getName());
-//            albumList.put(album1.getName(), album1);
         }
         model.addAttribute("albumList", albumList);
 
         String requestURL = request.getRequestURL().toString();
         log.trace("viewImage(), requestURL:" + requestURL);
         model.addAttribute("requestURL", requestURL);
-        return "/gallery/imageView";
+        return "/gallery/imageEdit";
     }
+    @RequestMapping(value = {"/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
+    public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
+        Image image = imageService.findByUserLoginAndAlbumNameAndName(login,albumName,imageName);
+        imageService.delete(image);
+        return "redirect:/gallery/" + login + "/" + albumName + "/";
+    }
+
+
+
+
 
     @RequestMapping(value = {"/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
     @ResponseBody
@@ -122,57 +212,4 @@ public class GalleryController {
         return bufferedImage;
     }
 
-    @RequestMapping(value = {"/{albumName}/upload"}, method = RequestMethod.GET)
-    public String uploadImagesGET(Model model, @PathVariable String login){
-        model.addAttribute("image", new Image());
-        return "/gallery/imageUpload";
-    }
-
-    @RequestMapping(value = {"/{albumName}/upload"}, method = RequestMethod.POST)
-    public String uploadImagesPOST(@Valid @ModelAttribute("image") Image imageFromForm, BindingResult result,
-                                   @PathVariable String login, @PathVariable String albumName){
-        String viewName;
-        if(result.hasErrors()){
-            viewName = "/gallery/imageUpload";
-        }
-        else {
-            Image image = new Image();
-            User user = userService.findByLogin(login);
-            Album album = albumService.findByUserLoginAndName(login, albumName);
-            if(album == null){
-                album = new Album();
-                album.setName(albumName);
-                album.setUser(user);
-                album.setDefImage(image);
-            }
-
-            image.setUser(user);
-            image.setAlbum(album);
-            if(imageFromForm.getName() == null){
-                String originalFilename = imageFromForm.getMultipartFile().getOriginalFilename();
-                originalFilename = originalFilename.replace('.','_');
-                image.setName(originalFilename);
-            }
-            else {
-                image.setName(imageFromForm.getName());
-            }
-            image.setDescription(imageFromForm.getDescription());
-            image.setMultipartFile(imageFromForm.getMultipartFile());
-
-            UploadStatus uploadStatus = imageService.create(image);
-            if (uploadStatus.equals(UploadStatus.EXISTS)){
-                result.rejectValue("multipartFile", "error.upload.exists");
-                viewName = "/gallery/imageUpload";
-            } else if (uploadStatus.equals(UploadStatus.INVALID)){
-                result.rejectValue("multipartFile", "error.upload.invalid");
-                viewName = "/gallery/imageUpload";
-            } else if (uploadStatus.equals(UploadStatus.FAILED)) {
-                result.rejectValue("multipartFile", "error.upload.failed");
-                viewName = "/gallery/imageUpload";
-            } else {
-                viewName = "/gallery/" + login + "/" + albumName + "/";
-            }
-        }
-        return viewName;
-    }
 }

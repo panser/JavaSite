@@ -1,7 +1,7 @@
 package ua.org.gostroy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ua.org.gostroy.domain.*;
+import ua.org.gostroy.domain.Image;
 
 import java.util.List;
 

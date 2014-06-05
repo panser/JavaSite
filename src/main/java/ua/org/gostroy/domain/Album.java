@@ -1,6 +1,5 @@
 package ua.org.gostroy.domain;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

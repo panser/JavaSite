@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.org.gostroy.domain.Album;
-import ua.org.gostroy.domain.User;
 import ua.org.gostroy.repository.AlbumRepository;
 
 import java.util.List;

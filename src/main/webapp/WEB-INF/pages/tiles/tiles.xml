@@ -26,6 +26,11 @@
         <put-attribute name="body" value="/WEB-INF/pages/jsp/article/{1}.jsp" />
     </definition>
 
+    <definition name="/gallery/*" extends="baseLayout">
+        <put-attribute name="title" value="ArticleList" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
+    </definition>
+
     <definition name="/exception/*" extends="baseLayout">
         <put-attribute name="title" value="Exception" />
         <put-attribute name="body" value="/WEB-INF/pages/jsp/exception/{1}.jsp" />

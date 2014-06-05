@@ -5,6 +5,8 @@ db.jdbc.driver=com.mysql.jdbc.Driver
 db.jdbc.url=jdbc:mysql://localhost:3306/javasite?characterEncoding=UTF-8
 db.jdbc.username=root
 db.jdbc.password=1234
+db.jdbc.initLocation=classpath:db/mysql/initDB.sql
+db.jdbc.dataLocation=classpath:db/mysql/populateDB.sql
 
 #Hibernate Configuration:
 db.hibernate.dialect=org.hibernate.dialect.MySQLDialect
@@ -14,5 +16,9 @@ db.hibernate.hbm2ddl.auto = update
 db.hibernate.connection.useUnicode = true
 db.hibernate.connection.characterEncoding = UTF-8
 db.hibernate.connection.charSet = UTF-8
+
+db.jpa.database=MYSQL
+db.jpa.showSql=true
+
 
 mailserver.host=192.168.1.102

@@ -13,7 +13,7 @@
         <context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
     </context:component-scan>
 
-    <context:property-placeholder properties-ref="deployProperties"/>
+    <context:property-placeholder properties-ref="deployProperties" system-properties-mode="OVERRIDE"/>
     <bean id="deployProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations" value="classpath:/etc/properties/*.properties.${type}"/>
     </bean>

@@ -19,6 +19,9 @@
             <li>
                 <a href="<c:url value="/gallery/${login}/"/>">gallery</a>
             </li>
+            <li>
+                <a href="<c:url value="/article/"/>">articles</a>
+            </li>
         </ul>
     </p>
 </security:authorize>

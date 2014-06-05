@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.context.ServletContextAware;
 import ua.org.gostroy.domain.Album;
 import ua.org.gostroy.domain.Image;
 import ua.org.gostroy.domain.User;
@@ -15,7 +14,6 @@ import ua.org.gostroy.repository.ImageRepository;
 import ua.org.gostroy.web.form.UploadStatus;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -159,7 +157,7 @@ public class ImageService {
         return UploadStatus.SUCCESS;
     }
 
-    @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long update(Image image) {
         log.trace("update ...");

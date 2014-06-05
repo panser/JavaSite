@@ -7,10 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.domain.Album;
-import ua.org.gostroy.domain.Comment;
 import ua.org.gostroy.domain.Image;
 import ua.org.gostroy.domain.User;
 import ua.org.gostroy.exception.EntityNotFound;
@@ -19,6 +19,7 @@ import ua.org.gostroy.exception.NeedAuthorize;
 import ua.org.gostroy.service.AlbumService;
 import ua.org.gostroy.service.ImageService;
 import ua.org.gostroy.service.UserService;
+import ua.org.gostroy.web.editor.AlbumEditor;
 import ua.org.gostroy.web.form.UploadStatus;
 
 import javax.imageio.ImageIO;
@@ -47,6 +48,13 @@ public class GalleryController {
     private AlbumService albumService;
     @Autowired(required = true)
     private UserService userService;
+
+
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, @PathVariable String login) {
+        binder.registerCustomEditor(Album.class, new AlbumEditor(this.albumService,login));
+    }
+
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listAlbumsGET(Model model, @PathVariable String login){
@@ -148,10 +156,12 @@ public class GalleryController {
     public String editImageGET(Model model, HttpServletRequest request,
                             @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
-        Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
+        if(!model.containsAttribute("image")) {
+            Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
+            model.addAttribute("image", image);
+        }
         model.addAttribute("login", login);
         model.addAttribute("album", album);
-        model.addAttribute("image", image);
 
         List<Album> albums = albumService.findByUserLogin(login);
         Map<Album, String> albumList = new LinkedHashMap<Album, String>();
@@ -161,9 +171,38 @@ public class GalleryController {
         model.addAttribute("albumList", albumList);
 
         String requestURL = request.getRequestURL().toString();
-        log.trace("viewImage(), requestURL:" + requestURL);
+        log.trace("viewImage(), requestURL: " + requestURL);
         model.addAttribute("requestURL", requestURL);
         return "/gallery/imageEdit";
+    }
+    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
+    public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
+                               @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
+        log.trace("editImagePUT(), start");
+        if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", result);
+            redirectAttributes.addFlashAttribute("image", imageFromForm);
+        }
+        else {
+            Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
+            log.trace("editImagePUT(), image after find: " + image);
+
+//            Album album = albumService.findByUserLoginAndName(login,albumName);
+//            image.setAlbum(album);
+
+            image.setName(imageFromForm.getName());
+            image.setDescription(imageFromForm.getDescription());
+//            image.setAlbum(imageFromForm.getAlbum());
+//            if(imageFromForm.getDefAlbum() != null) {
+//                image.setDefAlbum(imageFromForm.getDefAlbum());
+//            }
+
+            log.trace("editImagePUT(), image before update: " + image);
+            imageService.update(image);
+            log.trace("editImagePUT(), finish");
+        }
+
+        return "redirect:/gallery/" + login + "/" + albumName + "/" + imageName;
     }
     @RequestMapping(value = {"/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
@@ -171,6 +210,7 @@ public class GalleryController {
         imageService.delete(image);
         return "redirect:/gallery/" + login + "/" + albumName + "/";
     }
+
 
 
 

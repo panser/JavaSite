@@ -1,0 +1,140 @@
+CREATE DATABASE IF NOT EXISTS javasite DEFAULT CHARACTER SET utf8;
+USE javasite;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS userAddress;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS visitors;
+# DROP TABLE IF EXISTS images;
+# DROP TABLE IF EXISTS albums;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE IF NOT EXISTS users (
+  id        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  email     VARCHAR(50) DEFAULT NULL,
+  login     VARCHAR(50) UNIQUE DEFAULT NULL,
+  password  VARCHAR(50) DEFAULT NULL,
+  enabled TINYINT,
+  regUrI VARCHAR(250) UNIQUE,
+  role VARCHAR(45) NOT NULL,
+  sex TINYINT,
+  receiveNewsletter TINYINT DEFAULT 1,
+  avatarImage  LONGBLOB DEFAULT NULL,
+  birthDay  DATETIME DEFAULT NULL,
+  createDate   DATETIME,
+  deleteDate  DATETIME DEFAULT NULL
+)
+ENGINE =InnoDB
+DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS userAddress (
+  id        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  country  VARCHAR(50) DEFAULT NULL,
+  city  VARCHAR(50) DEFAULT NULL,
+  street  VARCHAR(50) DEFAULT NULL,
+  build   INT(11) DEFAULT NULL,
+  user_id   BIGINT(11) UNSIGNED NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+)
+ENGINE =InnoDB
+DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS articles (
+  id        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  title     VARCHAR(250) DEFAULT NULL,
+  description     VARCHAR(250) DEFAULT NULL,
+  text     VARCHAR(20000) DEFAULT NULL,
+  author_id   BIGINT(11) UNSIGNED DEFAULT NULL,
+  visible TINYINT DEFAULT 1,
+  allowComments TINYINT DEFAULT 1,
+  createDate   DATETIME,
+  deleteDate  DATETIME DEFAULT NULL,
+  FOREIGN KEY (author_id) REFERENCES users(id)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS comments (
+  id        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  text     VARCHAR(250) DEFAULT NULL,
+  sortId   FLOAT UNIQUE DEFAULT NULL,
+  author_id   BIGINT(11) UNSIGNED,
+  name     VARCHAR(50) DEFAULT NULL,
+  email     VARCHAR(50) DEFAULT NULL,
+  article_id   BIGINT(11) UNSIGNED,
+  visible TINYINT DEFAULT 1,
+  parent_id   BIGINT(11) UNSIGNED DEFAULT NULL,
+  depth   INT(11),
+  createDate   DATETIME,
+  deleteDate  DATETIME DEFAULT NULL,
+  FOREIGN KEY (author_id) REFERENCES users(id),
+  FOREIGN KEY (article_id) REFERENCES articles(id),
+  FOREIGN KEY (parent_id) REFERENCES comments(id)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS visitors (
+  id        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  ip     VARCHAR(250) DEFAULT NULL,
+  userAgent     VARCHAR(250) DEFAULT NULL,
+  article_id   BIGINT(11) UNSIGNED,
+  createDate   DATETIME,
+  FOREIGN KEY (article_id) REFERENCES articles(id)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS albums (
+  ID        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  user_id  BIGINT(11) UNSIGNED NOT NULL,
+  defImage_id  BIGINT(11) UNSIGNED DEFAULT NULL,
+  name     VARCHAR(200) DEFAULT NULL,
+  description     VARCHAR(100) DEFAULT NULL,
+  publicAccess TINYINT,
+  createDate   DATETIME,
+  deleteDate  DATETIME DEFAULT NULL
+#   FOREIGN KEY (user_id) REFERENCES users(id),
+#   FOREIGN KEY (defImage_id) REFERENCES images(id)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+CREATE TABLE IF NOT EXISTS images (
+  ID        BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  version   BIGINT(11) DEFAULT NULL,
+  user_id  BIGINT(11) UNSIGNED NOT NULL,
+  name     VARCHAR(2000) DEFAULT NULL,
+  description     VARCHAR(500) DEFAULT NULL,
+  size   BIGINT(11) DEFAULT NULL,
+  path  VARCHAR(2000) DEFAULT NULL,
+  file  VARCHAR(2000) DEFAULT NULL,
+  album_id  BIGINT(11) UNSIGNED DEFAULT NULL,
+  createDate   DATETIME,
+  deleteDate  DATETIME DEFAULT NULL
+#   FOREIGN KEY (user_id) REFERENCES users(id),
+#   FOREIGN KEY (album_id) REFERENCES albums(id)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+# ADD FOREIGN KEYS
+ALTER TABLE images ADD CONSTRAINT fk_image_user FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE images ADD CONSTRAINT fk_image_album FOREIGN KEY (album_id) REFERENCES albums(id);
+ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE albums ADD CONSTRAINT fk_album_defImage FOREIGN KEY (defImage_id) REFERENCES images(id);
+
+# ADD INDEX
+CREATE INDEX users_login ON users (login);
+CREATE INDEX comments_article_id ON comments (article_id);
+CREATE INDEX visitors_article_id ON visitors (article_id);
+CREATE INDEX images_user_id ON images (user_id);
+CREATE INDEX albums_user_id ON albums (user_id);

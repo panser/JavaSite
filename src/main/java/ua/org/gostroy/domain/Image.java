@@ -158,10 +158,12 @@ public class Image {
     public String toString() {
         return "Image{" +
                 "id=" + id +
+                ", user.login=" + user.getLogin() +
                 ", name='" + name + '\'' +
                 ", size=" + size +
                 ", path='" + path + '\'' +
                 ", file='" + file + '\'' +
+                ", album=" + album +
                 '}';
     }
 }

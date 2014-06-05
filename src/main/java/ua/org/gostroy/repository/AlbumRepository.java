@@ -2,8 +2,6 @@ package ua.org.gostroy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.org.gostroy.domain.Album;
-import ua.org.gostroy.domain.Image;
-import ua.org.gostroy.domain.User;
 
 import java.util.List;
 

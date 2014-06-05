@@ -8,8 +8,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 # DROP TABLE IF EXISTS articles;
 # DROP TABLE IF EXISTS comments;
 # DROP TABLE IF EXISTS visitors;
-DROP TABLE IF EXISTS images;
-DROP TABLE IF EXISTS albums;
+# DROP TABLE IF EXISTS images;
+# DROP TABLE IF EXISTS albums;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -125,8 +125,8 @@ CREATE TABLE IF NOT EXISTS `albums` (
 # ALTER TABLE comments ADD CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles(id);
 # ALTER TABLE comments ADD CONSTRAINT fk_comment_comment FOREIGN KEY (parent_id) REFERENCES comments(id);
 # ALTER TABLE visitors ADD CONSTRAINT fk_visitor_article FOREIGN KEY (article_id) REFERENCES articles(id);
-ALTER TABLE images ADD CONSTRAINT fk_image_user FOREIGN KEY (user_id) REFERENCES users(id);
-ALTER TABLE images ADD CONSTRAINT fk_image_album FOREIGN KEY (album_id) REFERENCES albums(id);
-ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES users(id);
-ALTER TABLE albums ADD CONSTRAINT fk_album_defImage FOREIGN KEY (defImage_id) REFERENCES images(id);
+# ALTER TABLE images ADD CONSTRAINT fk_image_user FOREIGN KEY (user_id) REFERENCES users(id);
+# ALTER TABLE images ADD CONSTRAINT fk_image_album FOREIGN KEY (album_id) REFERENCES albums(id);
+# ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES users(id);
+# ALTER TABLE albums ADD CONSTRAINT fk_album_defImage FOREIGN KEY (defImage_id) REFERENCES images(id);
 

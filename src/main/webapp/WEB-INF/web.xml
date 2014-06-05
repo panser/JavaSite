@@ -33,7 +33,32 @@
         <param-value>SpringDAO.root</param-value>
     </context-param>
 
-
+    <servlet>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                classpath:/etc/spring/servletContext.xml
+                classpath:/etc/spring/servletContext.d/controllers.xml
+                classpath:/etc/spring/servletContext.d/mvc-interceptors.xml
+                classpath:/etc/spring/servletContext.d/multipart-resolver.xml
+                classpath:/etc/spring/servletContext.d/resources.xml
+                classpath:/etc/spring/servletContext.d/view-resolver.xml
+                classpath:/etc/spring/servletContext.d/spring-security-for-servlet.xml
+                classpath:/etc/spring/applicationContext.d/validator.xml
+            </param-value>
+        </init-param>
+        <multipart-config>
+            <max-file-size>-1</max-file-size>
+            <file-size-threshold>-1</file-size-threshold>
+        </multipart-config>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
     <!-- Фильтр для перекодировки в utf8 -->
     <filter>
@@ -105,33 +130,6 @@
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <servlet>
-        <servlet-name>mvc-dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>
-                classpath:/etc/spring/servletContext.xml
-                classpath:/etc/spring/servletContext.d/controllers.xml
-                classpath:/etc/spring/servletContext.d/mvc-interceptors.xml
-                classpath:/etc/spring/servletContext.d/multipart-resolver.xml
-                classpath:/etc/spring/servletContext.d/resources.xml
-                classpath:/etc/spring/servletContext.d/view-resolver.xml
-                classpath:/etc/spring/servletContext.d/spring-security-for-servlet.xml
-                classpath:/etc/spring/applicationContext.d/validator.xml
-            </param-value>
-        </init-param>
-        <multipart-config>
-            <max-file-size>-1</max-file-size>
-            <file-size-threshold>-1</file-size-threshold>
-        </multipart-config>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>mvc-dispatcher</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
 
 
     <!--

@@ -16,6 +16,12 @@
         <property name="testWhileIdle" value="true"/>
         <property name="removeAbandoned" value="true"/>
     </bean>
+    <!-- As an alternative, for embedded databases see <jdbc:embedded-database/>. -->
+    <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="${db.jdbc.initLocation}"/>
+        <!--<jdbc:script location="${db.jdbc.dataLocation}"/>-->
+    </jdbc:initialize-database>
+
 
 
     <bean id="myEntityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -41,8 +47,7 @@
     <tx:annotation-driven transaction-manager="txManagerJPA" />
     <!--<tx:annotation-driven transaction-manager="txManagerJPA" proxy-target-class="true"/>-->
 
-    <bean id="persistenceExceptionTranslationPostProcessor"
-          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
     <jpa:repositories base-package="ua.org.gostroy.repository" transaction-manager-ref="txManagerJPA"/>
 </beans>

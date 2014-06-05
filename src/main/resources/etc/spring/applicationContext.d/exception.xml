@@ -11,5 +11,6 @@
             </map>
         </property>
         <property name="defaultErrorView" value="/exception/default" />
+        <property name="warnLogCategory" value="warn"/>
     </bean>
 </beans>

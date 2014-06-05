@@ -51,7 +51,7 @@
     <div id="addCommentDiv" hidden="true">
         <fieldset>
         <c:set var="commentPutUrl"><c:url value="${article.id}/comment"/></c:set>
-        <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}?parentComment=${parentComment}">
+        <sf:form method="post" modelAttribute="comment" action="${commentPutUrl}?parentComment=${parentComment}" parent="${parentComment}">
             <h2>Add Comment</h2>
 
             <ul class="comment-block">
@@ -78,7 +78,7 @@
         </fieldset>
     </div>
 
-    <input type="submit" id="addComment" value="Add Comment" commentIndex="${comment.id}"/><br/>
+    <input type="submit" id="addComment" value="Add Comment" commentIndex="0"/><br/>
 
     <b>Comments:</b>
     <c:forEach items="${comments}" var="comment">
@@ -105,15 +105,37 @@
 </div>
 
 <script type="text/javascript">
-    $("input[id*='addComment']").click(function() {
-                $('div#addCommentDiv').hide();
-                var index = $(this).attr('commentIndex');
-                var html = $("#addCommentDiv").clone();
-                var attrAction = $(html.find('#comment')).attr('action');
-                $(html.find('#comment')).attr('action', attrAction+index);
-                $(html).show();
+    $(document).ready(function(){
+        var error = hasValidError();
+        $("input[id*='addComment']").click(function() {
+                    $('div#addCommentDiv').hide();
+                    var index = $(this).attr('commentIndex');
+                    var html = $("#addCommentDiv").clone();
+                    var attrAction = $(html.find('#comment')).attr('action');
+                    if(!error){
+                        $(html.find('#comment')).attr('action', attrAction+index);
+                        $(html.find('#comment')).attr('parent', index);
+                    }
+                    $(html).show();
 
-                $(this).after(html);
+                    $(this).after(html);
+                }
+        );
+        if(error){
+            var parent = $('#addCommentDiv').find('form[id="comment"]').attr('parent');
+            $('input[type="submit"][commentindex="'+parent+'"]').click();
+        }
+    });
+
+    function hasValidError(){
+        var result = false;
+        var objs = $('#addCommentDiv').find('span[id*="errors"]');
+        $(objs).each(function(){
+            if($(this).text() != ""){
+                result =  true;
             }
-    );
+        });
+
+        return result;
+    }
 </script>

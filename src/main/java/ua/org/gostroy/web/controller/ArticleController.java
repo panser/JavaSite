@@ -23,7 +23,9 @@ import javax.mail.MessagingException;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by panser on 5/23/14.
@@ -166,7 +168,7 @@ public class ArticleController {
         else{
             log.debug("addComment(), commentFromForm: " + commentFromForm);
             commentFromForm.setArticle(article);
-            if(parentComment != null) {
+            if(!parentComment.equals("0")) {
                 Comment comment = commentService.find(Long.parseLong(parentComment));
                 commentFromForm.setParent(comment);
                 commentFromForm.setDepth(comment.getDepth() + 1);

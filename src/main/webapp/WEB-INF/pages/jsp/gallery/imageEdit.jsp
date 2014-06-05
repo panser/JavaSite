@@ -27,7 +27,7 @@
     for <b>${login}</b>
 </div>
 
-<sf:form name="f" method="PUT" modelAttribute="image" enctype="multipart/form-data">
+<sf:form name="f" method="PUT" modelAttribute="image">
     <table>
         <tr>
             <td>
@@ -59,9 +59,13 @@
             <td>Album : </td>
             <td>
                 <sf:select path="album" disabled="${disabledEdit}">
-                    <%--<sf:option value="NONE" label="--- Select ---"/>--%>
-                    <sf:options items="${albumList}" />
+                    <sf:options items="${albumList}"/>
                 </sf:select>
+<%--
+                <sf:select path="album.id" disabled="${disabledEdit}">
+                    <sf:options items="${albumList}" itemValue="id" itemLabel="name" />
+                </sf:select>
+--%>
             </td>
             <td><sf:errors path="album" cssClass="error" /></td>
         </tr>
@@ -76,19 +80,15 @@
         </tr>
 
         <c:if test="${disabledEdit=='false'}">
-            <tr>
-                <td><sf:label path="multipartFile">Image: </sf:label></td>
-                <td><sf:input type="file" path="multipartFile"/></td>
-                    <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
-                <td><sf:errors path="multipartFile"/>
-            </tr>
             <%--<c:if test="${not empty image.defAlbum}" var="isDefForAlbum"/>--%>
             <%--<h1>isDefForAlbum: <c:out value="${isDefForAlbum}"/></h1><br/>--%>
+<%--
             <tr>
                 <td>Use like title for album: </td>
                 <td><sf:checkbox path="defAlbum"  value="${album}"/></td>
                 <td><sf:errors path="defAlbum" cssClass="error" /></td>
             </tr>
+--%>
             <tr>
                 <td>
                     <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/delete"/>">

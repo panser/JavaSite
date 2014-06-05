@@ -224,7 +224,7 @@ public class GalleryController {
         if(album == null){
             throw new EntityNotFound("Album not found");
         }
-        if(!album.isPublicAccess()){
+        if(!album.getPublicAccess()){
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = null;
             if (principal instanceof User) {

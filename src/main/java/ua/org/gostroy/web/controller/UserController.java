@@ -95,8 +95,8 @@ public class UserController {
                 user.setAvatarImage(userFromForm.getAvatarImage());
             }
             user.setBirthDay(userFromForm.getBirthDay());
-            user.setReceiveNewsletter(userFromForm.isReceiveNewsletter());
-            user.setEnabled(userFromForm.isEnabled());
+            user.setReceiveNewsletter(userFromForm.getReceiveNewsletter());
+            user.setEnabled(userFromForm.getEnabled());
             user.setSex(userFromForm.getSex());
             user.setRole(userFromForm.getRole());
             log.trace("addUser(), user = " + user);
@@ -132,8 +132,8 @@ public class UserController {
                 user.setAvatarImage(userFromForm.getAvatarImage());
             }
             user.setBirthDay(userFromForm.getBirthDay());
-            user.setReceiveNewsletter(userFromForm.isReceiveNewsletter());
-            user.setEnabled(userFromForm.isEnabled());
+            user.setReceiveNewsletter(userFromForm.getReceiveNewsletter());
+            user.setEnabled(userFromForm.getEnabled());
             user.setSex(userFromForm.getSex());
             user.setRole(userFromForm.getRole());
             log.trace("editUser(), user = " + user);

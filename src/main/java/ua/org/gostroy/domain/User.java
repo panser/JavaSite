@@ -31,11 +31,11 @@ public class User implements Serializable {
     @NotEmpty(message="{validation.user.password.NotEmpty.message}")
     @Size(min=3, max=20, message="{validation.user.password.Size.message}")
     private String password;
-    private boolean enabled;
+    private Boolean enabled;
     private String regUrI;
     private String role;
     private UserSex sex;
-    private boolean receiveNewsletter;
+    private Boolean receiveNewsletter;
     @Basic(fetch=FetchType.LAZY)
     @Lob
     private byte[] avatarImage;
@@ -132,14 +132,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public String getRegUrI() {
         return regUrI;
     }
@@ -212,11 +204,19 @@ public class User implements Serializable {
         this.comments = comments;
     }
 
-    public boolean isReceiveNewsletter() {
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getReceiveNewsletter() {
         return receiveNewsletter;
     }
 
-    public void setReceiveNewsletter(boolean receiveNewsletter) {
+    public void setReceiveNewsletter(Boolean receiveNewsletter) {
         this.receiveNewsletter = receiveNewsletter;
     }
 

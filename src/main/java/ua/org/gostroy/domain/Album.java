@@ -26,7 +26,7 @@ public class Album {
 
     private String name;
     private String description;
-    private boolean publicAccess = true;
+    private Boolean publicAccess = true;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "defImage_id")
     private Image defImage;
@@ -106,11 +106,11 @@ public class Album {
         this.deleteDate = deleteDate;
     }
 
-    public boolean isPublicAccess() {
+    public Boolean getPublicAccess() {
         return publicAccess;
     }
 
-    public void setPublicAccess(boolean publicAccess) {
+    public void setPublicAccess(Boolean publicAccess) {
         this.publicAccess = publicAccess;
     }
 

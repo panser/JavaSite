@@ -20,7 +20,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.domain.User;
+import ua.org.gostroy.model.User;
 import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.service.UserService;
 

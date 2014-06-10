@@ -16,9 +16,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import ua.org.gostroy.domain.Article;
-import ua.org.gostroy.domain.User;
+import ua.org.gostroy.model.Article;
+import ua.org.gostroy.model.User;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -42,6 +43,7 @@ public class ArticleServiceTests {
 
     private Article testArticle;
     @Before
+    @Transactional
     public void setup(){
         testArticle = new Article();
         testArticle.setTitle("jUnitArticle");
@@ -63,6 +65,7 @@ public class ArticleServiceTests {
         SecurityContextHolder.getContext().setAuthentication(authenticationResult);
     }
     @After
+    @Transactional
     public void destroy(){
         articleService.delete(testArticle);
         User userDelete = userService.findByLogin("jUnitUser");
@@ -70,12 +73,14 @@ public class ArticleServiceTests {
     }
 
     @Test
+    @Transactional
     public void findOne(){
         Article newArticle = articleService.find(testArticle.getId());
         Assert.assertEquals(newArticle.getId(), testArticle.getId());
     }
 
     @Test
+    @Transactional
     public void update(){
         Article updateArticle = articleService.find(testArticle.getId());
         articleService.update(updateArticle);

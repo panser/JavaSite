@@ -7,9 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
-import ua.org.gostroy.domain.Album;
-import ua.org.gostroy.domain.Image;
-import ua.org.gostroy.domain.User;
+import ua.org.gostroy.model.Album;
+import ua.org.gostroy.model.Image;
+import ua.org.gostroy.model.User;
 import ua.org.gostroy.repository.ImageRepository;
 import ua.org.gostroy.web.form.UploadStatus;
 

@@ -10,9 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.domain.Album;
-import ua.org.gostroy.domain.Image;
-import ua.org.gostroy.domain.User;
+import ua.org.gostroy.model.Album;
+import ua.org.gostroy.model.Image;
+import ua.org.gostroy.model.User;
 import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.exception.HaveNotAccess;
 import ua.org.gostroy.exception.NeedAuthorize;
@@ -51,7 +51,7 @@ public class GalleryController {
 
 
     @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, @PathVariable String login) {
+    protected void initBinder(ServletRequestDataBinder binder, @PathVariable String login) {
         binder.registerCustomEditor(Album.class, new AlbumEditor(this.albumService,login));
     }
 
@@ -164,9 +164,9 @@ public class GalleryController {
         model.addAttribute("album", album);
 
         List<Album> albums = albumService.findByUserLogin(login);
-        Map<Album, String> albumList = new LinkedHashMap<Album, String>();
+        Map<String, String> albumList = new LinkedHashMap<String, String>();
         for(Album album1 : albums){
-            albumList.put(album1, album1.getName());
+            albumList.put(album1.getName(), album1.getName());
         }
         model.addAttribute("albumList", albumList);
 
@@ -178,8 +178,8 @@ public class GalleryController {
     @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
     public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
                                @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
-        log.trace("editImagePUT(), start");
         if(result.hasErrors()){
+            log.trace("editImagePUT(), result: " + result);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", result);
             redirectAttributes.addFlashAttribute("image", imageFromForm);
         }
@@ -187,12 +187,9 @@ public class GalleryController {
             Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
             log.trace("editImagePUT(), image after find: " + image);
 
-//            Album album = albumService.findByUserLoginAndName(login,albumName);
-//            image.setAlbum(album);
-
             image.setName(imageFromForm.getName());
             image.setDescription(imageFromForm.getDescription());
-//            image.setAlbum(imageFromForm.getAlbum());
+            image.setAlbum(imageFromForm.getAlbum());
 //            if(imageFromForm.getDefAlbum() != null) {
 //                image.setDefAlbum(imageFromForm.getDefAlbum());
 //            }
@@ -202,7 +199,7 @@ public class GalleryController {
             log.trace("editImagePUT(), finish");
         }
 
-        return "redirect:/gallery/" + login + "/" + albumName + "/" + imageName;
+        return "redirect:/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName();
     }
     @RequestMapping(value = {"/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){

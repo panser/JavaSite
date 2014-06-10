@@ -1,1 +1,1 @@
-All rights reserved. 2014 Panov Sergey
+Created by Sergey Panov (2014)

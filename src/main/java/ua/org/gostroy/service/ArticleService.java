@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.org.gostroy.domain.Article;
+import ua.org.gostroy.model.Article;
 import ua.org.gostroy.repository.ArticleRepository;
 
 import java.util.List;

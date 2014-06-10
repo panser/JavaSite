@@ -7,6 +7,7 @@
 
 <html>
 <head>
+    <link href="<c:url value="/resources/css/thisProject.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/ui-lightness/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet">
     <script src="<c:url value="/resources/js/jquery-1.10.2.js"/>"></script>
     <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js"/>"></script>
@@ -23,30 +24,6 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
-    <style type="text/css">
-        /*body { margin: 0; padding: 0; }*/
-        textarea{
-            width: 30%;
-            /*min-width: 20%;*/
-            height: 100px;
-        }
-        .depth1{
-            margin-left: 40px;
-        }
-        .depth2{
-            margin-left: 80px;
-        }
-        .depth3{
-            margin-left: 120px;
-        }
-        .depth4{
-            margin-left: 160px;
-        }
-        .comment-block li{
-            display: block;
-        }
-    </style>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

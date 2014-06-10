@@ -4,7 +4,7 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.org.gostroy.domain.Comment;
+import ua.org.gostroy.model.Comment;
 
 import java.io.Serializable;
 

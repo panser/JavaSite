@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.org.gostroy.domain.User;
+import org.springframework.transaction.annotation.Transactional;
+import ua.org.gostroy.model.User;
 
 /**
  * Created by panser on 5/21/14.
@@ -22,6 +23,7 @@ public class UserRepositoryTests {
 
     private User testUser;
     @Before
+    @Transactional
     public void setup(){
         testUser = new User();
         testUser.setLogin("jUnitUser");
@@ -31,17 +33,20 @@ public class UserRepositoryTests {
         userRepository.save(testUser);
     }
     @After
+    @Transactional
     public void destroy(){
         userRepository.delete(testUser);
     }
 
     @Test
+    @Transactional
     public void findOne(){
         User newUser = userRepository.findOne(testUser.getId());
         Assert.assertEquals(newUser.getId(),testUser.getId());
     }
 
     @Test
+    @Transactional
     public void update(){
         User updateUser = userRepository.findOne(testUser.getId());
         User newUser = userRepository.save(updateUser);

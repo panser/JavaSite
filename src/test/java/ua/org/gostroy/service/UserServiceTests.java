@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.org.gostroy.domain.User;
+import org.springframework.transaction.annotation.Transactional;
+import ua.org.gostroy.model.User;
 
 /**
  * Created by panser on 5/21/14.
@@ -25,6 +26,7 @@ public class UserServiceTests {
 
     private User testUser;
     @Before
+    @Transactional
     public void setup(){
         testUser = new User();
         testUser.setLogin("jUnitUser");
@@ -34,17 +36,20 @@ public class UserServiceTests {
         userService.create(testUser);
     }
     @After
+    @Transactional
     public void destroy(){
         userService.delete(testUser);
     }
 
     @Test
+    @Transactional
     public void findOne(){
         User newUser = userService.find(testUser.getId());
         Assert.assertEquals(newUser.getId(), testUser.getId());
     }
 
     @Test
+    @Transactional
     public void update(){
         User updateUser = userService.find(testUser.getId());
         userService.update(updateUser);

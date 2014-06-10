@@ -18,10 +18,11 @@
 --%>
 
 <div>
-    List of image in <b>${album.name}</b> for
     <a href="<c:url value="/gallery/${login}/"/>">
         <b>${login}</b>
     </a>
+    /
+    <b>${album.name}</b>
 </div>
 
 <div>

@@ -20,11 +20,15 @@
 --%>
 
 <div>
-    Image <b>${image.name}</b> in
+    <a href="<c:url value="/gallery/${login}/"/>">
+        <b>${login}</b>
+    </a>
+    /
     <a href="<c:url value="/gallery/${login}/${album.name}/"/>">
         <b>${album.name}</b>
     </a>
-    for <b>${login}</b>
+    /
+    <b>${image.name}</b>
 </div>
 
 <sf:form name="f" method="PUT" modelAttribute="image">
@@ -82,13 +86,17 @@
         <c:if test="${disabledEdit=='false'}">
             <%--<c:if test="${not empty image.defAlbum}" var="isDefForAlbum"/>--%>
             <%--<h1>isDefForAlbum: <c:out value="${isDefForAlbum}"/></h1><br/>--%>
-<%--
             <tr>
                 <td>Use like title for album: </td>
                 <td><sf:checkbox path="defAlbum"  value="${album}"/></td>
                 <td><sf:errors path="defAlbum" cssClass="error" /></td>
             </tr>
+<%--
+            <sf:select path="album" disabled="${disabledEdit}">
+                <sf:options items="${albumList}"/>
+            </sf:select>
 --%>
+
             <tr>
                 <td>
                     <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/delete"/>">

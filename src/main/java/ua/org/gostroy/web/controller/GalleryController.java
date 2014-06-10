@@ -259,7 +259,8 @@ public class GalleryController {
         }
         if(!album.getPublicAccess()){
             String authLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-            if(authLogin != login){
+            log.trace("viewImage(), authLogin: " + authLogin);
+            if(!authLogin.equals(login)){
                     ClassPathResource resourceImage = new ClassPathResource("templates/image/accessDenied.jpg");
                     bufferedImage = ImageIO.read(resourceImage.getFile());
                     return bufferedImage;

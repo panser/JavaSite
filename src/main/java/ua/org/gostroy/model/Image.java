@@ -1,6 +1,8 @@
 package ua.org.gostroy.model;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +16,7 @@ import java.util.Date;
 @Entity
 @Table(name = "images")
 public class Image {
+    private transient final Logger log = LoggerFactory.getLogger(getClass());
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +37,9 @@ public class Image {
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     public Album album;
-    @OneToOne(mappedBy = "defImage")
+    @OneToOne(mappedBy = "defImage", cascade = CascadeType.ALL)
     private Album defAlbum;
+    private transient Boolean checkDefForAlbum;
 
     @DateTimeFormat
     private Date createDate = new Date();
@@ -154,6 +158,17 @@ public class Image {
         this.defAlbum = defAlbum;
     }
 
+    public Boolean getCheckDefForAlbum() {
+//        log.trace("getCheckDefForAlbum(), defAlbum: " + defAlbum);
+        return defAlbum != null;
+    }
+
+    public void setCheckDefForAlbum(Boolean checkDefForAlbum) {
+        if(checkDefForAlbum){
+            this.defAlbum = this.album;
+        }
+    }
+
     @Override
     public String toString() {
         return "Image{" +
@@ -164,6 +179,8 @@ public class Image {
                 ", path='" + path + '\'' +
                 ", file='" + file + '\'' +
                 ", album=" + album +
+                ", defAlbum=" + defAlbum +
+                ", checkDefForAlbum=" + checkDefForAlbum +
                 '}';
     }
 }

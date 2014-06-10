@@ -127,6 +127,7 @@ public class Album {
         return "Album{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+//                ", defImage='" + defImage + '\'' +
                 '}';
     }
 }

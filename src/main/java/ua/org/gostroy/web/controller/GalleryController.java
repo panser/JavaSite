@@ -190,12 +190,27 @@ public class GalleryController {
             image.setName(imageFromForm.getName());
             image.setDescription(imageFromForm.getDescription());
             image.setAlbum(imageFromForm.getAlbum());
-//            if(imageFromForm.getDefAlbum() != null) {
-//                image.setDefAlbum(imageFromForm.getDefAlbum());
-//            }
+            if(imageFromForm.getCheckDefForAlbum()){
+                log.trace("editImagePUT(), image.getDefAlbum()1: " + image.getDefAlbum());
+                if(image.getDefAlbum() != null) {
+                    image.getDefAlbum().setDefImage(null);
+                    image.setDefAlbum(image.getAlbum());
+                    image.getDefAlbum().setDefImage(image);
+                }
+                else{
+                    image.setDefAlbum(image.getAlbum());
+                    image.getDefAlbum().setDefImage(image);
+                }
+            }
+            else{
+                if(image.getDefAlbum() != null){
+                    image.getDefAlbum().setDefImage(null);
+                }
+            }
 
             log.trace("editImagePUT(), image before update: " + image);
             imageService.update(image);
+            log.trace("editImagePUT(), image.getDefAlbum()2: " + image.getDefAlbum());
             log.trace("editImagePUT(), finish");
         }
 

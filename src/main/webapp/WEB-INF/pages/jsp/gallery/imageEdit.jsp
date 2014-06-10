@@ -86,16 +86,13 @@
         <c:if test="${disabledEdit=='false'}">
             <%--<c:if test="${not empty image.defAlbum}" var="isDefForAlbum"/>--%>
             <%--<h1>isDefForAlbum: <c:out value="${isDefForAlbum}"/></h1><br/>--%>
+            <%--<h1>album: <c:out value="${album}"/></h1><br/>--%>
             <tr>
                 <td>Use like title for album: </td>
-                <td><sf:checkbox path="defAlbum"  value="${album}"/></td>
-                <td><sf:errors path="defAlbum" cssClass="error" /></td>
+                <td><sf:checkbox path="checkDefForAlbum"/></td>
+                <%--<td><sf:checkbox path="defAlbum"  value="${album}"/></td>--%>
+                <%--<td><sf:errors path="defAlbum" cssClass="error" /></td>--%>
             </tr>
-<%--
-            <sf:select path="album" disabled="${disabledEdit}">
-                <sf:options items="${albumList}"/>
-            </sf:select>
---%>
 
             <tr>
                 <td>

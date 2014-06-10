@@ -28,7 +28,7 @@ Album List of user: <b>${login}</b>
             <td></td>
             <td>Name</td>
             <td>Description</td>
-            <td>PublicAccess</td>
+            <td>Allow few view?</td>
             <td>Count images</td>
             <td>CreateDate</td>
             <c:if test="${disabledEdit=='false'}">

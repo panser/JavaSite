@@ -147,7 +147,7 @@ public class ImageService {
         image.setSize(image.getMultipartFile().getSize());
         image.setPath(path);
         image.setDigest(digest);
-        image.setName(image.getMultipartFile().getOriginalFilename());
+        image.setName(image.getMultipartFile().getOriginalFilename().replace('.','_'));
 
         imageRepository.save(image);
         log.trace("create.");

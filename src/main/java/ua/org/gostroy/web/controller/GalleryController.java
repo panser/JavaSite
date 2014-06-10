@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ import java.util.Map;
  * Created by panser on 6/2/2014.
  */
 @Controller
-@RequestMapping("/gallery/{login}")
+@RequestMapping("/gallery")
 public class GalleryController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private String root = System.getProperty("user.dir");
@@ -68,6 +69,12 @@ public class GalleryController {
 
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String listImagesGET(Model model){
+        model.addAttribute("images", imageService.findAll());
+        return "/gallery/imageAll";
+    }
+
+    @RequestMapping(value = {"/{login}/"}, method = RequestMethod.GET)
     public String listAlbumsGET(Model model, @PathVariable String login){
         model.addAttribute("login", login);
         model.addAttribute("albums", albumService.findByUserLogin(login));
@@ -75,7 +82,7 @@ public class GalleryController {
         return "/gallery/albumList";
     }
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/{login}/"}, method = RequestMethod.POST)
     public String listAlbumsPOST(@Valid @ModelAttribute("albumNew") Album albumFromForm, BindingResult result,
                                  @PathVariable String login) {
         String viewName;
@@ -89,7 +96,7 @@ public class GalleryController {
         }
         return viewName;
     }
-    @RequestMapping(value = {"/{albumName}/delete"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/delete"}, method = RequestMethod.GET)
     public String listAlbumsDELETE(@PathVariable String login, @PathVariable String albumName){
         List<Image> images = imageService.findByUserLoginAndAlbumName(login, albumName);
         Album album = albumService.findByUserLoginAndName(login,albumName);
@@ -102,7 +109,7 @@ public class GalleryController {
 
 
 
-    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.GET)
     public String listImages(Model model, @PathVariable String login, @PathVariable String albumName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
         model.addAttribute("login", login);
@@ -121,7 +128,7 @@ public class GalleryController {
     }
 */
 //    @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.POST)
     public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
                                    MultipartRequest multipartRequest)
             throws IOException, NoSuchAlgorithmException{
@@ -162,7 +169,7 @@ public class GalleryController {
 
 
 
-    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.GET)
     public String editImageGET(Model model, HttpServletRequest request,
                             @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
@@ -185,7 +192,7 @@ public class GalleryController {
         model.addAttribute("requestURL", requestURL);
         return "/gallery/imageEdit";
     }
-    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.PUT)
     public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
                                @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
         if(result.hasErrors()){
@@ -226,7 +233,7 @@ public class GalleryController {
 
         return "redirect:/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName();
     }
-    @RequestMapping(value = {"/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login,albumName,imageName);
         imageService.delete(image);
@@ -238,39 +245,41 @@ public class GalleryController {
 
 
 
-    @RequestMapping(value = {"/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
     @ResponseBody
     public BufferedImage viewImage(@PathVariable String login, @PathVariable String imageName, @PathVariable String albumName)
             throws HaveNotAccess,NeedAuthorize,EntityNotFound, IOException {
         Album album = albumService.findByUserLoginAndName(login, albumName);
+        BufferedImage bufferedImage = null;
         if(album == null){
-            throw new EntityNotFound("Album not found");
+            ClassPathResource resourceImage = new ClassPathResource("templates/image/notFound.gif");
+            bufferedImage = ImageIO.read(resourceImage.getFile());
+            return bufferedImage;
+//            throw new EntityNotFound("Album not found");
         }
         if(!album.getPublicAccess()){
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user = null;
-            if (principal instanceof User) {
-                user = (User) principal;
-                if(user.getLogin() != login){
-                    throw new HaveNotAccess("You have not access to view Image in private Album");
-                }
-            } else {
-                throw new NeedAuthorize("You need to authorize to view private content");
+            String authLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            if(authLogin != login){
+                    ClassPathResource resourceImage = new ClassPathResource("templates/image/accessDenied.jpg");
+                    bufferedImage = ImageIO.read(resourceImage.getFile());
+                    return bufferedImage;
+//                    throw new HaveNotAccess("You have not access to view Image in private Album");
             }
         }
-//        log.trace("viewImage(), imageName:" + imageName);
+
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login, albumName, imageName);
-        if(image == null){
-            throw new EntityNotFound("Image not found");
+        if (image == null) {
+            ClassPathResource resourceImage = new ClassPathResource("templates/image/notFound.gif");
+            bufferedImage = ImageIO.read(resourceImage.getFile());
+            return bufferedImage;
+//            throw new EntityNotFound("Image not found");
+        } else {
+            File filePath = new File(root + image.getPath() + image.getDigest());
+            log.trace("viewImage(), filePath:" + filePath.toString());
+            bufferedImage = ImageIO.read(filePath);
         }
-//        Resource resource = new ClassPathResource(root + image.getPath() + image.getFile());
-//        log.trace("viewImage(), resource:" + resource.getFilename());
-//        BufferedImage bufferedImage = ImageIO.read(resource.getURL());
-        File filePath = new File(root + image.getPath() + image.getDigest());
-        log.trace("viewImage(), filePath:" + filePath.toString());
-        BufferedImage bufferedImage = ImageIO.read(filePath);
         Graphics g = bufferedImage.getGraphics();
-        g.drawString("gostroy.org.ua",20,20);
+        g.drawString("gostroy.org.ua", 20, 20);
         return bufferedImage;
     }
 

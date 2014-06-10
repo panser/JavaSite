@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface ImageRepository  extends JpaRepository<Image, Long> {
     List<Image> findByUserLogin(String userLogin);
-    List<Image> findByAlbumName(String albumName);
     List<Image> findByUserLoginAndAlbumName(String userLogin, String albumName);
     Image findByUserLoginAndAlbumNameAndName(String userLogin, String albumName, String name);
 }

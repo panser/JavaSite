@@ -9,8 +9,7 @@
 <spring:message code="date_format_pattern" var="dateFormatPattern"/>
 
 
-<c:set var="disabledEdit">false</c:set>
-<%--
+<%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
 <security:authorize access="isAuthenticated()">
     <c:set var="username"><security:authentication property="principal.username"/></c:set>
@@ -19,7 +18,6 @@
 <security:authorize access="hasRole('ROLE_ADMIN')">
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
---%>
 
 
 Album List of user: <b>${login}</b>

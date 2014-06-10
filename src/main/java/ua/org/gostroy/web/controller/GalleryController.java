@@ -3,12 +3,18 @@ package ua.org.gostroy.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.model.Album;
 import ua.org.gostroy.model.Image;
@@ -24,11 +30,14 @@ import ua.org.gostroy.web.form.UploadStatus;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +58,8 @@ public class GalleryController {
     @Autowired(required = true)
     private UserService userService;
 
+    @Autowired(required = true)
+    private MessageSource messageSource;
 
     @InitBinder
     protected void initBinder(ServletRequestDataBinder binder, @PathVariable String login) {
@@ -80,7 +91,11 @@ public class GalleryController {
     }
     @RequestMapping(value = {"/{albumName}/delete"}, method = RequestMethod.GET)
     public String listAlbumsDELETE(@PathVariable String login, @PathVariable String albumName){
+        List<Image> images = imageService.findByUserLoginAndAlbumName(login, albumName);
         Album album = albumService.findByUserLoginAndName(login,albumName);
+        for(Image image : images){
+            imageService.delete(image);
+        }
         albumService.delete(album);
         return "redirect:/gallery/" + login + "/";
     }
@@ -105,48 +120,43 @@ public class GalleryController {
         return "/gallery/imageUpload";
     }
 */
+//    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.POST)
-    public String uploadImagesPOST(@Valid @ModelAttribute("imageNew") Image imageFromForm, BindingResult result, RedirectAttributes redirectAttributes,
-                                   @PathVariable String login, @PathVariable String albumName){
-        if(imageFromForm.getMultipartFile() == null){
-            result.rejectValue("multipartFile", "error.upload.notselected");
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
-            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
-        }
-        else if(result.hasErrors()){
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
-            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
+    public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
+                                   MultipartRequest multipartRequest)
+            throws IOException, NoSuchAlgorithmException{
+        log.trace("uploadImagesPOST(), start ...");
+        Map<String, String> errorsMap = new HashMap<String, String>();
+        List<MultipartFile> files = multipartRequest.getFiles("files");
+        if(files.get(0).isEmpty()){
+            errorsMap.put("", messageSource.getMessage("error.upload.notselected", null, LocaleContextHolder.getLocale()));
         }
         else {
-            Image image = new Image();
             User user = userService.findByLogin(login);
             Album album = albumService.findByUserLoginAndName(login, albumName);
-            if(album == null){
+            if (album == null) {
                 album = new Album();
                 album.setName(albumName);
                 album.setUser(user);
-                album.setDefImage(image);
             }
+            for (MultipartFile multipartFile : files) {
+                    Image image = new Image();
+                    image.setUser(user);
+                    image.setAlbum(album);
+                    image.setMultipartFile(multipartFile);
 
-            image.setUser(user);
-            image.setAlbum(album);
-
-            String originalFilename = imageFromForm.getMultipartFile().getOriginalFilename();
-            originalFilename = originalFilename.replace('.','_');
-            image.setName(originalFilename);
-            image.setMultipartFile(imageFromForm.getMultipartFile());
-
-            UploadStatus uploadStatus = imageService.create(image);
-            if (uploadStatus.equals(UploadStatus.EXISTS)){
-                result.rejectValue("multipartFile", "error.upload.exists");
-            } else if (uploadStatus.equals(UploadStatus.INVALID)){
-                result.rejectValue("multipartFile", "error.upload.invalid");
-            } else if (uploadStatus.equals(UploadStatus.FAILED)) {
-                result.rejectValue("multipartFile", "error.upload.failed");
+                    UploadStatus uploadStatus = imageService.create(image);
+                    String fileName = image.getMultipartFile().getOriginalFilename();
+                    if (uploadStatus.equals(UploadStatus.EXISTS)) {
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.exists", null, LocaleContextHolder.getLocale()));
+                    } else if (uploadStatus.equals(UploadStatus.INVALID)) {
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.invalid", null, LocaleContextHolder.getLocale()));
+                    } else if (uploadStatus.equals(UploadStatus.FAILED)) {
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.failed", null, LocaleContextHolder.getLocale()));
+                    }
+                }
             }
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.imageNew", result);
-            redirectAttributes.addFlashAttribute("imageNew", imageFromForm);
-        }
+        redirectAttributes.addFlashAttribute("errorsMap", errorsMap);
         return "redirect:/gallery/" + login + "/" + albumName + "/";
     }
 
@@ -256,7 +266,7 @@ public class GalleryController {
 //        Resource resource = new ClassPathResource(root + image.getPath() + image.getFile());
 //        log.trace("viewImage(), resource:" + resource.getFilename());
 //        BufferedImage bufferedImage = ImageIO.read(resource.getURL());
-        File filePath = new File(root + image.getPath() + image.getFile());
+        File filePath = new File(root + image.getPath() + image.getDigest());
         log.trace("viewImage(), filePath:" + filePath.toString());
         BufferedImage bufferedImage = ImageIO.read(filePath);
         Graphics g = bufferedImage.getGraphics();

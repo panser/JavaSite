@@ -8,6 +8,7 @@
             <map>
                 <!--<entry key="com.seostella.spring.exception.CustomException" value="/exception/customException" />-->
                 <!--<entry key="com.seostella.spring.exception.SecondCustomException" value="/exception/secondCustomException" />-->
+                <entry key="org.springframework.security.access.AccessDeniedException" value="/exception/accessDeniedException" />
             </map>
         </property>
         <property name="defaultErrorView" value="/exception/default" />

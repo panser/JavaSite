@@ -32,7 +32,7 @@ public class Image {
     private String description;
     private long size;
     private String path;
-    private String file;
+    private String digest;
     private transient MultipartFile multipartFile;
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "album_id", referencedColumnName = "id")
@@ -126,12 +126,12 @@ public class Image {
         this.size = size;
     }
 
-    public String getFile() {
-        return file;
+    public String getDigest() {
+        return digest;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setDigest(String digest) {
+        this.digest = digest;
     }
 
     public MultipartFile getMultipartFile() {
@@ -177,7 +177,7 @@ public class Image {
                 ", name='" + name + '\'' +
                 ", size=" + size +
                 ", path='" + path + '\'' +
-                ", file='" + file + '\'' +
+                ", digest='" + digest + '\'' +
                 ", album=" + album +
                 ", defAlbum=" + defAlbum +
                 ", checkDefForAlbum=" + checkDefForAlbum +

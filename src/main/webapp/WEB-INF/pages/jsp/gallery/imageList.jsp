@@ -5,8 +5,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="disabledEdit">false</c:set>
-<%--
+<%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
 <security:authorize access="isAuthenticated()">
     <c:set var="username"><security:authentication property="principal.username"/></c:set>
@@ -15,7 +14,6 @@
 <security:authorize access="hasRole('ROLE_ADMIN')">
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
---%>
 
 <div>
     <a href="<c:url value="/gallery/${login}/"/>">
@@ -33,18 +31,19 @@
     </c:forEach>
 </div>
 
+<br/>
 <div>
     <c:if test="${disabledEdit=='false'}">
-        <%--<a href="<c:url value="/gallery/${login}/${album.name}/upload"/>">Upload image</a>--%>
-        <sf:form name="f" method="POST" modelAttribute="imageNew" enctype="multipart/form-data">
-            <sf:label path="multipartFile">Upload image</sf:label>
-            <sf:input type="file" path="multipartFile" disabled="${disabledEdit}"/>
-            <%--<input id="multipartFile" name="multipartFile" type="file" value=""/>--%>
-            <sf:errors path="multipartFile"/>
-            <br/>
-            <input name="commit" type="submit" value="Upload"/>
-            <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
-            <security:csrfInput/>
+        <sf:form name="html5_upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="files" id="files" multiple="multiple"/>
+            <input type="submit"/>
         </sf:form>
     </c:if>
+    <font color="red">
+        <c:forEach items="${errorsMap}" var="entry">
+            <p>
+            ${entry.key}: ${entry.value}
+            </p>
+        </c:forEach>
+    </font>
 </div>

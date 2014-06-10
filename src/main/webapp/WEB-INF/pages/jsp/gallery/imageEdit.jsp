@@ -7,8 +7,7 @@
 
 <spring:message code="date_format_pattern" var="dateFormatPattern"/>
 
-<c:set var="disabledEdit">false</c:set>
-<%--
+<%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
 <security:authorize access="isAuthenticated()">
     <c:set var="username"><security:authentication property="principal.username"/></c:set>
@@ -17,7 +16,6 @@
 <security:authorize access="hasRole('ROLE_ADMIN')">
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
---%>
 
 <div>
     <a href="<c:url value="/gallery/${login}/"/>">
@@ -65,18 +63,12 @@
                 <sf:select path="album" disabled="${disabledEdit}">
                     <sf:options items="${albumList}"/>
                 </sf:select>
-<%--
-                <sf:select path="album.id" disabled="${disabledEdit}">
-                    <sf:options items="${albumList}" itemValue="id" itemLabel="name" />
-                </sf:select>
---%>
             </td>
             <td><sf:errors path="album" cssClass="error" /></td>
         </tr>
         <tr>
             <td><sf:label path="size">Size: </sf:label></td>
             <td><fmt:formatNumber type="number" maxFractionDigits="3" value="${image.size}" />B</td>
-            <%--<td>${image.size}</td>--%>
         </tr>
         <tr>
             <td><sf:label path="createDate">CreateDate: </sf:label></td>
@@ -84,14 +76,10 @@
         </tr>
 
         <c:if test="${disabledEdit=='false'}">
-            <%--<c:if test="${not empty image.defAlbum}" var="isDefForAlbum"/>--%>
-            <%--<h1>isDefForAlbum: <c:out value="${isDefForAlbum}"/></h1><br/>--%>
-            <%--<h1>album: <c:out value="${album}"/></h1><br/>--%>
             <tr>
                 <td>Use like title for album: </td>
                 <td><sf:checkbox path="checkDefForAlbum"/></td>
-                <%--<td><sf:checkbox path="defAlbum"  value="${album}"/></td>--%>
-                <%--<td><sf:errors path="defAlbum" cssClass="error" /></td>--%>
+                <td><sf:errors path="checkDefForAlbum" cssClass="error" /></td>
             </tr>
 
             <tr>

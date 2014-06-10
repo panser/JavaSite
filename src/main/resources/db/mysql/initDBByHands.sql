@@ -2,13 +2,13 @@ CREATE DATABASE IF NOT EXISTS javasite DEFAULT CHARACTER SET utf8;
 USE javasite;
 
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS userAddress;
-DROP TABLE IF EXISTS articles;
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS visitors;
-# DROP TABLE IF EXISTS images;
-# DROP TABLE IF EXISTS albums;
+# DROP TABLE IF EXISTS users;
+# DROP TABLE IF EXISTS userAddress;
+# DROP TABLE IF EXISTS articles;
+# DROP TABLE IF EXISTS comments;
+# DROP TABLE IF EXISTS visitors;
+DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS albums;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS images (
   description     VARCHAR(500) DEFAULT NULL,
   size   BIGINT(11) DEFAULT NULL,
   path  VARCHAR(2000) DEFAULT NULL,
-  file  VARCHAR(2000) DEFAULT NULL,
+  digest  VARCHAR(2000) DEFAULT NULL,
   album_id  BIGINT(11) UNSIGNED DEFAULT NULL,
   createDate   DATETIME,
   deleteDate  DATETIME DEFAULT NULL
@@ -133,8 +133,8 @@ ALTER TABLE albums ADD CONSTRAINT fk_album_user FOREIGN KEY (user_id) REFERENCES
 ALTER TABLE albums ADD CONSTRAINT fk_album_defImage FOREIGN KEY (defImage_id) REFERENCES images(id);
 
 # ADD INDEX
-CREATE INDEX users_login ON users (login);
-CREATE INDEX comments_article_id ON comments (article_id);
-CREATE INDEX visitors_article_id ON visitors (article_id);
-CREATE INDEX images_user_id ON images (user_id);
-CREATE INDEX albums_user_id ON albums (user_id);
+# CREATE INDEX users_login ON users (login);
+# CREATE INDEX comments_article_id ON comments (article_id);
+# CREATE INDEX visitors_article_id ON visitors (article_id);
+# CREATE INDEX images_user_id ON images (user_id);
+# CREATE INDEX albums_user_id ON albums (user_id);

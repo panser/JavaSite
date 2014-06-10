@@ -5,8 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:set var="disabledEdit">false</c:set>
-<%--
+<%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
 <security:authorize access="isAuthenticated()">
     <c:set var="username"><security:authentication property="principal.username"/></c:set>
@@ -15,7 +14,6 @@
 <security:authorize access="hasRole('ROLE_ADMIN')">
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
---%>
 
 <sf:form name="f" method="POST" modelAttribute="image" enctype="multipart/form-data">
     <%--<sf:input type="hidden" path="id" />--%>

@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.FileSystemUtils;
 import ua.org.gostroy.model.Album;
 import ua.org.gostroy.model.Image;
 import ua.org.gostroy.model.User;
@@ -16,6 +18,11 @@ import ua.org.gostroy.web.form.UploadStatus;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -47,14 +54,6 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
-    public List<Image> findByAlbumName(String albumName) {
-        log.trace("findByAlbumName ...");
-        List<Image> images = imageRepository.findByAlbumName(albumName);
-        log.trace("findByAlbumName.");
-        return images;
-    }
-
-    @Transactional(readOnly = true)
     public List<Image> findByUserLoginAndAlbumName(String userLogin, String albumName) {
         log.trace("findByUserLoginAndAlbumName ...");
         List<Image> images = imageRepository.findByUserLoginAndAlbumName(userLogin, albumName);
@@ -78,8 +77,10 @@ public class ImageService {
         return images;
     }
 
+    @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = Exception.class)
-    public UploadStatus create(Image image) {
+    public UploadStatus create(Image image) throws NoSuchAlgorithmException, IOException{
         log.trace("create ...");
 
         log.trace(String.format("create(), root: %s", root));
@@ -101,11 +102,6 @@ public class ImageService {
             target.append(user.getLogin());
             target.append(File.separator);
         }
-        Album album = image.getAlbum();
-        if(album != null){
-            target.append(album.getName());
-            target.append(File.separator);
-        }
 
         String path = target.toString();
         target.insert(0, this.root);
@@ -115,11 +111,12 @@ public class ImageService {
             dir.mkdirs();
         }
 
-        String fileName = image.getMultipartFile().getOriginalFilename();
-        if (fileName == null || "".equals(fileName)){
-            fileName = image.getMultipartFile().getName();
-        }
-        target.append(fileName);
+        byte[] bytesOfMessage = image.getMultipartFile().getBytes();
+        String digest = DigestUtils.md5DigestAsHex(bytesOfMessage);
+        log.trace("create(), fileName: " + digest);
+
+
+        target.append(digest);
         log.trace(String.format("create(), target: %s", target));
 
         File targetFile = new File(target.toString());
@@ -149,7 +146,8 @@ public class ImageService {
 
         image.setSize(image.getMultipartFile().getSize());
         image.setPath(path);
-        image.setFile(fileName);
+        image.setDigest(digest);
+        image.setName(image.getMultipartFile().getOriginalFilename());
 
         imageRepository.save(image);
         log.trace("create.");
@@ -157,7 +155,7 @@ public class ImageService {
         return UploadStatus.SUCCESS;
     }
 
-//    @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long update(Image image) {
         log.trace("update ...");
@@ -170,6 +168,15 @@ public class ImageService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Image image) {
         log.trace("delete ...");
+
+        StringBuffer target = new StringBuffer();
+        target.append(this.root);
+        target.append(image.getPath());
+        target.append(image.getDigest());
+        File targetFile = new File(target.toString());
+        log.trace("delete(), targetFile: " + targetFile.toString());
+        targetFile.delete();
+
         imageRepository.delete(image);
         log.trace("delete.");
     }

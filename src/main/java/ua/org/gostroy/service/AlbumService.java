@@ -55,6 +55,7 @@ public class AlbumService {
         return albums;
     }
 
+    @PreAuthorize("#album.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
     public Long create(Album album) {
         log.trace("create ...");

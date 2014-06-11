@@ -3,6 +3,7 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,7 @@ public class ImageService {
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
 //    @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "images")
     public UploadStatus create(Image image) throws NoSuchAlgorithmException, IOException{
         log.trace("create ...");
 
@@ -160,6 +162,7 @@ public class ImageService {
 
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "images")
     public Long update(Image image) {
         log.trace("update ...");
         imageRepository.save(image);
@@ -169,6 +172,7 @@ public class ImageService {
 
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "images")
     public void delete(Image image) {
         log.trace("delete ...");
 

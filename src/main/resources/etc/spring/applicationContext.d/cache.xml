@@ -4,9 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <!-- enables scanning for @Cacheable annotation -->
-    <cache:annotation-driven cache-manager="cacheManager1"/>
+    <cache:annotation-driven cache-manager="cacheManager"/>
 
-    <bean id="cacheManager1" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <property name="cacheManager" ref="ehcache"/>
     </bean>
 

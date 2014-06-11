@@ -6,6 +6,47 @@
     <mvc:view-controller path="/" view-name="redirect:/article/"/>
 
 
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager" ref="cnManager"/>
+
+        <property name="viewResolvers">
+            <list>
+                <!-- Default viewClass: Tiles view (JSP with html output) -->
+                <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+                    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+                    <property name="order" value="1"/>
+                </bean>
+
+                <bean id="jsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+                    <property name="prefix" value="/WEB-INF/pages/jsp/"/>
+                    <property name="suffix" value=".jsp"/>
+                    <property name="order" value="5"/>
+                </bean>
+
+                <!-- Used here for 'xml' and 'atom' views  -->
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+                    <property name="order" value="10"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Simple strategy: only path extension is taken into account -->
+    <bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="true"/>
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="defaultContentType" value="text/html"/>
+
+        <property name="mediaTypes">
+            <map>
+                <entry key="html" value="text/html" />
+                <entry key="xml" value="application/xml" />
+                <entry key="atom" value="application/atom+xml" />
+            </map>
+        </property>
+    </bean>
+
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <property name="definitions">
             <list>
@@ -15,14 +56,21 @@
         </property>
     </bean>
 
-    <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
-        <property name="order" value="1"/>
-    </bean>
-    <bean id="jsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/pages/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-        <property name="order" value="10"/>
-    </bean>
+    <!--
+
+        &lt;!&ndash; Renders an Atom feed of the visits. Used by the BeanNameViewResolver  &ndash;&gt;
+        <bean id="vets/vetList.atom" class="org.springframework.samples.petclinic.web.VetsAtomView"/>
+
+        &lt;!&ndash; Renders an XML view. Used by the BeanNameViewResolver  &ndash;&gt;
+        <bean id="vets/vetList.xml" class="org.springframework.web.servlet.view.xml.MarshallingView">
+            <property name="marshaller" ref="marshaller"/>
+        </bean>
+
+        <oxm:jaxb2-marshaller id="marshaller">
+            &lt;!&ndash; Object-XML mapping declared using annotations inside 'Vets' &ndash;&gt;
+            <oxm:class-to-be-bound name="org.springframework.samples.petclinic.model.Vets"/>
+        </oxm:jaxb2-marshaller>
+
+    -->
+
 </beans>

@@ -57,7 +57,7 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "images")
+//    @Cacheable(value = "images")
     public List<Image> findByUserLoginAndAlbumName(String userLogin, String albumName) {
         log.trace("findByUserLoginAndAlbumName ...");
         List<Image> images = imageRepository.findByUserLoginAndAlbumName(userLogin, albumName);
@@ -85,7 +85,7 @@ public class ImageService {
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
 //    @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "images")
+//    @CacheEvict(value = "images")
     public UploadStatus create(Image image) throws NoSuchAlgorithmException, IOException{
         log.trace("create ...");
 
@@ -163,7 +163,7 @@ public class ImageService {
 
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "images")
+//    @CacheEvict(value = "images")
     public Long update(Image image) {
         log.trace("update ...");
         imageRepository.save(image);
@@ -173,7 +173,7 @@ public class ImageService {
 
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "images")
+//    @CacheEvict(value = "images")
     public void delete(Image image) {
         log.trace("delete ...");
 

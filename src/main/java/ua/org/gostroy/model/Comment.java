@@ -1,5 +1,7 @@
 package ua.org.gostroy.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "comments")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Comment implements Serializable {
     private transient final Logger log = LoggerFactory.getLogger(getClass());
 

@@ -3,6 +3,7 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,7 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "images")
     public List<Image> findByUserLoginAndAlbumName(String userLogin, String albumName) {
         log.trace("findByUserLoginAndAlbumName ...");
         List<Image> images = imageRepository.findByUserLoginAndAlbumName(userLogin, albumName);
@@ -70,6 +72,7 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "images")
     public List<Image> findAll() {
         log.trace("findAll ...");
         List<Image>  images = imageRepository.findAll();

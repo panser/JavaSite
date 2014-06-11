@@ -11,11 +11,22 @@ db.jdbc.dataLocation=classpath:db/mysql/populateDB.sql
 #Hibernate Configuration:
 db.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 db.hibernate.show_sql=false
+db.hibernate.format_sql=true
 db.hibernate.hbm2ddl.auto = update
 #db.hibernate.hbm2ddl.auto = create
 db.hibernate.connection.useUnicode = true
 db.hibernate.connection.characterEncoding = UTF-8
 db.hibernate.connection.charSet = UTF-8
+
+# Hibernate second-level cache
+# hibernate.cache.region.factory_class = org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+hibernate.cache.region.factory_class = org.hibernate.cache.ehcache.EhCacheRegionFactory
+db.hibernate.cache.use_second_level_cache = true
+
+# Hibernate third-level cache
+db.hibernate.cache.use_query_cache = true
+db.hibernate.generate_statistics = true
+db.hibernate.cache.use_structured_entries = true
 
 db.jpa.database=MYSQL
 db.jpa.showSql=true

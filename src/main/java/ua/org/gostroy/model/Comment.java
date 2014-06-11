@@ -20,15 +20,7 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Comment implements Serializable {
-    private transient final Logger log = LoggerFactory.getLogger(getClass());
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class Comment extends BaseEntity{
     @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
     @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")
     private String text;
@@ -61,22 +53,6 @@ public class Comment implements Serializable {
         this.visible = true;
         this.createDate = new Date();
         this.depth = 0;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public String getText() {

@@ -12,13 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "albums")
-public class Album {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class Album extends BaseEntity {
     @Valid
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -40,22 +34,6 @@ public class Album {
     private Date deleteDate;
 
     public Album() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public User getUser() {

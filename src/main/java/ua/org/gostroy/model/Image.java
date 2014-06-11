@@ -15,14 +15,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "images")
-public class Image {
-    private transient final Logger log = LoggerFactory.getLogger(getClass());
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class Image extends BaseEntity{
     @Valid
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -52,22 +45,6 @@ public class Image {
     public Image(User user, String imagePath) {
         this.user = user;
         this.path = imagePath;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public User getUser() {

@@ -11,13 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "visitors")
-public class Visitor implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class Visitor extends BaseEntity{
     private String ip;
     private String userAgent;
 
@@ -30,22 +24,6 @@ public class Visitor implements Serializable {
 
     public Visitor() {
         this.createDate = new Date();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public String getIp() {

@@ -15,13 +15,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class User extends BaseEntity{
     @NotEmpty(message="{validation.user.login.NotEmpty.message}")
     @Size(min=3, max=60, message="{validation.user.login.Size.message}")
     private String login;
@@ -82,22 +76,6 @@ public class User implements Serializable {
         this.role = role;
         this.enabled = false;
         this.createDate = new Date();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public String getEmail() {

@@ -8,13 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "userAddress")
-public class UserAddress implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class UserAddress extends BaseEntity{
     private String country;
     private String city;
     private String street;
@@ -24,22 +18,6 @@ public class UserAddress implements Serializable {
     private User user;
 
     public UserAddress() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public String getCountry() {

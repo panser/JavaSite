@@ -14,13 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "articles")
-public class Article implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
-
+public class Article extends BaseEntity{
     @NotEmpty(message="{validation.article.title.NotEmpty.message}")
     @Size(min=5, max=60, message="{validation.article.title.Size.message}")
     private String title;
@@ -49,22 +43,6 @@ public class Article implements Serializable{
     public Article() {
         this.visible = true;
         this.createDate = new Date();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public String getTitle() {

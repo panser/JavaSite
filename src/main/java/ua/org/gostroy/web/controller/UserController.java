@@ -138,7 +138,7 @@ public class UserController {
             user.setRole(userFromForm.getRole());
             log.trace("editUser(), user = " + user);
             userService.update(user);
-            viewName = "redirect:/user/";
+            viewName = "redirect:/";
         }
         return viewName;
     }

@@ -42,6 +42,7 @@ public class ImageService {
     @Transactional(readOnly = true)
     public Image find(Long id) {
         log.trace("find ...");
+        log.trace("find ...");
         Image image = imageRepository.findOne(id);
         log.trace("find.");
         return image;

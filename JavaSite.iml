@@ -124,6 +124,10 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.7.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache-core:2.6.9" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-ehcache:4.3.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:bootstrap:3.1.1-1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery-ui:1.10.4" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:ckeditor:4.4.1" level="project" />
   </component>
 </module>
 

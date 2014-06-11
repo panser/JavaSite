@@ -15,25 +15,35 @@
     });
 </script>
 
+    <c:choose>
+        <c:when test="${article['new']}">
+            <c:set var="method" value="post"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="method" value="put"/>
+        </c:otherwise>
+    </c:choose>
+
 
     <h2>Article:</h2>
-    <sf:form name="f" method="${formMethod}" modelAttribute="article">
+    <sf:form name="f" method="${method}" modelAttribute="article">
+    <%--<sf:form name="f" method="${formMethod}" modelAttribute="article">--%>
         <%--<sf:input type="hidden" path="id" id="id"/>--%>
         <%--<sf:input type="hidden" path="version" id="version"/>--%>
 
         <sf:label path="title"><spring:message code="article.title" /></sf:label>
-        <sf:errors path="title"/>
         <sf:input path="title" id="title"/>
+        <sf:errors path="title"/>
         <p/>
         <sf:label path="description"><spring:message code="article.description" /></sf:label>
-        <sf:errors path="description"/>
         <sf:textarea path="description" id="description"/>
+        <sf:errors path="description"/>
         <p/>
         <br/>
         <p/>
         <sf:label path="text"><spring:message code="article.text" /></sf:label>
-        <sf:errors path="text"/>
         <sf:textarea path="text" id="text"/>
+        <sf:errors path="text"/>
         <p/>
         <br/>
 

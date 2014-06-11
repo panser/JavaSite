@@ -63,7 +63,6 @@
         <tr>
             <td><sf:label path="avatarImage"><spring:message code="label.avatarImage"/></sf:label></td>
             <td><sf:input type="file" path="avatarImage" disabled="${disabledEdit}"/></td>
-            <%--<input id="multipartfile" name="multipartfile" type="file" value=""/>--%>
             <td><sf:errors path="avatarImage"/>
         </tr>
         <tr>

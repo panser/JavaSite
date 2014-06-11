@@ -55,7 +55,6 @@ public class ArticleController {
     public String newGET(Model model){
         log.trace("newGET(), RequestMethod.GET");
         model.addAttribute("article", new Article());
-        model.addAttribute("formMethod", "POST");
         return "/article/articleEdit";
     }
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -124,13 +123,12 @@ public class ArticleController {
         return "/article/articleEdit";
     }
     @RequestMapping(value = {"/{id}/edit"}, method = RequestMethod.PUT)
-    public String editArticle(Model model, @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
+    public String editArticle(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult articleFromFormError,
                               @PathVariable(value = "id") String id
     ) throws IOException {
         String viewName;
         log.debug("editArticle(), articleFromForm.id = " + articleFromForm.getId());
         if(articleFromFormError.hasErrors()){
-            model.addAttribute("articleFromFormError", articleFromFormError);
             viewName = "/article/articleEdit";
         }
         else{
@@ -139,7 +137,7 @@ public class ArticleController {
             article.setDescription(articleFromForm.getDescription());
             article.setTitle(articleFromForm.getTitle());
             articleService.update(article);
-            viewName = "redirect:/article/";
+            viewName = "redirect:/article/" + id;
         }
         return viewName;
     }

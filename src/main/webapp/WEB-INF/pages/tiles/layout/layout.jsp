@@ -8,22 +8,14 @@
 <html>
 <head>
     <link href="<c:url value="/resources/css/thisProject.css"/>" rel="stylesheet">
-    <link href="<c:url value="/resources/css/ui-lightness/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet">
-    <script src="<c:url value="/resources/js/jquery-1.10.2.js"/>"></script>
-    <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js"/>"></script>
-    <script src="<c:url value="/resources/js/ckeditor/ckeditor.js"/>"></script>
-    <script src="<c:url value="/resources/js/ckeditor/adapters/jquery.js"/>"></script>
 
-    <%--<link href="/prospring3/resources/jqgrid/css/ui.jqgrid.css" media="screen" type="text/css" rel="stylesheet"/>--%>
-    <%--<script src="/prospring3/resources/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>--%>
-    <%--<script src="/prospring3/resources/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>--%>
+    <link rel='stylesheet' href='<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css"/>'>
+    <link rel='stylesheet' href='<c:url value="/webjars/jquery-ui/1.10.4/themes/base/jquery.ui.all.css"/>'>
+    <script src="<c:url value="/webjars/jquery/2.1.1/jquery.js"/>"></script>
+    <script src="<c:url value="/webjars/jquery-ui/1.10.4/ui/jquery-ui.js"/>"></script>
+    <script src="<c:url value="/webjars/ckeditor/4.4.1/ckeditor.js"/>"></script>
+    <script src="<c:url value="/webjars/ckeditor/4.4.1/adapters/jquery.js"/>"></script>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

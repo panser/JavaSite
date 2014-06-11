@@ -147,6 +147,10 @@ public class Article implements Serializable{
         this.visitors = visitors;
     }
 
+    public boolean isNew() {
+        return (this.id == null);
+    }
+
     @Override
     public String toString() {
         return "Article{" +

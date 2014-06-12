@@ -3,6 +3,7 @@ package ua.org.gostroy.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "visitors")
+@XmlTransient
 public class Visitor extends BaseEntity{
     private String ip;
     private String userAgent;

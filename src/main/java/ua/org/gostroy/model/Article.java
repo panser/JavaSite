@@ -1,10 +1,13 @@
 package ua.org.gostroy.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,17 +17,22 @@ import java.util.List;
  */
 @Entity
 @Table(name = "articles")
-public class Article extends BaseEntity{
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class Article{
     @NotEmpty(message="{validation.article.title.NotEmpty.message}")
     @Size(min=5, max=60, message="{validation.article.title.Size.message}")
+    @XmlElement
     private String title;
     @NotEmpty(message="{validation.article.description.NotEmpty.message}")
     @Size(min=5, max=500, message="{validation.article.description.Size.message}")
+    @XmlElement
     private String description;
+    @XmlElement
     private String text;
-//    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(optional = true, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @XmlElement
     private User author;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
@@ -36,6 +44,7 @@ public class Article extends BaseEntity{
     private Boolean visible;
     private Boolean allowComments;
     @DateTimeFormat
+    @XmlElement
     private Date createDate;
     @DateTimeFormat
     private Date deleteDate;
@@ -125,10 +134,6 @@ public class Article extends BaseEntity{
         this.visitors = visitors;
     }
 
-    public boolean isNew() {
-        return (this.id == null);
-    }
-
     @Override
     public String toString() {
         return "Article{" +
@@ -138,4 +143,35 @@ public class Article extends BaseEntity{
 //                ", author=" + author.getLogin() +
                 '}';
     }
+
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+    @Version
+    protected Long version;
+
+    protected transient final Logger log = LoggerFactory.getLogger(getClass());
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public boolean isNew() {
+        return (this.id == null);
+    }
+
 }

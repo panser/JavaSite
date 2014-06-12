@@ -4,16 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.model.Article;
-import ua.org.gostroy.model.Comment;
-import ua.org.gostroy.model.User;
-import ua.org.gostroy.model.Visitor;
+import ua.org.gostroy.model.*;
+import ua.org.gostroy.model.xmlwrapper.ArticleList;
 import ua.org.gostroy.service.ArticleService;
 import ua.org.gostroy.service.CommentService;
 import ua.org.gostroy.service.UserService;
@@ -44,10 +43,19 @@ public class ArticleController {
     @Autowired(required = true)
     CommentService commentService;
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "list"}, method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE})
     public String listArticle(Model model){
         log.trace("listArticle() start ...");
         model.addAttribute("articles", articleService.findAll());
+        return "/article/articleList";
+    }
+
+    @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    public String listArticleXML(Model model){
+        log.trace("listArticleXML() start ...");
+        ArticleList articleList = new ArticleList();
+        articleList.getArticleList().addAll(articleService.findAll());
+        model.addAttribute("articleList", articleList);
         return "/article/articleList";
     }
 

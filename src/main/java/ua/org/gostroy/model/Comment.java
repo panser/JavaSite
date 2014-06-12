@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@XmlTransient
 public class Comment extends BaseEntity{
     @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
     @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")

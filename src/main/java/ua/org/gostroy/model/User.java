@@ -6,6 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +19,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
+@XmlAccessorType(XmlAccessType.NONE)
 public class User extends BaseEntity{
     @NotEmpty(message="{validation.user.login.NotEmpty.message}")
     @Size(min=3, max=60, message="{validation.user.login.Size.message}")
+    @XmlElement
     private String login;
     @NotEmpty(message="{validation.user.email.NotEmpty.message}")
     @Email(message = "{validation.user.email.Email.message}")

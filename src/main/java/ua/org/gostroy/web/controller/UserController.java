@@ -133,9 +133,12 @@ public class UserController {
             }
             user.setBirthDay(userFromForm.getBirthDay());
             user.setReceiveNewsletter(userFromForm.getReceiveNewsletter());
-            user.setEnabled(userFromForm.getEnabled());
+            log.trace("editUser(), userFromForm.getEnabled() = " + userFromForm.getEnabled());
             user.setSex(userFromForm.getSex());
-            user.setRole(userFromForm.getRole());
+            if(user.getRole().equals("ROLE_ADMIN")) {
+                user.setEnabled(userFromForm.getEnabled());
+                user.setRole(userFromForm.getRole());
+            }
             log.trace("editUser(), user = " + user);
             userService.update(user);
             viewName = "redirect:/";

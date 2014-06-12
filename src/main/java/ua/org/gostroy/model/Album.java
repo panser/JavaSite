@@ -1,11 +1,12 @@
 package ua.org.gostroy.model;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by panser on 6/3/2014.
@@ -26,7 +27,8 @@ public class Album extends BaseEntity {
     private Image defImage;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
-    private List<Image> images;
+//    private List<Image> images;
+    private Set<Image> images;
 
     @DateTimeFormat
     private Date createDate = new Date();
@@ -60,12 +62,22 @@ public class Album extends BaseEntity {
         this.description = description;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public void setImagesInternal(Set<Image> images) {
+        this.images = images;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public Set<Image> getImagesInternal() {
+        if(this.images == null){
+            this.images = new HashSet<Image>();
+        }
+        return this.images;
+    }
+
+    public List<Image> getImages() {
+        List<Image> sortedImages = new ArrayList<Image>(getImagesInternal());
+//        PropertyComparator.sort(sortedImages, new MutableSortDefinition("name", true, true));
+        PropertyComparator.sort(sortedImages, new MutableSortDefinition("createDate", true, true));
+        return Collections.unmodifiableList(sortedImages);
     }
 
     public Date getCreateDate() {
@@ -105,7 +117,6 @@ public class Album extends BaseEntity {
         return "Album{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-//                ", defImage='" + defImage + '\'' +
                 '}';
     }
 }

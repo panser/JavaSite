@@ -53,7 +53,7 @@ Album List of user: <b>${login}</b>
                 <td>${fn:length(album.images)}</td>
                 <td><fmt:formatDate value="${album.createDate}" pattern="${dateFormatPattern}"/>   </td>
                 <c:if test="${disabledEdit=='false'}">
-                    <td><a href="<c:url value="/gallery/${login}/${album.name}/delete"/>">Delete</a>   </td>
+                    <td><a href="<c:url value="/gallery/${login}/${album.name}?delete"/>">Delete</a>   </td>
                 </c:if>
 
             </tr>

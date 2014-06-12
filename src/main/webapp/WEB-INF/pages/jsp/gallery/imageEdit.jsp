@@ -84,7 +84,7 @@
 
             <tr>
                 <td>
-                    <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}/delete"/>">
+                    <a href="<c:url value="/gallery/${login}/${album.name}/${image.name}?delete"/>">
                         Delete
                     </a>
                 </td>

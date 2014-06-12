@@ -96,7 +96,7 @@ public class GalleryController {
         }
         return viewName;
     }
-    @RequestMapping(value = {"/{login}/{albumName}/delete"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}"}, method = RequestMethod.GET, params = "delete")
     public String listAlbumsDELETE(@PathVariable String login, @PathVariable String albumName){
         List<Image> images = imageService.findByUserLoginAndAlbumName(login, albumName);
         Album album = albumService.findByUserLoginAndName(login,albumName);
@@ -233,7 +233,7 @@ public class GalleryController {
 
         return "redirect:/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName();
     }
-    @RequestMapping(value = {"/{login}/{albumName}/{imageName}/delete"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.GET, params = "delete")
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login,albumName,imageName);
         imageService.delete(image);

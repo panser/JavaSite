@@ -31,8 +31,13 @@
         <put-attribute name="body" value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
     </definition>
 
-    <definition name="/exception/*" extends="baseLayout">
-        <put-attribute name="title" value="Exception" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/exception/{1}.jsp" />
+    <definition name="/gallery/*" extends="baseLayout">
+        <put-attribute name="title" value="ArticleList" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
+    </definition>
+
+    <definition name="/test/*" extends="baseLayout">
+        <put-attribute name="title" value="Test Pages" />
+        <put-attribute name="body" value="/WEB-INF/pages/jsp/test/{1}.jsp" />
     </definition>
 </tiles-definitions>

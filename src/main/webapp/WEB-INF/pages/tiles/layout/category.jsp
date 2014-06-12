@@ -6,6 +6,10 @@
     <br/>
     <ul>
         <li><a href="<c:url value="/user/"/>">users</a></li>
+        <li>test:</li>
+        <ul>
+            <li><a href="<c:url value="/test/views"/>">views</a></li>
+        </ul>
     </ul>
 </security:authorize>
 

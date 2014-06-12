@@ -36,6 +36,8 @@ public class Article{
     private User author;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @XmlElementWrapper
+    @XmlElement(name = "comment")
     private List<Comment> comments;
     @ElementCollection(fetch=FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")

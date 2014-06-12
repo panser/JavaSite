@@ -10,6 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -21,9 +24,11 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@XmlAccessorType(XmlAccessType.NONE)
 public class Comment extends BaseEntity{
     @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
     @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")
+    @XmlElement
     private String text;
     private Float sortId;
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
@@ -31,6 +36,7 @@ public class Comment extends BaseEntity{
     private User author;
     @NotEmpty(message="{validation.comment.name.NotEmpty.message}")
     @Size(min=3, max=50, message="{validation.comment.name.Size.message}")
+    @XmlElement
     private String name;
     @Email(message = "{validation.comment.email.Email.message}")
     private String email;

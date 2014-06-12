@@ -4,22 +4,16 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <mvc:annotation-driven validator="validator" content-negotiation-manager="contentNegotiationManager">
+    <mvc:annotation-driven validator="validator" content-negotiation-manager="cnManager">
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
             <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="ua.org.gostroy.internal.json.jackson.HibernateAwareObjectMapper" />
+                </property>
+            </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <property name="favorPathExtension" value="true" />
-        <property name="favorParameter" value="true" />
-        <property name="mediaTypes" >
-            <value>
-                json=application/json
-                xml=application/xml
-                file=multipart/form-data
-            </value>
-        </property>
-    </bean>
 </beans>

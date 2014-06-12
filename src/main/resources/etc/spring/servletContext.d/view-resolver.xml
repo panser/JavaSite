@@ -57,14 +57,16 @@
 
 
     <!-- Renders an Atom feed of the visits. Used by the BeanNameViewResolver  -->
-    <bean id="/article/articleList.atom" class="ua.org.gostroy.web.atom.ArticlesAtomView"/>
+    <bean id="/article/articleList.atom" class="ua.org.gostroy.web.view.atom.ArticlesAtomView"/>
 
-    <!-- Renders an XML view. Used by the BeanNameViewResolver  -->
+<!--
+    &lt;!&ndash; Renders an XML view. Used by the BeanNameViewResolver  &ndash;&gt;
     <bean id="/article/articleList.xml" class="org.springframework.web.servlet.view.xml.MarshallingView">
         <property name="marshaller" ref="marshaller1"/>
     </bean>
     <oxm:jaxb2-marshaller id="marshaller1">
         <oxm:class-to-be-bound name="ua.org.gostroy.model.xmlwrapper.ArticleList"/>
     </oxm:jaxb2-marshaller>
+-->
 
 </beans>

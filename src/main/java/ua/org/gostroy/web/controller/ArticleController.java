@@ -49,7 +49,15 @@ public class ArticleController {
         model.addAttribute("articles", articleService.findAll());
         return "/article/articleList";
     }
-
+    @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    @ResponseBody
+    public ArticleList listArticleXML(Model model){
+        log.trace("listArticleXML() start ...");
+        ArticleList articleList = new ArticleList();
+        articleList.getArticleList().addAll(articleService.findAll());
+        return articleList;
+    }
+/*
     @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
     public String listArticleXML(Model model){
         log.trace("listArticleXML() start ...");
@@ -57,6 +65,13 @@ public class ArticleController {
         articleList.getArticleList().addAll(articleService.findAll());
         model.addAttribute("articleList", articleList);
         return "/article/articleList";
+    }
+*/
+    @RequestMapping(value = {"/", "list"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public List<Article> listArticleJSON(Model model){
+        log.trace("listArticleJSON() start ...");
+        return articleService.findAll();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)

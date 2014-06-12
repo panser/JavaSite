@@ -19,6 +19,7 @@
         <tiles.version>3.0.3</tiles.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <springframework.security.version>3.2.3.RELEASE</springframework.security.version>
+        <jackson2.version>2.3.3</jackson2.version>
 
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -362,6 +363,38 @@
             <artifactId>rome</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <!-- the core, which includes Streaming API, shared low-level abstractions (but NOT data-binding) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <!-- databinding; ObjectMapper, JsonNode and related classes are here -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <!-- Just the annotations; use this dependency if you want to attach annotations
+             to classes without connecting them to the code. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <!-- Support for JAX-B annotations as additional configuration -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+
 
 
 

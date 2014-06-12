@@ -21,7 +21,6 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@XmlTransient
 public class Comment extends BaseEntity{
     @NotEmpty(message="{validation.comment.text.NotEmpty.message}")
     @Size(min=1, max=1000, message="{validation.comment.text.Size.message}")

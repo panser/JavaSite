@@ -12,7 +12,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "visitors")
-@XmlTransient
 public class Visitor extends BaseEntity{
     private String ip;
     private String userAgent;

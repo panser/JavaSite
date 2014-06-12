@@ -16,7 +16,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "images")
-@XmlTransient
 public class Image extends BaseEntity{
     @Valid
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -28,7 +27,6 @@ public class Image extends BaseEntity{
     private long size;
     private String path;
     private String digest;
-//    @XmlTransient
     private transient MultipartFile multipartFile;
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "album_id", referencedColumnName = "id")

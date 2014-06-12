@@ -1,4 +1,4 @@
-package ua.org.gostroy.web.atom;
+package ua.org.gostroy.web.view.atom;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;

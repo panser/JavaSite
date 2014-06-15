@@ -22,6 +22,7 @@ import javax.mail.MessagingException;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -81,7 +82,7 @@ public class ArticleController {
         return "/article/articleEdit";
     }
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String newPOST(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult result) throws MessagingException {
+    public String newPOST(@Valid @ModelAttribute("article") Article articleFromForm, BindingResult result, Principal user) throws MessagingException {
         log.trace("newGET(), RequestMethod.POST");
         String viewName;
         if(result.hasErrors()){
@@ -91,7 +92,7 @@ public class ArticleController {
             log.trace("newPOST(), articleFromForm1: " + articleFromForm);
 //            articleService.save(articleFromForm);
 
-            String login = SecurityContextHolder.getContext().getAuthentication().getName();
+            String login = (user == null) ? "guest" : user.getName();
 
             User author = userService.findByLogin(login);
             log.trace("newPOST(), author: " + author);

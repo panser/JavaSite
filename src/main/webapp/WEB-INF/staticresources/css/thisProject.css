@@ -42,3 +42,18 @@ textarea{
 .comment-block li{
     display: block;
 }
+
+span.success {
+    color: #4F8A10;
+    margin-left: 12px;
+}
+
+span.error {
+    color: #D8000C;
+}
+
+div.comment {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    /*background-image: url('image/success.png');*/
+}

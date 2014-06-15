@@ -38,10 +38,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.security.Principal;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by panser on 6/2/2014.
@@ -130,13 +129,13 @@ public class GalleryController {
 //    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.POST)
     public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
-                                   MultipartRequest multipartRequest)
+                                   MultipartRequest multipartRequest, Locale locale)
             throws IOException, NoSuchAlgorithmException{
         log.trace("uploadImagesPOST(), start ...");
         Map<String, String> errorsMap = new HashMap<String, String>();
         List<MultipartFile> files = multipartRequest.getFiles("files");
         if(files.get(0).isEmpty()){
-            errorsMap.put("", messageSource.getMessage("error.upload.notselected", null, LocaleContextHolder.getLocale()));
+            errorsMap.put("", messageSource.getMessage("error.upload.notselected", null, locale));
         }
         else {
             User user = userService.findByLogin(login);
@@ -155,11 +154,11 @@ public class GalleryController {
                     UploadStatus uploadStatus = imageService.create(image);
                     String fileName = image.getMultipartFile().getOriginalFilename();
                     if (uploadStatus.equals(UploadStatus.EXISTS)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.exists", null, LocaleContextHolder.getLocale()));
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.exists", null, locale));
                     } else if (uploadStatus.equals(UploadStatus.INVALID)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.invalid", null, LocaleContextHolder.getLocale()));
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.invalid", null, locale));
                     } else if (uploadStatus.equals(UploadStatus.FAILED)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.failed", null, LocaleContextHolder.getLocale()));
+                        errorsMap.put(fileName, messageSource.getMessage("error.upload.failed", null, locale));
                     }
                 }
             }
@@ -247,7 +246,7 @@ public class GalleryController {
 
     @RequestMapping(value = {"/{login}/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
     @ResponseBody
-    public BufferedImage viewImage(@PathVariable String login, @PathVariable String imageName, @PathVariable String albumName)
+    public BufferedImage viewImage(@PathVariable String login, @PathVariable String imageName, @PathVariable String albumName, Principal user)
             throws HaveNotAccess,NeedAuthorize,EntityNotFound, IOException {
         Album album = albumService.findByUserLoginAndName(login, albumName);
         BufferedImage bufferedImage = null;
@@ -258,7 +257,7 @@ public class GalleryController {
 //            throw new EntityNotFound("Album not found");
         }
         if(!album.getPublicAccess()){
-            String authLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            String authLogin = (user == null) ? "guest" : user.getName();
             log.trace("viewImage(), authLogin: " + authLogin);
             if(!authLogin.equals(login)){
                     ClassPathResource resourceImage = new ClassPathResource("templates/image/accessDenied.jpg");

@@ -43,6 +43,11 @@
 <sf:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data">
     <%--<sf:input type="hidden" path="id" />--%>
     <%--<sf:input type="hidden" path="version"/>--%>
+    <s:bind path="*">
+        <c:if test="${status.error}">
+            <div id="message" class="error">Form has errors</div>
+        </c:if>
+    </s:bind>
 
     <table>
         <tr>

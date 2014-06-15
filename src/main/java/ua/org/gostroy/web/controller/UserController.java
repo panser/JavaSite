@@ -1,40 +1,26 @@
 package ua.org.gostroy.web.controller;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.model.User;
 import ua.org.gostroy.exception.EntityNotFound;
+import ua.org.gostroy.model.User;
+import ua.org.gostroy.service.UserControllerService;
 import ua.org.gostroy.service.UserService;
 
-import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,19 +29,14 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/user")
+@SessionAttributes("user")
 public class UserController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired(required = true)
     private UserService userService;
-
-    @Autowired
-    JavaMailSender mailSender;
-    @Autowired
-    VelocityEngine velocityEngine;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
+    @Autowired(required = true)
+    private UserControllerService userControllerService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listUser(Model model){
@@ -64,13 +45,6 @@ public class UserController {
         return "/user/userList";
     }
 
-/*
-    @InitBinder
-    @RequestMapping(value = {"/edit/{login}"})
-    protected void initBinder(WebDataBinder binder){
-        binder.setAllowedFields("id","version","login","email","password","avatarImage","birthDay");
-    }
-*/
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"add"}, method = RequestMethod.GET)
     public String addUser(Model model){
@@ -79,28 +53,14 @@ public class UserController {
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"add"}, method = RequestMethod.PUT)
-    public String addUser(Model model, @Valid @ModelAttribute("user") User userFromForm, BindingResult userFromFormError) throws IOException{
+    public String addUser(Model model, @Valid User userFromForm, BindingResult userFromFormError) throws IOException{
         String viewName;
         log.debug("addUser()");
         if(userFromFormError.hasErrors()){
             viewName = "/user/userEdit";
         }
         else{
-//            userService.save(userFromForm);
-            User user = new User();
-            user.setLogin(userFromForm.getLogin());
-            user.setEmail(userFromForm.getEmail());
-            user.setPassword(userFromForm.getPassword());
-            if(userFromForm.getAvatarImage()!=null){
-                user.setAvatarImage(userFromForm.getAvatarImage());
-            }
-            user.setBirthDay(userFromForm.getBirthDay());
-            user.setReceiveNewsletter(userFromForm.getReceiveNewsletter());
-            user.setEnabled(userFromForm.getEnabled());
-            user.setSex(userFromForm.getSex());
-            user.setRole(userFromForm.getRole());
-            log.trace("addUser(), user = " + user);
-            userService.create(user);
+            userService.create(userFromForm);
             viewName = "redirect:/user/";
         }
         return viewName;
@@ -114,34 +74,18 @@ public class UserController {
         return "/user/userEdit";
     }
     @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.PUT)
-    public String editUser(Model model, @Valid @ModelAttribute("user") User userFromForm, BindingResult userFromFormError,
-                           @PathVariable(value = "login") String login
-                           ) throws IOException{
+    public String editUser(Model model, @Valid User user, BindingResult userFromFormError,
+                           @PathVariable String login, SessionStatus sessionStatus) throws IOException{
         String viewName;
         log.debug("editUser(), userFromForm.login = " + login);
         if(userFromFormError.hasErrors()){
             viewName = "/user/userEdit";
         }
         else{
-//            userService.save(userFromForm);
-            User user = userService.findByLogin(login);
-            user.setLogin(userFromForm.getLogin());
-            user.setEmail(userFromForm.getEmail());
-            user.setPassword(userFromForm.getPassword());
-            if(userFromForm.getAvatarImage()!=null){
-                user.setAvatarImage(userFromForm.getAvatarImage());
-            }
-            user.setBirthDay(userFromForm.getBirthDay());
-            user.setReceiveNewsletter(userFromForm.getReceiveNewsletter());
-            log.trace("editUser(), userFromForm.getEnabled() = " + userFromForm.getEnabled());
-            user.setSex(userFromForm.getSex());
-            if(user.getRole().equals("ROLE_ADMIN")) {
-                user.setEnabled(userFromForm.getEnabled());
-                user.setRole(userFromForm.getRole());
-            }
-            log.trace("editUser(), user = " + user);
+            log.trace("editUser(), userFromForm = " + user);
             userService.update(user);
-            viewName = "redirect:/";
+            sessionStatus.setComplete();
+            viewName = "redirect:/user/";
         }
         return viewName;
     }
@@ -151,10 +95,8 @@ public class UserController {
         model.addAttribute("user", new User());
         return "/user/userAdd";
     }
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result,
-                               HttpServletRequest request)
+    public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result, HttpServletRequest request)
             throws MessagingException, URISyntaxException {
         String viewName;
         if(result.hasErrors()){
@@ -162,15 +104,12 @@ public class UserController {
         }
         else
         {
-            String randomString = RandomStringUtils.random(30,true,true);
-            String requestURL = request.getRequestURL().toString();
-            requestURL = requestURL.replaceAll("register","");
-            requestURL = requestURL + "confirm/" + randomString;
 //            log.trace("registerPOST(), requestURL: " + requestURL);
-            userFromForm.setRegUrI(requestURL);
+            String regUrl = userControllerService.generateRegistrationUrl(request.getRequestURL().toString());
+            userFromForm.setRegUrI(regUrl);
             log.trace("registerPOST(), userFromForm: " + userFromForm);
             userService.create(userFromForm);
-            sendEmailOfRegistration(userFromForm);
+            userControllerService.sendEmailOfRegistration(userFromForm);
             viewName = "redirect:/";
         }
         return viewName;
@@ -186,10 +125,7 @@ public class UserController {
         user.setEnabled(true);
         user.setRegUrI("!" + user.getRegUrI());
         userService.create(user);
-
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
-        Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authenticationResult);
+        userControllerService.setAuthenticationContext(user);
 
         redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! We confirm your registration.");
         return "redirect:/user/" + user.getLogin() + "/profile";
@@ -209,37 +145,9 @@ public class UserController {
     @ResponseBody
     public BufferedImage getAvatar(@PathVariable String login) throws IOException{
         User user = userService.findByLogin(login);
-        BufferedImage bufferedImage;
-        if(user.getAvatarImage() != null && user.getAvatarImage().length != 0){
-            bufferedImage = ImageIO.read(new ByteArrayInputStream(user.getAvatarImage()));
-        }
-        else{
-            Resource resource = new ClassPathResource("/templates/image/avatar.jpg");
-            bufferedImage = ImageIO.read(resource.getFile());
-        }
-        Graphics g = bufferedImage.getGraphics();
-        g.drawString("gostroy.org.ua",20,20);
-        return bufferedImage;
+        return userControllerService.getAvator(user);
     }
 
-    public void sendEmailOfRegistration(User user) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom("noreply@gostroy.org.ua");
-        helper.setTo(user.getEmail());
-        helper.setSubject("Account confirm");
-
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("login", user.getLogin());
-        model.put("password", user.getPassword());
-        model.put("regURI", user.getRegUrI());
-        String emailText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/mail/emailRegisterTemplate.vm", "UTF-8", model);
-
-        helper.setText(emailText, true);
-        ClassPathResource image = new ClassPathResource("templates/image/site_logo.jpg");
-        helper.addInline("siteLogo", image); // Встроенное изображение
-        mailSender.send(message);
-    }
 
 
     @ModelAttribute("roleList")

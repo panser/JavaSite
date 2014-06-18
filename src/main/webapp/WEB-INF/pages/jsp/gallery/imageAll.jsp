@@ -6,17 +6,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="disabledEdit">false</c:set>
-<%--
-<c:set var="disabledEdit">true</c:set>
-<security:authorize access="isAuthenticated()">
-    <c:set var="username"><security:authentication property="principal.username"/></c:set>
-    <c:if test="${login != username}" var="disabledEdit" />
-</security:authorize>
-<security:authorize access="hasRole('ROLE_ADMIN')">
-    <c:set var="disabledEdit">false</c:set>
-</security:authorize>
---%>
-
 <div>
     <c:forEach items="${images}" var="image">
         <c:if test="${image.album.publicAccess}">
@@ -25,4 +14,13 @@
             </a>
         </c:if>
     </c:forEach>
+</div>
+<div id="nextId">
+    <a href="next">Next Page</a>
+    <ul>
+        <li><a href="?page=0">Page 0</a></li>
+        <li><a href="?page=1">Page 1</a></li>
+        <li><a href="?page=2">Page 2</a></li>
+        <li><a href="?page=3">Page 3</a></li>
+    </ul>
 </div>

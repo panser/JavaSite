@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +83,19 @@ public class ImageService {
         List<Image>  images = imageRepository.findAll();
         log.trace("findAll.");
         return images;
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "images")
+    public List<Image> findByPage(Integer page) {
+        log.trace("findByPage ...");
+        PageRequest page1 = new PageRequest(page,3, new Sort(
+                new Sort.Order(Sort.Direction.ASC, "createDate"),
+                new Sort.Order(Sort.Direction.DESC, "name")
+        ));
+        Page<Image> images = imageRepository.findAll(page1);
+        log.trace("findByPage.");
+        return images.getContent();
     }
 
     @PreAuthorize("#image.user.login == authentication.name or hasRole('ROLE_ADMIN')")

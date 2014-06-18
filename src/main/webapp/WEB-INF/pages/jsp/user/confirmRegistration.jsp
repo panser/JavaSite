@@ -1,1 +1,0 @@
-Congratulation! You confirm your registration.

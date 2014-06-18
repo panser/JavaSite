@@ -107,10 +107,9 @@ public class TestAjaxController {
         model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(request));
     }
     @RequestMapping(value = "/sendPostForm", method=RequestMethod.POST)
-    public String sendPostFormPOST(@Valid @ModelAttribute User user, BindingResult result,
+    public String sendPostFormPOST(@Valid User user, BindingResult result,
                                    @ModelAttribute("ajaxRequest") boolean ajaxRequest,
-                                   Model model, RedirectAttributes redirectAttrs,
-                                   HttpEntity<byte[]> requestEntity) {
+                                   Model model, RedirectAttributes redirectAttrs) {
         if(result.hasErrors()){
             log.trace("sendPostFormPOST(), receive result.hasErrors()");
             return "/test/ajax";

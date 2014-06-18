@@ -3,36 +3,30 @@ package ua.org.gostroy.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.org.gostroy.model.Album;
-import ua.org.gostroy.model.Image;
-import ua.org.gostroy.model.User;
 import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.exception.HaveNotAccess;
 import ua.org.gostroy.exception.NeedAuthorize;
+import ua.org.gostroy.model.Album;
+import ua.org.gostroy.model.Image;
+import ua.org.gostroy.model.User;
 import ua.org.gostroy.service.AlbumService;
 import ua.org.gostroy.service.GalleryControllerService;
 import ua.org.gostroy.service.ImageService;
 import ua.org.gostroy.service.UserService;
 import ua.org.gostroy.web.editor.AlbumEditor;
-import ua.org.gostroy.web.form.UploadStatus;
+import ua.org.gostroy.web.util.AjaxUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -40,8 +34,10 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.*;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by panser on 6/2/2014.
@@ -127,14 +123,26 @@ public class GalleryController {
     }
 */
 //    @PreAuthorize("isAuthenticated()")
+    @ModelAttribute
+    public void ajaxAttribute(WebRequest request, Model model) {
+        model.addAttribute("ajaxUpload", AjaxUtils.isAjaxUploadRequest(request));
+    }
     @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.POST)
     public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
-                                   MultipartRequest multipartRequest, Locale locale)
+                                   MultipartRequest multipartRequest, Locale locale, @ModelAttribute("ajaxUpload") boolean ajaxUpload,
+                                   Model model)
             throws IOException, NoSuchAlgorithmException{
         log.trace("uploadImagesPOST(), start ...");
-        Map<String, String> errors = galleryControllerService.uploadImages(multipartRequest, login, albumName, locale);
-        redirectAttributes.addFlashAttribute("errorsMap", errors);
-        return "redirect:/gallery/" + login + "/" + albumName + "/";
+        Model modelUpload = galleryControllerService.uploadImages(multipartRequest, login, albumName, locale);
+        if(ajaxUpload){
+            model.addAllAttributes(modelUpload.asMap());
+            return "/gallery/imageList";
+//            return "/gallery/ajaxImageList";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("errors", modelUpload.asMap().get("errors"));
+            return "redirect:/gallery/" + login + "/" + albumName + "/";
+        }
     }
 
 

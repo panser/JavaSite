@@ -11,8 +11,6 @@
 <spring:message code="button.save" var="sfButton_save"/>
 <spring:message code="button.add" var="sfButton_add"/>
 
-<spring:eval expression="user.id == null ? labelContactNew:labelContactUpdate" var="formTitle"/>
-<spring:eval expression="user.id == null ? sfButton_add:sfButton_save" var="sfButtonNew"/>
 
 
 <script type="text/javascript">
@@ -35,19 +33,30 @@
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
 
-<form:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data" cssClass="cleanform">
-    <div class="header">
-        <h2>${formTitle}</h2>
-        <font color="red">${confirmRegistration}</font>
-        <br/>
-        <br/>
+<spring:eval expression="user.id == null ? labelContactNew:labelContactUpdate" var="formTitle"/>
+<spring:eval expression="user.id == null ? sfButton_add:sfButton_save" var="sfButtonNew"/>
+<c:choose>
+    <c:when test="${user['new']}">
+        <c:set var="method" value="post"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="method" value="put"/>
+    </c:otherwise>
+</c:choose>
 
-        <spring:bind path="*">
-            <c:if test="${status.error}">
-                <div id="message" class="error">Form has errors</div>
-            </c:if>
-        </spring:bind>
-    </div>
+<form:form method="${method}" modelAttribute="user" enctype="multipart/form-data" cssClass="cleanform">
+        <div class="header">
+            <h2>${formTitle}</h2>
+            <font color="red">${confirmRegistration}</font>
+            <br/>
+            <br/>
+
+            <spring:bind path="*">
+                <c:if test="${status.error}">
+                    <div id="message" class="error">Form has errors</div>
+                </c:if>
+            </spring:bind>
+        </div>
         <fieldset>
             <%--<form:input type="hidden" path="id" />--%>
             <%--<form:input type="hidden" path="version"/>--%>
@@ -109,9 +118,9 @@
             </fieldset>
         </security:authorize>
 
-    <br/>
-    <input name="commit" type="submit" value="${sfButtonNew}"/>
-    <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
-    <security:csrfInput/>
+        <br/>
+        <input name="commit" type="submit" value="${sfButtonNew}"/>
+        <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
+        <security:csrfInput/>
 
 </form:form>

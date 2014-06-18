@@ -32,16 +32,16 @@ public class TestController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public String hello(ModelMap model) {
+    public String test(ModelMap model) {
         model.addAttribute("message", "Hello world!");
-        return "hello";
+        return "test";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/security", method = RequestMethod.GET)
-    public String helloSecurity(ModelMap model) {
+    public String testSecurity(ModelMap model) {
         model.addAttribute("message", "Hello world!");
-        return "hello";
+        return "test";
     }
 
     @ModelAttribute

@@ -52,7 +52,7 @@ public class UserController {
         return "/user/userEdit";
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = {"add"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"add"}, method = RequestMethod.POST)
     public String addUser(Model model, @Valid User userFromForm, BindingResult userFromFormError, RedirectAttributes redirectAttributes)
             throws IOException{
         String viewName;
@@ -89,7 +89,7 @@ public class UserController {
             userService.update(user);
             sessionStatus.setComplete();
             redirectAttributes.addFlashAttribute("message", "Profile save successfully");
-            viewName = "redirect:/user/";
+            viewName = "redirect:/";
         }
         return viewName;
     }
@@ -97,14 +97,14 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registerGET(Model model){
         model.addAttribute("user", new User());
-        return "/user/userAdd";
+        return "/user/register";
     }
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result, HttpServletRequest request)
             throws MessagingException, URISyntaxException {
         String viewName;
         if(result.hasErrors()){
-            viewName = "/user/userAdd";
+            viewName = "/user/register";
         }
         else
         {

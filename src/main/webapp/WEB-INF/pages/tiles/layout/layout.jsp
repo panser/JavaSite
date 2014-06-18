@@ -3,6 +3,7 @@
 
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tilesx" uri="http://tiles.apache.org/tags-tiles-extras" %>
 
 <c:if test="${!ajaxRequest}">
     <html>
@@ -46,7 +47,11 @@
 </c:if>
 
         <div id="content" style="background-color:#eeeeee;width:90%;float:left;">
-            <tiles:insertAttribute name="body"/>
+            <tilesx:useAttribute id="list" name="body" classname="java.util.List" />
+            <c:forEach var="item" items="${list}">
+                <tiles:insertAttribute value="${item}" flush="true" />
+                <br/>
+            </c:forEach>
         </div>
 
 <c:if test="${!ajaxRequest}">

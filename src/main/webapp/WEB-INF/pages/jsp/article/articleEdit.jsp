@@ -4,17 +4,6 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<script type="text/javascript">
-    $(function(){
-        $("#text").ckeditor(
-                {
-                    toolbar : 'Basic',
-                    uiColor : '#CCCCCC'
-                }
-        );
-    });
-</script>
-
     <c:choose>
         <c:when test="${article['new']}">
             <c:set var="method" value="post"/>
@@ -23,7 +12,6 @@
             <c:set var="method" value="put"/>
         </c:otherwise>
     </c:choose>
-
 
     <h2>Article:</h2>
     <sf:form name="f" method="${method}" modelAttribute="article">
@@ -51,3 +39,14 @@
         <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />" />
         <security:csrfInput />
     </sf:form>
+
+<script type="text/javascript">
+    $(function(){
+        $("#text").ckeditor(
+                {
+                    toolbar : 'Basic',
+                    uiColor : '#CCCCCC'
+                }
+        );
+    });
+</script>

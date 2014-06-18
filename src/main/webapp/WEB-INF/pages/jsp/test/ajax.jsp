@@ -301,7 +301,7 @@
         $("#sendPostFormId1").submit(function() {
             $.post($(this).attr("action"), $(this).serialize(), function(html) {
                 $("#pageContentId1").replaceWith(html);
-                $('html, body').animate({ scrollTop: $("#messageId1").offset().top }, 500);
+                $('html, body').animate({ scrollTop: $("#sendPostFormId1").offset().top }, 500);
             });
             return false;
         });

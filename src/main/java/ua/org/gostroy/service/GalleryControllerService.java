@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import ua.org.gostroy.model.Album;
@@ -14,10 +16,7 @@ import ua.org.gostroy.web.form.UploadStatus;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by panser on 6/16/2014.
@@ -36,9 +35,11 @@ public class GalleryControllerService {
     @Autowired
     UserService userService;
 
-    public Map<String, String> uploadImages(MultipartRequest multipartRequest, String login, String albumName, Locale locale)
-            throws IOException, NoSuchAlgorithmException {
+    public Model uploadImages(MultipartRequest multipartRequest, String login, String albumName, Locale locale)
+            throws IOException, NoSuchAlgorithmException, NullPointerException {
+        Model model = new ExtendedModelMap();
         Map<String, String> errorsMap = new HashMap<String, String>();
+        List<Image> imageList = new ArrayList<Image>();
         List<MultipartFile> files = multipartRequest.getFiles("files");
         if(files.get(0).isEmpty()){
             errorsMap.put("", messageSource.getMessage("error.upload.notselected", null, locale));
@@ -57,8 +58,8 @@ public class GalleryControllerService {
                 image.setAlbum(album);
                 image.setMultipartFile(multipartFile);
 
-                UploadStatus uploadStatus = imageService.create(image);
                 String fileName = image.getMultipartFile().getOriginalFilename();
+                UploadStatus uploadStatus = imageService.create(image);
                 if (uploadStatus.equals(UploadStatus.EXISTS)) {
                     errorsMap.put(fileName, messageSource.getMessage("error.upload.exists", null, locale));
                 } else if (uploadStatus.equals(UploadStatus.INVALID)) {
@@ -66,8 +67,13 @@ public class GalleryControllerService {
                 } else if (uploadStatus.equals(UploadStatus.FAILED)) {
                     errorsMap.put(fileName, messageSource.getMessage("error.upload.failed", null, locale));
                 }
+                else{
+                    imageList.add(image);
+                }
             }
         }
-        return errorsMap;
+        model.addAttribute("errors", errorsMap);
+        model.addAttribute("images", imageList);
+        return model;
     }
 }

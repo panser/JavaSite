@@ -6,38 +6,56 @@
         <put-attribute name="header" value="/WEB-INF/pages/tiles/layout/header.jsp" />
         <put-attribute name="sigin" value="/WEB-INF/pages/tiles/layout/sigin.jsp" />
         <put-attribute name="menu" value="/WEB-INF/pages/tiles/layout/menu.jsp" />
-        <put-attribute name="body" value="" />
         <put-attribute name="category" value="/WEB-INF/pages/tiles/layout/category.jsp" />
         <put-attribute name="footer" value="/WEB-INF/pages/tiles/layout/footer.jsp" />
     </definition>
 
-    <definition name="/auth/login" extends="baseLayout">
-        <put-attribute name="title" value="Login" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/auth/login.jsp" />
+    <definition name="/auth/*" extends="baseLayout">
+        <put-attribute name="title" value="Auth" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/auth/{1}.jsp" />
+        </put-list-attribute>
     </definition>
 
     <definition name="/user/*" extends="baseLayout">
-        <put-attribute name="title" value="UserList" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/user/{1}.jsp" />
+        <put-attribute name="title" value="User" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/user/{1}.jsp" />
+        </put-list-attribute>
     </definition>
 
     <definition name="/article/*" extends="baseLayout">
-        <put-attribute name="title" value="ArticleList" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/article/{1}.jsp" />
+        <put-attribute name="title" value="Article" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/article/{1}.jsp" />
+        </put-list-attribute>
+    </definition>
+    <definition name="/article/articleRead" extends="baseLayout">
+        <put-attribute name="title" value="Article" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/article/articleRead.jsp" />
+            <add-attribute value="/WEB-INF/pages/jsp/article/articleRead_comment.jsp" />
+        </put-list-attribute>
     </definition>
 
     <definition name="/gallery/*" extends="baseLayout">
-        <put-attribute name="title" value="ArticleList" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
+        <put-attribute name="title" value="Gallery" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
+        </put-list-attribute>
     </definition>
-
-    <definition name="/gallery/*" extends="baseLayout">
-        <put-attribute name="title" value="ArticleList" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/gallery/{1}.jsp" />
+    <definition name="/gallery/imageList" extends="baseLayout">
+        <put-attribute name="title" value="Gallery" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/gallery/imageList_inputFile.jsp" />
+            <add-attribute value="/WEB-INF/pages/jsp/gallery/imageList.jsp" />
+        </put-list-attribute>
     </definition>
 
     <definition name="/test/*" extends="baseLayout">
         <put-attribute name="title" value="Test Pages" />
-        <put-attribute name="body" value="/WEB-INF/pages/jsp/test/{1}.jsp" />
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/test/{1}.jsp" />
+        </put-list-attribute>
     </definition>
 </tiles-definitions>

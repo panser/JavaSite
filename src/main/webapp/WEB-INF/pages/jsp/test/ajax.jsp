@@ -1,11 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<div id="pageContentId1">
+
 <p>
     <b>Test AJAX</b>
 </p>
@@ -67,7 +65,49 @@
                 <input id="readRssSubmit" type="submit" value="sendRss" />
             </form>
         </li>
+        <li>
+            <fieldset>
+                <legend>sendPostForm</legend>
+                <c:if test="${not empty message}">
+                    <div id="messageId1" class="success">${message}</div>
+                </c:if>
+                <c:set var="sendPostFormUrl"><c:url value="/test/ajax/sendPostForm"/></c:set>
+                <form:form id="sendPostFormId1" method="post" modelAttribute="user" action="${sendPostFormUrl}">
+                    <div class="header">
+                        <spring:bind path="*">
+                            <c:if test="${status.error}">
+                                <div id="messageId1" class="error">Form has errors</div>
+                            </c:if>
+                        </spring:bind>
+                    </div>
+                    <div>
+                        <form:label path="login">
+                            <spring:message code="label.login"/> <form:errors path="login" cssClass="error" />
+                        </form:label>
+                        <form:input path="login"/>
+                        <br/>
+
+                        <form:label path="email">
+                            <spring:message code="label.email"/> <form:errors path="email" cssClass="error" />
+                        </form:label>
+                        <form:input path="email"/>
+                        <br/>
+
+                        <form:label path="password">
+                            <spring:message code="label.password"/> <form:errors path="password" cssClass="error" />
+                        </form:label>
+                        <form:input path="password"/>
+                        <br/>
+
+
+                        <p><button type="submit">Submit</button></p>
+                    </div>
+                </form:form>
+            </fieldset>
+        </li>
     </ul>
+
+
 </p>
 
 
@@ -258,6 +298,15 @@
             return false;
         });
 
+/*
+        $("#sendPostFormId1").submit(function() {
+            $.post($(this).attr("action"), $(this).serialize(), function(html) {
+                $("#pageContentId1").replaceWith(html);
+                $('html, body').animate({ scrollTop: $("#messageId1").offset().top }, 500);
+            });
+            return false;
+        });
+*/
 
 
         // Include CSRF token as header in JQuery AJAX requests
@@ -271,6 +320,4 @@
 });
 </script>
 
-
-</body>
-</html>
+</div>

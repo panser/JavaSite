@@ -53,7 +53,8 @@ public class UserController {
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = {"add"}, method = RequestMethod.PUT)
-    public String addUser(Model model, @Valid User userFromForm, BindingResult userFromFormError) throws IOException{
+    public String addUser(Model model, @Valid User userFromForm, BindingResult userFromFormError, RedirectAttributes redirectAttributes)
+            throws IOException{
         String viewName;
         log.debug("addUser()");
         if(userFromFormError.hasErrors()){
@@ -61,6 +62,7 @@ public class UserController {
         }
         else{
             userService.create(userFromForm);
+            redirectAttributes.addFlashAttribute("message", "User add successfully");
             viewName = "redirect:/user/";
         }
         return viewName;
@@ -75,7 +77,8 @@ public class UserController {
     }
     @RequestMapping(value = {"{login}/profile"}, method = RequestMethod.PUT)
     public String editUser(Model model, @Valid User user, BindingResult userFromFormError,
-                           @PathVariable String login, SessionStatus sessionStatus) throws IOException{
+                           @PathVariable String login, SessionStatus sessionStatus,
+                           RedirectAttributes redirectAttributes) throws IOException{
         String viewName;
         log.debug("editUser(), userFromForm.login = " + login);
         if(userFromFormError.hasErrors()){
@@ -85,6 +88,7 @@ public class UserController {
             log.trace("editUser(), userFromForm = " + user);
             userService.update(user);
             sessionStatus.setComplete();
+            redirectAttributes.addFlashAttribute("message", "Profile save successfully");
             viewName = "redirect:/user/";
         }
         return viewName;

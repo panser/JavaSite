@@ -2,10 +2,13 @@ package ua.org.gostroy.web.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.org.gostroy.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -39,6 +42,11 @@ public class TestController {
     public String helloSecurity(ModelMap model) {
         model.addAttribute("message", "Hello world!");
         return "hello";
+    }
+
+    @ModelAttribute
+    public void populateModel(Model model){
+        model.addAttribute("user", new User());
     }
 
     @RequestMapping(value = {"/{viewName}"}, method = RequestMethod.GET)

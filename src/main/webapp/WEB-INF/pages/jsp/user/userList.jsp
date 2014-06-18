@@ -10,6 +10,10 @@
 
 <h2><spring:message code="userList.header"/></h2>
 
+<c:if test="${not empty message}">
+    <div id="message" class="success">${message}</div>
+</c:if>
+
 <table border="1">
     <tr>
         <td></td>

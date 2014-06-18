@@ -4,27 +4,32 @@ import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.rss.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.org.gostroy.model.JavaBean;
+import ua.org.gostroy.model.User;
+import ua.org.gostroy.web.util.AjaxUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * Created by panser on 6/13/2014.
  */
 @Controller
-@RequestMapping("/test/ajax/")
+@RequestMapping("/test/ajax")
 public class TestAjaxController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     // StringHttpMessageConverter
-    @RequestMapping(value="sendPlainText", method=RequestMethod.POST)
+    @RequestMapping(value="/sendPlainText", method=RequestMethod.POST)
     public @ResponseBody String withBody(@RequestBody String body) {
         return "Posted request body '" + body + "'";
     }
@@ -34,11 +39,11 @@ public class TestAjaxController {
 
 
     // Form encoded data (application/x-www-form-urlencoded)
-    @RequestMapping(value="sendFormUrlencoded", method=RequestMethod.POST)
+    @RequestMapping(value="/sendFormUrlencoded", method=RequestMethod.POST)
     public @ResponseBody String readForm(@ModelAttribute JavaBean bean) {
         return "Read x-www-form-urlencoded: " + bean;
     }
-    @RequestMapping(value="getFormUrlencoded", method=RequestMethod.GET)
+    @RequestMapping(value="/getFormUrlencoded", method=RequestMethod.GET)
     public @ResponseBody MultiValueMap<String, Object> writeForm() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
         map.add("foo", "bar");
@@ -47,12 +52,12 @@ public class TestAjaxController {
     }
 
     // MappingJacksonHttpMessageConverter (requires Jackson on the classpath - particularly useful for serving JavaScript clients that expect to work with JSON)
-    @RequestMapping(value="sendJson", method= RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/sendJson", method= RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody String byConsumes(@RequestBody JavaBean javaBean) {
         log.debug("byConsumes(), javaBean: " + javaBean);
         return "Mapped by path + method + consumable media type (javaBean '" + javaBean + "')";
     }
-    @RequestMapping(value="getJson", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/getJson", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody JavaBean byProducesJson() {
         return new JavaBean();
     }
@@ -63,7 +68,7 @@ public class TestAjaxController {
     public @ResponseBody String readXml(@RequestBody JavaBean bean) {
         return "Read from XML: " + bean;
     }
-    @RequestMapping(value="getXml", method=RequestMethod.GET, produces=MediaType.APPLICATION_XML_VALUE)
+    @RequestMapping(value="/getXml", method=RequestMethod.GET, produces=MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody JavaBean byProducesXml() {
         return new JavaBean();
     }
@@ -95,6 +100,32 @@ public class TestAjaxController {
         channel.setDescription("Description");
         channel.setLink("http://localhost:8082/JavaSite/rss");
         return channel;
+    }
+
+    @ModelAttribute
+    public void ajaxAttribute(WebRequest request, Model model) {
+        model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(request));
+    }
+    @RequestMapping(value = "/sendPostForm", method=RequestMethod.POST)
+    public String sendPostFormPOST(@Valid @ModelAttribute User user, BindingResult result,
+                                   @ModelAttribute("ajaxRequest") boolean ajaxRequest,
+                                   Model model, RedirectAttributes redirectAttrs,
+                                   HttpEntity<byte[]> requestEntity) {
+        if(result.hasErrors()){
+            log.trace("sendPostFormPOST(), receive result.hasErrors()");
+            return "/test/ajax";
+        }
+        log.trace("sendPostFormPOST(), receive user: " + user);
+        if(ajaxRequest){
+            log.trace("sendPostFormPOST(), receive ajaxRequest");
+            model.addAttribute("message", "receive user: " + user);
+            return "/test/ajax";
+        }
+        else{
+            log.trace("sendPostFormPOST(), receive normal request");
+            redirectAttrs.addFlashAttribute("message", "receive user: " + user);
+            return "redirect:/test/ajax";
+        }
     }
 
 }

@@ -1,4 +1,3 @@
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
@@ -25,10 +24,6 @@
     });
 </script>
 
-<h2>${formTitle}</h2>
-<font color="red">${confirmRegistration}</font>
-<br/>
-<br/>
 
 <%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
@@ -40,78 +35,83 @@
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
 
-<sf:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data">
-    <%--<sf:input type="hidden" path="id" />--%>
-    <%--<sf:input type="hidden" path="version"/>--%>
-    <s:bind path="*">
-        <c:if test="${status.error}">
-            <div id="message" class="error">Form has errors</div>
-        </c:if>
-    </s:bind>
+<form:form name="f" method="PUT" modelAttribute="user" enctype="multipart/form-data" cssClass="cleanform">
+    <div class="header">
+        <h2>${formTitle}</h2>
+        <font color="red">${confirmRegistration}</font>
+        <br/>
+        <br/>
 
-    <table>
-        <tr>
-            <td><sf:label path="login"><spring:message code="label.login"/></sf:label></td>
-            <td><sf:input path="login" disabled="${disabledEdit}"/></td>
-            <td><sf:errors path="login"/></td>
-        </tr>
-        <tr>
-            <td><sf:label path="email"><spring:message code="label.email"/></sf:label></td>
-            <td><sf:input path="email" disabled="${disabledEdit}"/></td>
-            <td><sf:errors path="email"/></td>
-        </tr>
-        <tr>
-            <td><sf:label path="password"><spring:message code="label.password"/></sf:label></td>
-            <td><sf:password path="password" showPassword="true" disabled="${disabledEdit}"/></td>
-            <td><sf:errors path="password"/></td>
-        </tr>
-        <tr>
-            <td><sf:label path="avatarImage"><spring:message code="label.avatarImage"/></sf:label></td>
-            <td><sf:input type="file" path="avatarImage" disabled="${disabledEdit}"/></td>
-            <td><sf:errors path="avatarImage"/>
-        </tr>
-        <tr>
-            <td><sf:label path="birthDay"><spring:message code="label.birthDay"/></sf:label></td>
-            <td><sf:input path="birthDay" id="birthDay" placeholder="${dateFormatPattern}" disabled="${disabledEdit}"/></td>
-            <td><sf:errors path="birthDay"/></td>
-        </tr>
-        <tr>
-            <td>Sex : </td>
-            <td>
-                <sf:radiobutton path="sex" value="Male" disabled="${disabledEdit}"/>Male
-                <sf:radiobutton path="sex" value="Female" disabled="${disabledEdit}"/>Female
-            </td>
-            <td><sf:errors path="sex" cssClass="error" /></td>
-        </tr>
-        <tr>
-            <td>Subscribe to newsletter?  </td>
-            <td><sf:checkbox path="receiveNewsletter" /></td>
-            <td><sf:errors path="receiveNewsletter" cssClass="error" /></td>
-        </tr>
+        <spring:bind path="*">
+            <c:if test="${status.error}">
+                <div id="message" class="error">Form has errors</div>
+            </c:if>
+        </spring:bind>
+    </div>
+        <fieldset>
+            <%--<form:input type="hidden" path="id" />--%>
+            <%--<form:input type="hidden" path="version"/>--%>
 
+            <legend>Personal Info</legend>
+            <form:label path="login">
+                <spring:message code="label.login"/> <form:errors path="login" cssClass="error" />
+            </form:label>
+            <form:input path="login" disabled="${disabledEdit}" />
+
+            <form:label path="email">
+                <spring:message code="label.email"/> <form:errors path="email" cssClass="error" />
+            </form:label>
+            <form:input path="email" disabled="${disabledEdit}" />
+
+            <form:label path="password">
+                <spring:message code="label.password"/> <form:errors path="password" cssClass="error" />
+            </form:label>
+            <form:input path="password" disabled="${disabledEdit}" />
+
+            <form:label path="birthDay">
+                <spring:message code="label.birthDay"/> <form:errors path="birthDay" cssClass="error" />
+            </form:label>
+            <form:input path="birthDay" disabled="${disabledEdit}" />
+
+            <form:label path="avatarImage">
+                <spring:message code="label.avatarImage"/> <form:errors path="avatarImage" cssClass="error" />
+            </form:label>
+            <form:input type="file" path="avatarImage" disabled="${disabledEdit}" />
+
+            <fieldset>
+                <legend>Sex:</legend>
+                <label><form:radiobutton path="sex" value="Male" />Male</label>
+                <label><form:radiobutton path="sex" value="Female" /> Female</label>
+            </fieldset>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>Subscribe to Newsletter?</legend>
+            <label><form:radiobutton path="receiveNewsletter" value="1"/> Yes</label>
+            <label><form:radiobutton path="receiveNewsletter" value="0"/> No</label>
+        </fieldset>
 
         <security:authorize access="hasRole('ROLE_ADMIN')">
-            <tr>
-                <td>Role : </td>
-                <td>
-                    <sf:select path="role">
-                        <%--<sf:option value="NONE" label="--- Select ---"/>--%>
-                        <sf:options items="${roleList}" />
-                    </sf:select>
-                </td>
-                <td><sf:errors path="role" cssClass="error" /></td>
-            </tr>
-            <tr>
-                <td>Enabled?  </td>
-                <td><sf:checkbox path="enabled" /></td>
-                <td><sf:errors path="enabled" cssClass="error" /></td>
-            </tr>
+            <fieldset>
+                <legend>Security information:</legend>
+
+                <label>Role:</label>
+                <form:select path="role">
+                    <form:options items="${roleList}" />
+                </form:select>
+
+                <fieldset>
+                    <legend>Enabled:</legend>
+                    <label><form:radiobutton path="enabled" value="1" />enabled</label>
+                    <label><form:radiobutton path="enabled" value="0" /> disabled</label>
+                </fieldset>
+            </fieldset>
         </security:authorize>
-    </table>
 
     <br/>
     <input name="commit" type="submit" value="${sfButtonNew}"/>
     <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
     <security:csrfInput/>
 
-</sf:form>
+</form:form>

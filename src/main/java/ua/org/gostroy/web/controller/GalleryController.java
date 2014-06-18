@@ -24,6 +24,7 @@ import ua.org.gostroy.exception.EntityNotFound;
 import ua.org.gostroy.exception.HaveNotAccess;
 import ua.org.gostroy.exception.NeedAuthorize;
 import ua.org.gostroy.service.AlbumService;
+import ua.org.gostroy.service.GalleryControllerService;
 import ua.org.gostroy.service.ImageService;
 import ua.org.gostroy.service.UserService;
 import ua.org.gostroy.web.editor.AlbumEditor;
@@ -57,9 +58,8 @@ public class GalleryController {
     private AlbumService albumService;
     @Autowired(required = true)
     private UserService userService;
-
-    @Autowired(required = true)
-    private MessageSource messageSource;
+    @Autowired
+    private GalleryControllerService galleryControllerService;
 
     @InitBinder
     protected void initBinder(ServletRequestDataBinder binder, @PathVariable String login) {
@@ -132,37 +132,8 @@ public class GalleryController {
                                    MultipartRequest multipartRequest, Locale locale)
             throws IOException, NoSuchAlgorithmException{
         log.trace("uploadImagesPOST(), start ...");
-        Map<String, String> errorsMap = new HashMap<String, String>();
-        List<MultipartFile> files = multipartRequest.getFiles("files");
-        if(files.get(0).isEmpty()){
-            errorsMap.put("", messageSource.getMessage("error.upload.notselected", null, locale));
-        }
-        else {
-            User user = userService.findByLogin(login);
-            Album album = albumService.findByUserLoginAndName(login, albumName);
-            if (album == null) {
-                album = new Album();
-                album.setName(albumName);
-                album.setUser(user);
-            }
-            for (MultipartFile multipartFile : files) {
-                    Image image = new Image();
-                    image.setUser(user);
-                    image.setAlbum(album);
-                    image.setMultipartFile(multipartFile);
-
-                    UploadStatus uploadStatus = imageService.create(image);
-                    String fileName = image.getMultipartFile().getOriginalFilename();
-                    if (uploadStatus.equals(UploadStatus.EXISTS)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.exists", null, locale));
-                    } else if (uploadStatus.equals(UploadStatus.INVALID)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.invalid", null, locale));
-                    } else if (uploadStatus.equals(UploadStatus.FAILED)) {
-                        errorsMap.put(fileName, messageSource.getMessage("error.upload.failed", null, locale));
-                    }
-                }
-            }
-        redirectAttributes.addFlashAttribute("errorsMap", errorsMap);
+        Map<String, String> errors = galleryControllerService.uploadImages(multipartRequest, login, albumName, locale);
+        redirectAttributes.addFlashAttribute("errorsMap", errors);
         return "redirect:/gallery/" + login + "/" + albumName + "/";
     }
 

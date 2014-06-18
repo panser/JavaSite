@@ -9,6 +9,7 @@
         <li>test:</li>
         <ul>
             <li><a href="<c:url value="/test/views"/>">views</a></li>
+            <li><a href="<c:url value="/test/ajax"/>">ajax</a></li>
         </ul>
     </ul>
 </security:authorize>

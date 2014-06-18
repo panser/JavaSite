@@ -68,12 +68,12 @@
         <li>
             <fieldset>
                 <legend>sendPostForm</legend>
-                <c:if test="${not empty message}">
-                    <div id="messageId1" class="success">${message}</div>
-                </c:if>
                 <c:set var="sendPostFormUrl"><c:url value="/test/ajax/sendPostForm"/></c:set>
                 <form:form id="sendPostFormId1" method="post" modelAttribute="user" action="${sendPostFormUrl}">
                     <div class="header">
+                        <c:if test="${not empty message}">
+                            <div id="messageId1" class="success">${message}</div>
+                        </c:if>
                         <spring:bind path="*">
                             <c:if test="${status.error}">
                                 <div id="messageId1" class="error">Form has errors</div>
@@ -298,7 +298,6 @@
             return false;
         });
 
-/*
         $("#sendPostFormId1").submit(function() {
             $.post($(this).attr("action"), $(this).serialize(), function(html) {
                 $("#pageContentId1").replaceWith(html);
@@ -306,7 +305,6 @@
             });
             return false;
         });
-*/
 
 
         // Include CSRF token as header in JQuery AJAX requests

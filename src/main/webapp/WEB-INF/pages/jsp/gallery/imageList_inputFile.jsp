@@ -21,7 +21,7 @@
             <b>${login}</b>
         </a>
         /
-        <b>${image.album.name}</b>
+        <b>${album.name}</b>
     </div>
 
     <div id="uploadInput">
@@ -39,7 +39,8 @@
         $(document).ready(function() {
             $('<input type="hidden" name="ajaxUpload" value="true" />').insertAfter($("#files"));
             $("#html5_upload").ajaxForm({ success: function(html) {
-                $("#fileuploadContent").replaceWith(html);
+//                $("#fileuploadContent").replaceWith(html);
+                html.after('#uploadInput');
             }
             });
         });

@@ -26,7 +26,9 @@ public class GalleryController {
     public String listImagesGET(Model model, @RequestParam(required = false) Integer page){
         log.trace("listImagesGET(), page: " + page);
         page = (page == null) ? 0 : page;
-        model.addAttribute("images", imageService.findByPage(page));
+        Integer number = 3;
+        model.addAttribute("images", imageService.findByPage(page, number));
+        model.addAttribute("page", page);
         return "/gallery/imageAll";
     }
 }

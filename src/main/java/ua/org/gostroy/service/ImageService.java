@@ -87,9 +87,9 @@ public class ImageService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "images")
-    public List<Image> findByPage(Integer page) {
+    public List<Image> findByPage(Integer page, Integer number) {
         log.trace("findByPage ...");
-        PageRequest page1 = new PageRequest(page,3, new Sort(
+        PageRequest page1 = new PageRequest(page,number, new Sort(
                 new Sort.Order(Sort.Direction.ASC, "createDate"),
                 new Sort.Order(Sort.Direction.DESC, "name")
         ));

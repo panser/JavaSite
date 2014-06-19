@@ -5,8 +5,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="disabledEdit">false</c:set>
-<div>
+<div page="${page}" class="page">
     <c:forEach items="${images}" var="image">
         <c:if test="${image.album.publicAccess}">
             <a href="<c:url value="/gallery/${image.user.login}/${image.album.name}/${image.name}"/>">
@@ -16,7 +15,7 @@
     </c:forEach>
 </div>
 <div id="nextId">
-    <a href="next">Next Page</a>
+    <a class="next" href="?page=">Next Page</a>
     <ul>
         <li><a href="?page=0">Page 0</a></li>
         <li><a href="?page=1">Page 1</a></li>
@@ -24,3 +23,25 @@
         <li><a href="?page=3">Page 3</a></li>
     </ul>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var obj = $('div.page').find('LAST');
+        var index = $(obj).attr('page');
+
+        $("a.next").click(function(){
+            var link = $(this);
+            $.ajax({ url: link.attr("href"), dataType: "text",
+                success: function(text) {
+//                    MvcUtil.showSuccessResponse(text, link);
+                },
+                error: function(xhr) {
+//                    MvcUtil.showErrorResponse(xhr.responseText, link);
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

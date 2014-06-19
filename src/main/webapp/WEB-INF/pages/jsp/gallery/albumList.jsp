@@ -62,17 +62,16 @@ Album List of user: <b>${login}</b>
 </c:if>
 
 <c:if test="${disabledEdit=='false'}">
-    <sf:form name="f" method="POST" modelAttribute="albumNew">
-        <p>
-            <sf:label path="name">Name: </sf:label>
-            <sf:input path="name" disabled="${disabledEdit}"/>
+    <fieldset>
+        <sf:form name="f" method="POST" modelAttribute="albumNew">
+            <p>
+                <sf:label path="name">Name: </sf:label>
+                <sf:input path="name"/>
+                <sf:errors path="name"/>
+            </p>
+            <security:csrfInput/>
             <input name="commit" type="submit" value="Add album"/>
-        </p>
-        <p>
-            <sf:errors path="name"/>
-        </p>
-        <security:csrfInput/>
-    </sf:form>
-
+        </sf:form>
+    </fieldset>
 </c:if>
 

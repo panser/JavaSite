@@ -43,7 +43,7 @@ import java.util.Map;
  * Created by panser on 6/2/2014.
  */
 @Controller
-@RequestMapping("/gallery")
+@RequestMapping("/gallery/{login}")
 public class GalleryLoginController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private String root = System.getProperty("user.dir");
@@ -64,29 +64,30 @@ public class GalleryLoginController {
 
 
 
-    @RequestMapping(value = {"/{login}/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String listAlbumsGET(Model model, @PathVariable String login){
         model.addAttribute("login", login);
         model.addAttribute("albums", albumService.findByUserLogin(login));
-        model.addAttribute("albumNew", new Album());
+        if(!model.containsAttribute("albumNew")) {
+            model.addAttribute("albumNew", new Album());
+        }
         return "/gallery/albumList";
     }
 
-    @RequestMapping(value = {"/{login}/"}, method = RequestMethod.POST)
-    public String listAlbumsPOST(@Valid @ModelAttribute("albumNew") Album albumFromForm, BindingResult result,
-                                 @PathVariable String login) {
-        String viewName;
+    @RequestMapping(value = {"/"}, method = RequestMethod.POST)
+    public String listAlbumsPOST(@Valid Album albumFromForm, BindingResult result,
+                                 @PathVariable String login, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            viewName = "/gallery/albumList";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.albumNew", result);
+            redirectAttributes.addFlashAttribute("albumNew", albumFromForm);
         } else {
             User user = userService.findByLogin(login);
             albumFromForm.setUser(user);
             albumService.create(albumFromForm);
-            viewName = "redirect:/gallery/" + login + "/";
         }
-        return viewName;
+        return "redirect:/gallery/" + login + "/";
     }
-    @RequestMapping(value = {"/{login}/{albumName}"}, method = RequestMethod.GET, params = "delete")
+    @RequestMapping(value = {"/{albumName}"}, method = RequestMethod.GET, params = "delete")
     public String listAlbumsDELETE(@PathVariable String login, @PathVariable String albumName){
         List<Image> images = imageService.findByUserLoginAndAlbumName(login, albumName);
         Album album = albumService.findByUserLoginAndName(login,albumName);
@@ -99,7 +100,7 @@ public class GalleryLoginController {
 
 
 
-    @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.GET)
     public String listImages(Model model, @PathVariable String login, @PathVariable String albumName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
         model.addAttribute("login", login);
@@ -110,19 +111,13 @@ public class GalleryLoginController {
         }
         return "/gallery/imageList";
     }
-    @RequestMapping(value = {"/{albumName}/upload"}, method = RequestMethod.GET)
-    public String uploadImagesGET(Model model, @PathVariable String login){
-        model.addAttribute("image", new Image());
-        return "/gallery/imageUpload";
-    }
 
-
-//    @PreAuthorize("isAuthenticated()")
     @ModelAttribute
     public void ajaxAttribute(WebRequest request, Model model) {
         model.addAttribute("ajaxUpload", AjaxUtils.isAjaxUploadRequest(request));
     }
-    @RequestMapping(value = {"/{login}/{albumName}/"}, method = RequestMethod.POST)
+    //    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.POST)
     public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
                                    MultipartRequest multipartRequest, Locale locale, @ModelAttribute("ajaxUpload") boolean ajaxUpload,
                                    Model model)
@@ -132,7 +127,6 @@ public class GalleryLoginController {
         if(ajaxUpload){
             model.addAllAttributes(modelUpload.asMap());
             return "/gallery/imageList";
-//            return "/gallery/ajaxImageList";
         }
         else {
             redirectAttributes.addFlashAttribute("errors", modelUpload.asMap().get("errors"));
@@ -142,7 +136,7 @@ public class GalleryLoginController {
 
 
 
-    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.GET)
     public String editImageGET(Model model, HttpServletRequest request,
                             @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Album album = albumService.findByUserLoginAndName(login,albumName);
@@ -165,7 +159,7 @@ public class GalleryLoginController {
         model.addAttribute("requestURL", requestURL);
         return "/gallery/imageEdit";
     }
-    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
     public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
                                @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
         if(result.hasErrors()){
@@ -206,7 +200,7 @@ public class GalleryLoginController {
 
         return "redirect:/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName();
     }
-    @RequestMapping(value = {"/{login}/{albumName}/{imageName}"}, method = RequestMethod.GET, params = "delete")
+    @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.GET, params = "delete")
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login,albumName,imageName);
         imageService.delete(image);
@@ -218,7 +212,7 @@ public class GalleryLoginController {
 
 
 
-    @RequestMapping(value = {"/{login}/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{albumName}/{imageName}/full"}, method = RequestMethod.GET)
     @ResponseBody
     public BufferedImage viewImage(@PathVariable String login, @PathVariable String imageName, @PathVariable String albumName, Principal user)
             throws HaveNotAccess,NeedAuthorize,EntityNotFound, IOException {

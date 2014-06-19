@@ -1,6 +1,7 @@
 package ua.org.gostroy.model;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +23,7 @@ public class Image extends BaseEntity{
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @NotEmpty(message="{validation.image.name.NotEmpty.message}")
     private String name;
     private String description;
     private long size;

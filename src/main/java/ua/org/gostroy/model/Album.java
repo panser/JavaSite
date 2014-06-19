@@ -1,5 +1,6 @@
 package ua.org.gostroy.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,7 @@ public class Album extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @NotEmpty(message="{validation.album.name.NotEmpty.message}")
     private String name;
     private String description;
     private Boolean publicAccess = true;

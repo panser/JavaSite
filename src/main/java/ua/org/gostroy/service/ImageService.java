@@ -3,7 +3,6 @@ package ua.org.gostroy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.FileSystemUtils;
-import ua.org.gostroy.model.Album;
 import ua.org.gostroy.model.Image;
 import ua.org.gostroy.model.User;
 import ua.org.gostroy.repository.ImageRepository;
@@ -23,10 +20,6 @@ import ua.org.gostroy.web.form.UploadStatus;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -169,7 +162,7 @@ public class ImageService {
         image.setSize(image.getMultipartFile().getSize());
         image.setPath(path);
         image.setDigest(digest);
-        String imageName = image.getMultipartFile().getOriginalFilename().replace('.','_');
+        String imageName = image.getMultipartFile().getOriginalFilename().replace('.', '_');
         // NEED VALIDATE ON imageName
         image.setName(imageName);
 

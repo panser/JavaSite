@@ -3,6 +3,7 @@ package ua.org.gostroy.model;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+import ua.org.gostroy.validator.UniqueForUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -21,6 +22,7 @@ import java.util.List;
 //@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @Table(name = "users")
 @XmlAccessorType(XmlAccessType.NONE)
+//@UniqueForUser
 public class User extends BaseEntity{
     @NotEmpty(message="{validation.user.login.NotEmpty.message}")
     @Size(min=3, max=60, message="{validation.user.login.Size.message}")

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,6 +18,7 @@ import ua.org.gostroy.service.UserService;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -57,6 +59,7 @@ public class UserController {
             throws IOException{
         String viewName;
         log.debug("addUser()");
+        validateUserOnUnique(userFromForm, userFromFormError);
         if(userFromFormError.hasErrors()){
             viewName = "/user/userEdit";
         }
@@ -81,6 +84,7 @@ public class UserController {
                            RedirectAttributes redirectAttributes) throws IOException{
         String viewName;
         log.debug("editUser(), userFromForm.login = " + login);
+        validateUserOnUnique(user, userFromFormError);
         if(userFromFormError.hasErrors()){
             viewName = "/user/userEdit";
         }
@@ -100,9 +104,10 @@ public class UserController {
         return "/user/register";
     }
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String registerPOST(@Valid @ModelAttribute("user") User userFromForm, BindingResult result, HttpServletRequest request)
+    public String registerPOST(@Valid User userFromForm, BindingResult result, HttpServletRequest request)
             throws MessagingException, URISyntaxException {
         String viewName;
+        validateUserOnUnique(userFromForm, result);
         if(result.hasErrors()){
             viewName = "/user/register";
         }
@@ -161,5 +166,15 @@ public class UserController {
         role.put("ROLE_USER", "user");
         return role;
     }
+
+
+//    vallidation on unique
+    public void validateUserOnUnique(User user, Errors errors){
+        Object checkByLogin = userService.findByLogin(user.getLogin());
+        if(checkByLogin != null){
+            errors.rejectValue("login", "validation.user.login.Duplicate", "already exists");
+        }
+    }
+
 
 }

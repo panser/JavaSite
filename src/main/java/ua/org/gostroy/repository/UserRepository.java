@@ -10,6 +10,7 @@ import ua.org.gostroy.model.User;
 @Repository
 public interface UserRepository  extends JpaRepository<User, Long> {
     User findByEmail(String email);
-    User findByLogin(String email);
+//    User findByLogin(String email);
+    User findByLogin(String login);
     User findByRegUrI(String regUrI);
 }

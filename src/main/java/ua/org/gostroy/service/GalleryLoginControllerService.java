@@ -22,7 +22,7 @@ import java.util.*;
  * Created by panser on 6/16/2014.
  */
 @Service
-public class GalleryControllerService {
+public class GalleryLoginControllerService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired(required = true)

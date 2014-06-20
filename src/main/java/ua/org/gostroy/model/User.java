@@ -18,12 +18,14 @@ import java.util.List;
  * Created by panser on 5/20/14.
  */
 @Entity
+//@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @Table(name = "users")
 @XmlAccessorType(XmlAccessType.NONE)
 public class User extends BaseEntity{
     @NotEmpty(message="{validation.user.login.NotEmpty.message}")
     @Size(min=3, max=60, message="{validation.user.login.Size.message}")
     @XmlElement
+    @Column(unique=true)
     private String login;
     @NotEmpty(message="{validation.user.email.NotEmpty.message}")
     @Email(message = "{validation.user.email.Email.message}")

@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -19,7 +20,7 @@ import ua.org.gostroy.model.Album;
 import ua.org.gostroy.model.Image;
 import ua.org.gostroy.model.User;
 import ua.org.gostroy.service.AlbumService;
-import ua.org.gostroy.service.GalleryControllerService;
+import ua.org.gostroy.service.GalleryLoginControllerService;
 import ua.org.gostroy.service.ImageService;
 import ua.org.gostroy.service.UserService;
 import ua.org.gostroy.web.editor.AlbumEditor;
@@ -55,7 +56,7 @@ public class GalleryLoginController {
     @Autowired(required = true)
     private UserService userService;
     @Autowired
-    private GalleryControllerService galleryControllerService;
+    private GalleryLoginControllerService galleryLoginControllerService;
 
     @InitBinder
     protected void initBinder(ServletRequestDataBinder binder, @PathVariable String login) {
@@ -77,6 +78,7 @@ public class GalleryLoginController {
     @RequestMapping(value = {"/"}, method = RequestMethod.POST)
     public String listAlbumsPOST(@Valid Album albumFromForm, BindingResult result,
                                  @PathVariable String login, RedirectAttributes redirectAttributes) {
+        validateAlbumOnUnique(login, albumFromForm,result);
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.albumNew", result);
             redirectAttributes.addFlashAttribute("albumNew", albumFromForm);
@@ -123,7 +125,7 @@ public class GalleryLoginController {
                                    Model model)
             throws IOException, NoSuchAlgorithmException{
         log.trace("uploadImagesPOST(), start ...");
-        Model modelUpload = galleryControllerService.uploadImages(multipartRequest, login, albumName, locale);
+        Model modelUpload = galleryLoginControllerService.uploadImages(multipartRequest, login, albumName, locale);
         if(ajaxUpload){
             model.addAllAttributes(modelUpload.asMap());
             return "/gallery/imageList";
@@ -162,6 +164,7 @@ public class GalleryLoginController {
     @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
     public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
                                @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
+        validateImageOnUnique(login,albumName,imageFromForm,result);
         if(result.hasErrors()){
             log.trace("editImagePUT(), result: " + result);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", result);
@@ -249,6 +252,21 @@ public class GalleryLoginController {
         Graphics g = bufferedImage.getGraphics();
         g.drawString("gostroy.org.ua", 20, 20);
         return bufferedImage;
+    }
+
+
+    //    vallidation on unique
+    public void validateAlbumOnUnique(String userLogin, Album album, Errors errors){
+        Object checkObject = albumService.findByUserLoginAndName(userLogin,album.getName());
+        if(checkObject != null){
+            errors.rejectValue("name", "validation.album.name.Duplicate", "already exists");
+        }
+    }
+    public void validateImageOnUnique(String userLogin, String albumName, Image image, Errors errors){
+        Object checkObject = imageService.findByUserLoginAndAlbumNameAndName(userLogin,albumName,image.getName());
+        if(checkObject != null){
+            errors.rejectValue("name", "validation.image.name.Duplicate", "already exists");
+        }
     }
 
 }

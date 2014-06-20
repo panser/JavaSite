@@ -54,6 +54,7 @@
     <!--<logger name="" level="warn" />-->
 
 
+    <!--<root level="debug" debug="false">-->
     <root level="warn" debug="false">
         <!-- <appender-ref ref="FILE" /> -->
         <appender-ref ref="console" />

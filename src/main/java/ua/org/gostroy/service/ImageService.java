@@ -169,7 +169,9 @@ public class ImageService {
         image.setSize(image.getMultipartFile().getSize());
         image.setPath(path);
         image.setDigest(digest);
-        image.setName(image.getMultipartFile().getOriginalFilename().replace('.','_'));
+        String imageName = image.getMultipartFile().getOriginalFilename().replace('.','_');
+        // NEED VALIDATE ON imageName
+        image.setName(imageName);
 
         imageRepository.save(image);
         log.trace("create.");

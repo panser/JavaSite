@@ -8,10 +8,15 @@
 <c:if test="${!ajaxRequest}">
     <html>
     <head>
-        <link href="<c:url value="/resources/css/thisProject.css"/>" rel="stylesheet">
 
-        <link rel='stylesheet' href='<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css"/>'>
-        <link rel='stylesheet' href='<c:url value="/webjars/jquery-ui/1.10.4/themes/base/jquery.ui.all.css"/>'>
+        <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.css"/>'>
+        <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/jquery-ui/1.10.4/themes/base/jquery.ui.all.css"/>'>
+
+        <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/thisProject.css"/>">
+        <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/bootstrap_diana.css"/>">
+
+
+
         <script src="<c:url value="/webjars/jquery/2.1.1/jquery.js"/>"></script>
         <script src="<c:url value="/webjars/jquery-ui/1.10.4/ui/jquery-ui.js"/>"></script>
         <script src="<c:url value="/webjars/ckeditor/4.4.1/ckeditor.js"/>"></script>
@@ -32,21 +37,26 @@
     </head>
     <body>
 
-    <div id="container" style="width:100%">
+    <div id="container" class="container-fluid">
 
-        <div id="header" style="background-color:lightcyan;height:100px;width:90%;float:left;">
+    <!--Header-->
+        <div id="header">
             <tiles:insertAttribute name="header"/>
         </div>
-        <div id="sigin" style="background-color:lightcyan;height:100px;width:10%;float:left;">
+
+    <!--Login form-->
+        <div id="sigin">
             <tiles:insertAttribute name="sigin"/>
         </div>
 
-        <div id="menu" style="background-color:green;width:100%;height:30px;float:left;">
+    <!--Navigation Bar-->
+        <div id="menu">
             <tiles:insertAttribute name="menu"/>
         </div>
 </c:if>
 
-        <div id="content" style="background-color:#eeeeee;width:90%;float:left;">
+    <!--Body content-->
+        <div id="content" class="container">
             <tilesx:useAttribute id="list" name="body" classname="java.util.List" />
             <c:forEach var="item" items="${list}">
                 <tiles:insertAttribute value="${item}" flush="true" />
@@ -54,13 +64,15 @@
             </c:forEach>
         </div>
 
+<!--Sidebar content-->
 <c:if test="${!ajaxRequest}">
-        <div id="category" style="background-color:lightcyan;width:10%;float:left;">
+        <div id="category">
             <tiles:insertAttribute name="category"/>
         </div>
 
-        <div id="footer" style="background-color:lightcyan;clear:both;text-align:center;">
-            <tiles:insertAttribute name="footer"/>
+<!-- Footer -->
+        <div id="footer">
+            <tiles:insertAttribute name="footer" />
         </div>
 
     </div>

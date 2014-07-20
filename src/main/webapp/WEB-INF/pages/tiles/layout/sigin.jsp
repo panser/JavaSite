@@ -8,7 +8,7 @@
 
 <security:authorize access="!isAuthenticated()">
     <c:url value="/auth/login" var="url"/>
-    <a href="<c:out value='${url}'/>">
+    <a class="login-button" href="<c:out value='${url}'/>">
         <spring:message code="href.login"/>
     </a>
 </security:authorize>

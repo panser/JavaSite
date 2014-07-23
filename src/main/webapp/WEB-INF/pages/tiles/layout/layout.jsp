@@ -56,7 +56,8 @@
 </c:if>
 
     <!--Body content-->
-        <div id="content" class="container">
+<div class="container">
+        <div id="content" class="content">
             <tilesx:useAttribute id="list" name="body" classname="java.util.List" />
             <c:forEach var="item" items="${list}">
                 <tiles:insertAttribute value="${item}" flush="true" />
@@ -66,17 +67,20 @@
 
 <!--Sidebar content-->
 <c:if test="${!ajaxRequest}">
-        <div id="category">
+        <div id="category" class="sidebar">
             <tiles:insertAttribute name="category"/>
         </div>
+
+    <div class="page-buffer"></div>
+    </div>
 
 <!-- Footer -->
         <div id="footer">
             <tiles:insertAttribute name="footer" />
         </div>
 
-    </div>
 
+ </div>
     </body>
     </html>
 </c:if>

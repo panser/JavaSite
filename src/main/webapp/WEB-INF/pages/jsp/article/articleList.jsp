@@ -6,27 +6,31 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<div class="add-new-article"><a href="<c:url value="/article/create"/>">Add article</a></div>
+
 <h2><spring:message code="articleList.header"/></h2>
-    <a href="<c:url value="/article/create"/>">Add article</a>
+
 
 <c:forEach items="${articles}" var="article">
 
     <fieldset>
         <table>
             <tr>
-                <td><h3>
+                <td class="article-title"><h3>
                     <a href="<c:url value="/article/${article.id}"/>">${article.title}</a>
                 </h3></td>
             </tr>
             <tr>
-                <td><img src="<c:url value="/user/${article.author.login}/avatar"/>" width="24" height="24"/></td>
-                <td><fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/></td>
+                <td class="article-date"><fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/></td>
             </tr>
             <tr>
-                <td>${article.description}</td>
+                <td class="article-image"><img src="<c:url value="/user/${article.author.login}/avatar"/>" width="24" height="24"/></td>
             </tr>
-            <tr  style="color:coral">
-                <td>${fn:length(article.visitors)}</td>
+            <tr>
+                <td class="article-description">${article.description}</td>
+            </tr>
+            <tr>
+                <td class="article-visits">Number of Visits: ${fn:length(article.visitors)}</td>
             </tr>
         </table>
     </fieldset>

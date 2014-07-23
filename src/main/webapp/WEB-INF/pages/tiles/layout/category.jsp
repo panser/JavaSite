@@ -14,19 +14,26 @@
     </ul>
 </security:authorize>
 
+<p>
+    <b>Your menu:</b>
+</p>
+<p class="sidebar-menu">
+<ul>
+    <li>
+        <a href="<c:url value="/article/"/>">Articles</a>
+    </li>
+</ul>
+</p>
+
+
 <security:authorize access="isAuthenticated()">
     <c:set var="login"><security:authentication property="principal.username" /></c:set>
-    <p>
-        <b>Your menu:</b>
-    </p>
-    <p>
+    <p class="sidebar-menu">
         <ul>
-            <li>
-                <a href="<c:url value="/gallery/${login}/"/>">gallery</a>
-            </li>
-            <li>
-                <a href="<c:url value="/article/"/>">articles</a>
-            </li>
+    <li>
+        <a href="<c:url value="/gallery/${login}/"/>">gallery</a>
+    </li>
         </ul>
     </p>
 </security:authorize>
+

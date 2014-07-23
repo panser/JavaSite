@@ -3,7 +3,7 @@
 
 <div id="article" class="navbar">
     <div class="navbar-inner">
-        <ul class="nav nav-pills pull-left">
+        <ul class="nav nav-pills">
             <li><a href="<c:url value="/article/"/>">Articles</a></li>
             <li><a href="<c:url value="/gallery/"/>">Gallery</a></li>
         </ul>

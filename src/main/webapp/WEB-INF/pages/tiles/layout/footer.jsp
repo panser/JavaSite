@@ -1,1 +1,1 @@
-Created by Sergey Panov (2014)
+<div class="footer"><div class="copyright1"><span>Created by Sergey Panov (2014)</span></div></div>

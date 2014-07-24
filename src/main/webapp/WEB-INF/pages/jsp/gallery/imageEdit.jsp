@@ -89,13 +89,19 @@
                     </a>
                 </td>
             </tr>
+
+            <tr>
+                <td>
+    <input name="commit" type="submit" value="Save"/>
+    <security:csrfInput/>
+                </td>
+                <td>
+                    <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
+                </td>
+            </tr>
+
         </c:if>
     </table>
-
-    <br/>
-    <input name="commit" type="submit" value="Save"/>
-    <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
-    <security:csrfInput/>
 
 </sf:form>
 

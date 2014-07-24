@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:security="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <mvc:annotation-driven validator="validator" content-negotiation-manager="cnManager">
         <mvc:message-converters>
@@ -15,5 +16,9 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <!--<tx:annotation-driven transaction-manager="transactionManagerJDBC" />-->
+    <tx:annotation-driven transaction-manager="txManagerJPA" />
+    <!--<tx:annotation-driven transaction-manager="txManagerJPA" proxy-target-class="true"/>-->
 
 </beans>

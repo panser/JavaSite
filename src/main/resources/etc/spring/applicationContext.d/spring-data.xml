@@ -51,10 +51,6 @@
         <property name="entityManagerFactory" ref="myEntityManager"/>
     </bean>
 
-    <!--<tx:annotation-driven transaction-manager="transactionManagerJDBC" />-->
-    <tx:annotation-driven transaction-manager="txManagerJPA" />
-    <!--<tx:annotation-driven transaction-manager="txManagerJPA" proxy-target-class="true"/>-->
-
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
     <jpa:repositories base-package="ua.org.gostroy.repository" transaction-manager-ref="txManagerJPA"/>

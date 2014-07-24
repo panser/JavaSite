@@ -14,6 +14,7 @@
         </c:if>
     </c:forEach>
 </div>
+<input id="pagecount" type="hidden" value="1"/>
 <div id="nextId">
     <a class="next" href="?page=">Next Page</a>
     <ul>
@@ -26,6 +27,22 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $(window).scroll(function () {
+            scrollWindow();
+        });
+
+        function scrollWindow() {
+            console.log($(window).scrollTop() + ">="+ $(document).height() + "-" + ($(window).height()) + " && " + document.location.toString().indexOf("endOfPage") + "== -1");
+            if (($(window).scrollTop() >= $(document).height() - $(window).height())) {
+                var pagecount = $('#pagecount').val();
+                loadNewData(pagecount);
+            }
+        }
+
+        function loadNewData (pagecount){
+            console(pagecount);
+        }
+
         var obj = $('div.page').find('LAST');
         var index = $(obj).attr('page');
 

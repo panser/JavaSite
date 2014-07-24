@@ -7,6 +7,6 @@
     <mvc:resources mapping="/resources/**" location="/WEB-INF/staticresources/"/>
     <!--<mvc:resources mapping="/resources/**" location="file:///C:/Users/panser/Dropbox/02.home/IdeaProjects/TEMPLATE/SpringTest/staticresources/"/>-->
 
-    <!--<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>-->
-    <mvc:resources mapping="/webjars/**" location="/webjars/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <!--<mvc:resources mapping="/webjars/**" location="/webjars/"/>-->
 </beans>

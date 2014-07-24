@@ -35,7 +35,7 @@
                     authentication-success-handler-ref="authenticationSuccessHandler"
                     authentication-failure-handler-ref="authenticationFailureHandler"/>
         <http-basic />
-        <logout logout-url="/auth/logout" success-handler-ref="logoutSuccessHandler"/>
+        <logout logout-url="/auth/logout" success-handler-ref="logoutSuccessHandler" delete-cookies="JSESSIONID"/>
         <remember-me token-validity-seconds="1209600" user-service-ref="userServiceOverJdbc"/>
 
         <csrf/>

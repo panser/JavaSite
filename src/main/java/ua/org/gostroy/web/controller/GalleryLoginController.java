@@ -116,16 +116,22 @@ public class GalleryLoginController {
 
     @ModelAttribute
     public void ajaxAttribute(WebRequest request, Model model) {
-        model.addAttribute("ajaxUpload", AjaxUtils.isAjaxUploadRequest(request));
+        Boolean ajaxRequest = AjaxUtils.isAjaxRequest(request) == true ? true : null;
+        Boolean ajaxUpload = AjaxUtils.isAjaxUploadRequest(request) == true ? true : null;
+
+        model.addAttribute("ajaxRequest", ajaxRequest);
+        model.addAttribute("ajaxUpload", ajaxUpload);
     }
     //    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = {"/{albumName}/"}, method = RequestMethod.POST)
     public String uploadImagesPOST(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName,
-                                   MultipartRequest multipartRequest, Locale locale, @ModelAttribute("ajaxUpload") boolean ajaxUpload,
+                                   MultipartRequest multipartRequest, Locale locale,
+                                   @ModelAttribute("ajaxUpload") Boolean ajaxUpload, @ModelAttribute("ajaxRequest") Boolean ajaxRequest,
                                    Model model)
             throws IOException, NoSuchAlgorithmException{
         log.trace("uploadImagesPOST(), start ...");
         Model modelUpload = galleryLoginControllerService.uploadImages(multipartRequest, login, albumName, locale);
+        ajaxUpload = (ajaxUpload == null) ? false : ajaxUpload;
         if(ajaxUpload){
             model.addAllAttributes(modelUpload.asMap());
             return "/gallery/imageList";
@@ -164,7 +170,8 @@ public class GalleryLoginController {
     @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.PUT)
     public String editImagePUT(RedirectAttributes redirectAttributes, @PathVariable String login, @PathVariable String albumName, @PathVariable String imageName,
                                @Valid @ModelAttribute("image") Image imageFromForm, BindingResult result){
-        validateImageOnUnique(login,albumName,imageFromForm,result);
+//        TODO: fix RUSSIAN imageFromForm.getName in URI field
+//        validateImageOnUnique(login,albumName,imageFromForm,result);
         if(result.hasErrors()){
             log.trace("editImagePUT(), result: " + result);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", result);
@@ -197,12 +204,14 @@ public class GalleryLoginController {
 
             log.trace("editImagePUT(), image before update: " + image);
             imageService.update(image);
-            log.trace("editImagePUT(), image.getDefAlbum()2: " + image.getDefAlbum());
+//            log.trace("editImagePUT(), image.getDefAlbum()2: " + image.getDefAlbum());
             log.trace("editImagePUT(), finish");
         }
 
+        log.trace("editImagePUT(), redirectURL: " + "/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName());
         return "redirect:/gallery/" + login + "/" + imageFromForm.getAlbum().getName() + "/" + imageFromForm.getName();
     }
+
     @RequestMapping(value = {"/{albumName}/{imageName}"}, method = RequestMethod.GET, params = "delete")
     public String editImageDELETE(@PathVariable String login, @PathVariable String albumName, @PathVariable String imageName){
         Image image = imageService.findByUserLoginAndAlbumNameAndName(login,albumName,imageName);

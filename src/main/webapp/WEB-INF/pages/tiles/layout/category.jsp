@@ -31,7 +31,7 @@
     <p class="sidebar-menu">
         <ul>
     <li>
-        <a href="<c:url value="/gallery/${login}/"/>">gallery</a>
+        <a href="<c:url value="/gallery/${login}/"/>">my gallery</a>
     </li>
         </ul>
     </p>

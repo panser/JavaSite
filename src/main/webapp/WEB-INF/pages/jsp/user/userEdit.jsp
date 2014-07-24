@@ -65,7 +65,17 @@
             <form:label path="login">
                 <spring:message code="label.login"/> <form:errors path="login" cssClass="error" />
             </form:label>
+            <c:choose>
+                <c:when test="${user['new']}">
             <form:input path="login" disabled="${disabledEdit}" />
+                </c:when>
+                <c:otherwise>
+                    <form:label path="login">
+                        ${user.login}
+                    </form:label>
+                    <br/>
+                </c:otherwise>
+            </c:choose>
 
             <form:label path="email">
                 <spring:message code="label.email"/> <form:errors path="email" cssClass="error" />

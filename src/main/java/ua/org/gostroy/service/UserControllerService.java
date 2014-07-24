@@ -61,7 +61,7 @@ public class UserControllerService {
         mailSender.send(message);
     }
 
-    public void setAuthenticationContext(User user){
+    public void signin(User user){
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
         Authentication authenticationResult = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authenticationResult);

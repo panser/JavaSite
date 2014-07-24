@@ -18,7 +18,6 @@ import ua.org.gostroy.service.UserService;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -84,7 +83,6 @@ public class UserController {
                            RedirectAttributes redirectAttributes) throws IOException{
         String viewName;
         log.debug("editUser(), userFromForm.login = " + login);
-        validateUserOnUnique(user, userFromFormError);
         if(userFromFormError.hasErrors()){
             viewName = "/user/userEdit";
         }
@@ -134,7 +132,7 @@ public class UserController {
         user.setEnabled(true);
         user.setRegUrI("!" + user.getRegUrI());
         userService.create(user);
-        userControllerService.setAuthenticationContext(user);
+        userControllerService.signin(user);
 
         redirectAttributes.addFlashAttribute("confirmRegistration", "Congratulation! We confirm your registration.");
         return "redirect:/user/" + user.getLogin() + "/profile";

@@ -19,6 +19,7 @@
 
         <script src="<c:url value="/webjars/jquery/2.1.1/jquery.js"/>"></script>
         <script src="<c:url value="/webjars/jquery-ui/1.10.4/ui/jquery-ui.js"/>"></script>
+        <script src="<c:url value="/webjars/jquery-form/3.28.0-2013.02.06/jquery.form.js"/>"></script>
         <script src="<c:url value="/webjars/ckeditor/4.4.1/ckeditor.js"/>"></script>
         <script src="<c:url value="/webjars/ckeditor/4.4.1/adapters/jquery.js"/>"></script>
 
@@ -84,3 +85,15 @@
     </body>
     </html>
 </c:if>
+<%--
+<script type="text/javascript">
+    $(document).ready(function(){
+        // Include CSRF token as header in JQuery AJAX requests
+        // See http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-include-csrf-token-ajax
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+</script>--%>

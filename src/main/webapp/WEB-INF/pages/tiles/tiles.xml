@@ -47,7 +47,6 @@
     <definition name="/gallery/imageList" extends="baseLayout">
         <put-attribute name="title" value="Gallery" />
         <put-list-attribute name="body">
-            <add-attribute value="/WEB-INF/pages/jsp/gallery/imageList_inputFile.jsp" />
             <add-attribute value="/WEB-INF/pages/jsp/gallery/imageList.jsp" />
         </put-list-attribute>
     </definition>

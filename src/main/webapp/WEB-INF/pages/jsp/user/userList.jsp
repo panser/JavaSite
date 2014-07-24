@@ -14,6 +14,10 @@
     <div id="message" class="success">${message}</div>
 </c:if>
 
+<security:authorize access="hasRole('ROLE_ADMIN')">
+    <a href="<c:url value="/user/add"/>">Add user</a>
+</security:authorize>
+
 <table border="1">
     <tr>
         <td></td>
@@ -47,8 +51,3 @@
         </tr>
     </c:forEach>
 </table>
-
-<security:authorize access="hasRole('ROLE_ADMIN')">
-    <a href="<c:url value="/user/add"/>">Add user</a>
-</security:authorize>
-

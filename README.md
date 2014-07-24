@@ -1,6 +1,8 @@
 JavaSite
 ========
-Blog - practice with Spring to make web application
+####it was tasted only with `Chrome browser`####
+
+practice with Spring to make web application
 ```
 Server side: Java7, Spring, Spring MVC, Spring Security, Spring Data
 Client side: JSP, JSTL, Tiles, JQuery

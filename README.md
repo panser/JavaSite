@@ -2,7 +2,7 @@ JavaSite
 ========
 ####it was test only with `Google Chrome browser`####
 
-practice with Spring to make web application
+do practice with Spring to make web application
 
 > Server side: Java7, Spring, Spring MVC, Spring Security, Spring Data
 

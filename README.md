@@ -18,7 +18,7 @@ practice with Spring to make web application
 
 > Sources: https://github.com/panser/JavaSite
 
-> Link: http://gostroy.org.ua:8888/JavaSite/ is available from 9:00 to 23:00
+> Link: http://gostroy.org.ua:8888/JavaSite/ is available from 9:00 to 23:00 (UTC +2)
 
 Responsibilities and accomplishments:
 > - write project from scratch 

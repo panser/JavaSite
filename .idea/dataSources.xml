@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3365334483">
-    <data-source source="LOCAL" name="MySQL - javasite@localhost" uuid="bfdf95d7-44b1-4e39-be47-d3f19ed07e6a">
+  <component name="DataSourceManagerImpl" format="xml" hash="762549668">
+    <data-source source="LOCAL" name="MySQL - andr_spring@localhost" uuid="40f392a5-fbad-4a75-afd8-9241eea8ec39">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/javasite</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/andr_spring</jdbc-url>
       <user-name>root</user-name>
       <user-password>df9bdf98df99df9e</user-password>
       <schema-pattern>javasite.*</schema-pattern>
       <default-schemas>javasite.*</default-schemas>
+      <driver-properties>
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+      </driver-properties>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="MySQL - javasite@192.168.1.102" uuid="c7b380fb-c382-4a22-966c-f0adf01f8429">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://192.168.1.102:3306/javasite</jdbc-url>
+      <user-name>javasite</user-name>
+      <user-password>dfc0dfcbdfdcdfcbdfd9dfc3dfdedfcf</user-password>
       <driver-properties>
         <property name="zeroDateTimeBehavior" value="convertToNull" />
         <property name="tinyInt1isBit" value="false" />

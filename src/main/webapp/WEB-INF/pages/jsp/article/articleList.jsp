@@ -6,9 +6,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<div class="add-new-article"><a href="<c:url value="/article/create"/>">Add article</a></div>
+<spring:message code="date_format_pattern" var="dateFormatPattern"/>
+<spring:message code="articleList.header" var="articleList_header"/>
+<spring:message code="articleList.visits" var="articleList_visits"/>
+<spring:message code="articleList.addNew" var="articleList_addNew"/>
+<%--<spring:message code="" var=""/>--%>
 
-<h2><spring:message code="articleList.header"/></h2>
+
+<div class="add-new-article"><a href="<c:url value="/article/create"/>">${articleList_addNew}</a></div>
+<h2>${articleList_header}</h2>
 
 
 <c:forEach items="${articles}" var="article">
@@ -21,7 +27,8 @@
                 </h3></td>
             </tr>
             <tr>
-                <td class="article-date"><fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/></td>
+                <td class="article-date"><fmt:formatDate value="${article.createDate}" pattern="${dateFormatPattern}"/></td>
+                <%--<td class="article-date"><fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/></td>--%>
             </tr>
             <tr>
                 <td class="article-image"><img src="<c:url value="/user/${article.author.login}/avatar"/>" width="24" height="24"/></td>
@@ -30,7 +37,7 @@
                 <td class="article-description">${article.description}</td>
             </tr>
             <tr>
-                <td class="article-visits">Number of Visits: ${fn:length(article.visitors)}</td>
+                <td class="article-visits">${articleList_visits} ${fn:length(article.visitors)}</td>
             </tr>
         </table>
     </fieldset>

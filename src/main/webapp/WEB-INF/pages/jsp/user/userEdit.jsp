@@ -90,6 +90,8 @@
             <form:label path="birthDay">
                 <spring:message code="label.birthDay"/> <form:errors path="birthDay" cssClass="error" />
             </form:label>
+            <%--<c:set var="formattedStartDate"><fmt:formatDate value="${article.createDate}" pattern="${dateFormatPattern}"/></c:set>--%>
+            <%--<input path="${formattedStartDate}" disabled="${disabledEdit}" />--%>
             <form:input path="birthDay" disabled="${disabledEdit}" />
 
             <form:label path="avatarImage">

@@ -1,6 +1,6 @@
 JavaSite
 ========
-####it was tasted only with `Chrome browser`####
+####it was test only with `Google Chrome browser`####
 
 practice with Spring to make web application
 ```

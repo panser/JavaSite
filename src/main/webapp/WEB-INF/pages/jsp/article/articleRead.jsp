@@ -5,6 +5,15 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<spring:message code="date_format_pattern_long" var="dateFormatPattern"/>
+<spring:message code="articleRead.createDate" var="articleRead_createDate"/>
+<spring:message code="articleRead.visits" var="articleRead_visits"/>
+<spring:message code="articleRead.uniqueVisits" var="articleRead_uniqueVisits"/>
+<spring:message code="articleRead.edit" var="articleRead_edit"/>
+<spring:message code="articleRead.delete" var="articleRead_delete"/>
+<%--<spring:message code="" var=""/>--%>
+
+
 <c:set var="enabledEdit">false</c:set>
 <security:authorize access="isAuthenticated()">
     <c:set var="username"><security:authentication property="principal.username"/></c:set>
@@ -25,22 +34,22 @@
 </p>
 <p>
     <div id="date" style="width:50%;float:left;color:coral">
-        <label>Create date: </label>
-        <fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/>
+        <label>${articleRead_createDate} </label>
+        <fmt:formatDate value="${article.createDate}" pattern="${dateFormatPattern}"/>
     </div>
     <div id="countUniqueVisitors" style="width:25%;float:right;color:coral">
-        <label>Unique visitors: </label>
+        <label>${articleRead_uniqueVisits} </label>
         ${countUniqueVisitors}
     </div>
     <div id="countVisitors" style="width:25%;float:right;color:coral">
-        <label>Views: </label>
+        <label>${articleRead_visits} </label>
         ${countVisitors}
     </div>
 </p>
 
 <c:if test="${enabledEdit}">
-    <td><a href="<c:url value="/article/${article.id}/edit"/>">Edit</a></td>
-    <td><a href="<c:url value="/article/${article.id}/delete"/>">Delete</a></td>
+    <td><a href="<c:url value="/article/${article.id}/edit"/>">${articleRead_edit}</a></td>
+    <td><a href="<c:url value="/article/${article.id}/delete"/>">${articleRead_delete}</a></td>
 </c:if>
 
 

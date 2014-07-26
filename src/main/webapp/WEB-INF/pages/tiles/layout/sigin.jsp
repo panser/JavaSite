@@ -6,6 +6,10 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<spring:message code="signIN.en" var="signIN_en"/>
+<spring:message code="signIN.ru" var="signIN_ru"/>
+<%--<spring:message code="" var=""/>--%>
+
 <security:authorize access="!isAuthenticated()">
     <c:url value="/auth/login" var="url"/>
     <a class="login-button" href="<c:out value='${url}'/>">
@@ -35,6 +39,6 @@
     </p>
 </security:authorize>
 <br/>
-<a href="?lang=en">en</a>
+<a href="?lang=en">${signIN_en}</a>
 |
-<a href="?lang=ru">ru</a>
+<a href="?lang=ru">${signIN_ru}</a>

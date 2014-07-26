@@ -6,10 +6,29 @@
 
 <spring:message code="date_format_pattern" var="dateFormatPattern"/>
 <spring:message code="date_format_patternJS" var="dateFormatPatternJS"/>
-<spring:message code="label_contact_new" var="labelContactNew"/>
-<spring:message code="label_contact_update" var="labelContactUpdate"/>
-<spring:message code="button.save" var="sfButton_save"/>
-<spring:message code="button.add" var="sfButton_add"/>
+<spring:message code="userEdit.new" var="userEdit_new"/>
+<spring:message code="userEdit.update" var="userEdit_update"/>
+<spring:message code="button.save" var="button_save"/>
+<spring:message code="button.add" var="button_add"/>
+<spring:message code="button.back" var="button_back"/>
+<spring:message code="userEdit.title" var="userEdit_title"/>
+<spring:message code="label.login" var="label_login"/>
+<spring:message code="label.email" var="label_email"/>
+<spring:message code="label.password" var="label_password"/>
+<spring:message code="label.birthDay" var="label_birthDay"/>
+<spring:message code="label.avatarImage" var="label_avatarImage"/>
+<spring:message code="radiobutton.sex" var="radiobutton_sex"/>
+<spring:message code="radiobutton.sexMale" var="radiobutton_sexMale"/>
+<spring:message code="radiobutton.sexFemale" var="radiobutton_sexFemale"/>
+<spring:message code="radiobutton.newsletter" var="radiobutton_newsletter"/>
+<spring:message code="radiobutton.newsletterYes" var="radiobutton_newsletterYes"/>
+<spring:message code="radiobutton.newsletterNo" var="radiobutton_newsletterNo"/>
+<spring:message code="userEdit.secInformation" var="userEdit_secInformation"/>
+<spring:message code="label.role" var="label_role"/>
+<spring:message code="radiobutton.enabled" var="radiobutton_enabled"/>
+<spring:message code="radiobutton.enabledYes" var="radiobutton_enabledYes"/>
+<spring:message code="radiobutton.enabledNo" var="radiobutton_enabledNo"/>
+<%--<spring:message code="" var=""/>--%>
 
 
 
@@ -33,8 +52,8 @@
     <c:set var="disabledEdit">false</c:set>
 </security:authorize>
 
-<spring:eval expression="user.id == null ? labelContactNew:labelContactUpdate" var="formTitle"/>
-<spring:eval expression="user.id == null ? sfButton_add:sfButton_save" var="sfButtonNew"/>
+<spring:eval expression="user.id == null ? userEdit_new:userEdit_update" var="formTitle"/>
+<spring:eval expression="user.id == null ? button_add:button_save" var="sfButtonNew"/>
 <c:choose>
     <c:when test="${user['new']}">
         <c:set var="method" value="post"/>
@@ -61,9 +80,9 @@
             <%--<form:input type="hidden" path="id" />--%>
             <%--<form:input type="hidden" path="version"/>--%>
 
-            <legend>Personal Info</legend>
+            <legend>${userEdit_title}</legend>
             <form:label path="login">
-                <spring:message code="label.login"/> <form:errors path="login" cssClass="error" />
+                ${label_login} <form:errors path="login" cssClass="error" />
             </form:label>
             <c:choose>
                 <c:when test="${user['new']}">
@@ -78,61 +97,61 @@
             </c:choose>
 
             <form:label path="email">
-                <spring:message code="label.email"/> <form:errors path="email" cssClass="error" />
+                ${label_email} <form:errors path="email" cssClass="error" />
             </form:label>
             <form:input path="email" disabled="${disabledEdit}" />
 
             <form:label path="password">
-                <spring:message code="label.password"/> <form:errors path="password" cssClass="error" />
+                ${label_password} <form:errors path="password" cssClass="error" />
             </form:label>
             <form:input path="password" disabled="${disabledEdit}" />
 
             <form:label path="birthDay">
-                <spring:message code="label.birthDay"/> <form:errors path="birthDay" cssClass="error" />
+                ${label_birthDay} <form:errors path="birthDay" cssClass="error" />
             </form:label>
             <%--<c:set var="formattedStartDate"><fmt:formatDate value="${article.createDate}" pattern="${dateFormatPattern}"/></c:set>--%>
             <%--<input path="${formattedStartDate}" disabled="${disabledEdit}" />--%>
             <form:input path="birthDay" disabled="${disabledEdit}" />
 
             <form:label path="avatarImage">
-                <spring:message code="label.avatarImage"/> <form:errors path="avatarImage" cssClass="error" />
+                ${label_avatarImage} <form:errors path="avatarImage" cssClass="error" />
             </form:label>
             <form:input type="file" path="avatarImage" disabled="${disabledEdit}" />
 
             <fieldset>
-                <legend>Sex:</legend>
-                <label><form:radiobutton path="sex" value="Male" />Male</label>
-                <label><form:radiobutton path="sex" value="Female" /> Female</label>
+                <legend>${radiobutton_sex}</legend>
+                <label><form:radiobutton path="sex" value="Male" />${radiobutton_sexMale}</label>
+                <label><form:radiobutton path="sex" value="Female" /> ${radiobutton_sexFemale}</label>
             </fieldset>
         </fieldset>
 
 
         <fieldset>
-            <legend>Subscribe to Newsletter?</legend>
-            <label><form:radiobutton path="receiveNewsletter" value="1"/> Yes</label>
-            <label><form:radiobutton path="receiveNewsletter" value="0"/> No</label>
+            <legend>${radiobutton_newsletter}</legend>
+            <label><form:radiobutton path="receiveNewsletter" value="1"/> ${radiobutton_newsletterYes}</label>
+            <label><form:radiobutton path="receiveNewsletter" value="0"/> ${radiobutton_newsletterNo}</label>
         </fieldset>
 
         <security:authorize access="hasRole('ROLE_ADMIN')">
             <fieldset>
-                <legend>Security information:</legend>
+                <legend>${userEdit_secInformation}</legend>
 
-                <label>Role:</label>
+                <label>${label_role}</label>
                 <form:select path="role">
                     <form:options items="${roleList}" />
                 </form:select>
 
                 <fieldset>
-                    <legend>Enabled:</legend>
-                    <label><form:radiobutton path="enabled" value="1" />enabled</label>
-                    <label><form:radiobutton path="enabled" value="0" /> disabled</label>
+                    <legend>${radiobutton_enabled}</legend>
+                    <label><form:radiobutton path="enabled" value="1" />${radiobutton_enabledYes}</label>
+                    <label><form:radiobutton path="enabled" value="0" /> ${radiobutton_enabledNo}</label>
                 </fieldset>
             </fieldset>
         </security:authorize>
 
         <br/>
         <input name="commit" type="submit" value="${sfButtonNew}"/>
-        <input type="button" class="back-button" onclick="history.back();" value="<spring:message code="button.back" />"/>
+        <input type="button" class="back-button" onclick="history.back();" value="${button_back}"/>
         <security:csrfInput/>
 
 </form:form>

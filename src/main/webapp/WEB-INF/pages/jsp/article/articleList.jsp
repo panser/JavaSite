@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<spring:message code="date_format_pattern" var="dateFormatPattern"/>
+<spring:message code="date_format_pattern_long" var="dateFormatPattern"/>
 <spring:message code="articleList.header" var="articleList_header"/>
 <spring:message code="articleList.visits" var="articleList_visits"/>
 <spring:message code="articleList.addNew" var="articleList_addNew"/>

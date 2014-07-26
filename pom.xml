@@ -53,20 +53,20 @@
             <properties>
                 <type>develop</type>
             </properties>
+<!--
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+-->
         </profile>
         <profile>
             <id>release</id>
             <properties>
                 <type>release</type>
             </properties>
-<!--
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
--->
         </profile>
     </profiles>
 
@@ -492,7 +492,7 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
-                    <port>8082</port>
+                    <port>8084</port>
                     <address>0.0.0.0</address>
                     <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
@@ -524,7 +524,7 @@
                 <configuration>
                     <connectors>
                         <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8082</port>
+                            <port>8083</port>
                             <maxIdleTime>60000</maxIdleTime>
                         </connector>
                     </connectors>

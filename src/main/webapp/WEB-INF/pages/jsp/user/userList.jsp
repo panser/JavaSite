@@ -6,25 +6,34 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <spring:message code="date_format_pattern" var="dateFormatPattern"/>
+<spring:message code="userList.header" var="userList_header"/>
+<spring:message code="userList.add" var="userList_add"/>
+<spring:message code="userList.login" var="userList_login"/>
+<spring:message code="userList.email" var="userList_email"/>
+<spring:message code="userList.password" var="userList_password"/>
+<spring:message code="userList.birtday" var="userList_birtday"/>
+<spring:message code="userList.delete" var="userList_delete"/>
+<%--<spring:message code="" var=""/>--%>
 
 
-<h2><spring:message code="userList.header"/></h2>
+
+<h2>${userList_header}</h2>
 
 <c:if test="${not empty message}">
     <div id="message" class="success">${message}</div>
 </c:if>
 
 <security:authorize access="hasRole('ROLE_ADMIN')">
-    <a href="<c:url value="/user/add"/>">Add user</a>
+    <a href="<c:url value="/user/add"/>">${userList_add}</a>
 </security:authorize>
 
 <table border="1">
     <tr>
         <td></td>
-        <td>Login</td>
-        <td>Email</td>
-        <td>Password</td>
-        <td>BirthDay</td>
+        <td>${userList_login}</td>
+        <td>${userList_email}</td>
+        <td>${userList_password}</td>
+        <td>${userList_birtday}</td>
         <td></td>
     </tr>
     <c:forEach items="${users}" var="user">
@@ -45,7 +54,7 @@
             <td>${user.password}   </td>
             <td><fmt:formatDate value="${user.birthDay}" pattern="${dateFormatPattern}"/>   </td>
             <c:if test="${enabledEdit}">
-                <td><a href="<c:url value="/user/${user.login}/delete"/>">Delete</a>   </td>
+                <td><a href="<c:url value="/user/${user.login}/delete"/>">${userList_delete}</a>   </td>
             </c:if>
 
         </tr>

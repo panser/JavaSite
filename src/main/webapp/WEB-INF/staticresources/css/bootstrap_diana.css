@@ -371,7 +371,7 @@ h6,
     font-family: inherit;
     font-weight: 500;
     line-height: 1.1;
-    color: inherit;
+    color: #000;
 }
 h1 small,
 h2 small,
@@ -5797,14 +5797,14 @@ button.close {
 
 #sigin {
     background-color:#CFF09E;
-    height:100px;
+    height:130px;
     width:10%;
     float:left;
 }
 
 #header {
     background-color:#CFF09E;
-    height:100px;
+    height:130px;
     width:90%;
     float:left;
     padding-left: 15px;
@@ -5912,7 +5912,10 @@ button.close {
 
 .article-title {
     padding: 0 0 3px 10px;
-    background-color: #E8F6F1;
+    background-color: transparent;
+    font-size: 40px;
+    color: #0B486B;
+    font-family: Great Vibes, cursive!important;
 }
 .article-description,
 .article-visits,
@@ -5927,7 +5930,7 @@ button.close {
 }
 
 .main-header {
-    width:700px;
+    width:785px;
     margin: auto;
 }
 

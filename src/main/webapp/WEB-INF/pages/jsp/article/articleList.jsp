@@ -28,7 +28,6 @@
             </tr>
             <tr>
                 <td class="article-date"><fmt:formatDate value="${article.createDate}" pattern="${dateFormatPattern}"/></td>
-                <%--<td class="article-date"><fmt:formatDate value="${article.createDate}" type="both" dateStyle="short" timeStyle="short"/></td>--%>
             </tr>
             <tr>
                 <td class="article-image"><img src="<c:url value="/user/${article.author.login}/avatar"/>" width="24" height="24"/></td>

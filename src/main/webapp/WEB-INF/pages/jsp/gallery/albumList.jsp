@@ -6,8 +6,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<spring:message code="date_format_pattern" var="dateFormatPattern"/>
-
+<spring:message code="date_format_pattern_long" var="dateFormatPattern"/>
+<spring:message code="albumList.header" var="albumList_header"/>
+<spring:message code="albumList.name" var="albumList_name"/>
+<spring:message code="albumList.desc" var="albumList_desc"/>
+<spring:message code="albumList.publicAccess" var="albumList_publicAccess"/>
+<spring:message code="albumList.countImage" var="albumList_countImage"/>
+<spring:message code="albumList.createDate" var="albumList_createDate"/>
+<spring:message code="albumList.delete" var="albumList_delete"/>
+<spring:message code="albumList.addName" var="albumList_addName"/>
+<spring:message code="albumList.addAlbum" var="albumList_addAlbum"/>
+<%--<spring:message code="" var=""/>--%>
 
 <%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
@@ -20,17 +29,17 @@
 </security:authorize>
 
 
-Album List of user: <b>${login}</b>
+${albumList_header} <b>${login}</b>
 
 <c:if test="${fn:length(albums) != 0}">
     <table border="1">
         <tr>
             <td></td>
-            <td>Name</td>
-            <td>Description</td>
-            <td>PublicAccess</td>
-            <td>Count images</td>
-            <td>CreateDate</td>
+            <td>${albumList_name}</td>
+            <td>${albumList_desc}</td>
+            <td>${albumList_publicAccess}</td>
+            <td>${albumList_countImage}</td>
+            <td>${albumList_createDate}</td>
             <c:if test="${disabledEdit=='false'}">
                 <td></td>
             </c:if>
@@ -53,7 +62,7 @@ Album List of user: <b>${login}</b>
                 <td>${fn:length(album.images)}</td>
                 <td><fmt:formatDate value="${album.createDate}" pattern="${dateFormatPattern}"/>   </td>
                 <c:if test="${disabledEdit=='false'}">
-                    <td><a href="<c:url value="/gallery/${login}/${album.name}?delete"/>">Delete</a>   </td>
+                    <td><a href="<c:url value="/gallery/${login}/${album.name}?delete"/>">${albumList_delete}</a>   </td>
                 </c:if>
 
             </tr>
@@ -65,12 +74,12 @@ Album List of user: <b>${login}</b>
     <fieldset>
         <sf:form name="f" method="POST" modelAttribute="albumNew">
             <p>
-                <sf:label path="name">Name: </sf:label>
+                <sf:label path="name">${albumList_addName} </sf:label>
                 <sf:input path="name"/>
                 <sf:errors path="name"/>
             </p>
             <security:csrfInput/>
-            <input name="commit" type="submit" value="Add album"/>
+            <input name="commit" type="submit" value="${albumList_addAlbum}"/>
         </sf:form>
     </fieldset>
 </c:if>

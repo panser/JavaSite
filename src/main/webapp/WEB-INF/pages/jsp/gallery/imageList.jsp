@@ -5,6 +5,10 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<spring:message code="imageList.upload" var="imageList_upload"/>
+<%--<spring:message code="" var=""/>--%>
+
+
 <%--<c:set var="disabledEdit">false</c:set>--%>
 <c:set var="disabledEdit">true</c:set>
 <security:authorize access="isAuthenticated()">
@@ -28,7 +32,7 @@
         <c:if test="${disabledEdit=='false'}">
             <sf:form id="html5_upload" method="POST" enctype="multipart/form-data">
                 <input type="file" name="files" id="files" multiple="multiple"/>
-                <input type="submit" value="Upload"/>
+                <input type="submit" value="${imageList_upload}"/>
             </sf:form>
         </c:if>
     </div>

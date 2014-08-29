@@ -53,20 +53,20 @@
             <properties>
                 <type>develop</type>
             </properties>
-<!--
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
--->
         </profile>
         <profile>
             <id>release</id>
             <properties>
                 <type>release</type>
             </properties>
+<!--
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+-->
         </profile>
     </profiles>
 
@@ -492,7 +492,7 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
-                    <port>8084</port>
+                    <port>8085</port>
                     <address>0.0.0.0</address>
                     <uriEncoding>UTF-8</uriEncoding>
                 </configuration>

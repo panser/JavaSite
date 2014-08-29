@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3334759754">
+  <component name="DataSourceManagerImpl" format="xml" hash="2453023609">
     <data-source source="LOCAL" name="MySQL - javasite@192.168.1.102" uuid="c7b380fb-c382-4a22-966c-f0adf01f8429">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
@@ -14,7 +14,7 @@
       </driver-properties>
       <libraries />
     </data-source>
-    <data-source source="LOCAL" name="MySQL - @localhost2" uuid="c9845ed7-8064-4f7b-a228-2f605a153b8b">
+    <data-source source="LOCAL" name="MySQL - @localhost" uuid="c9845ed7-8064-4f7b-a228-2f605a153b8b">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>

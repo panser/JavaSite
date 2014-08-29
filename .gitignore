@@ -1,5 +1,5 @@
-.idea/
-upload/
-webAppRootKey_IS_UNDEFINED/
-JavaSite.iml
-target/
+/*
+!/src
+!.gitignore
+!pom.xml
+!README.md

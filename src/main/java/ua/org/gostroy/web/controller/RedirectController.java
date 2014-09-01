@@ -17,7 +17,7 @@ public class RedirectController {
 
     @RequestMapping
     public String root(HttpServletRequest request){
-        return "redirect:/article/";
+        return "redirect:/main/index";
     }
 
     @RequestMapping(value = {"article"})

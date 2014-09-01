@@ -5863,7 +5863,7 @@ button.close {
     width: 100%;
 }
 
-.sidebar {
+.body_\/WEB-INF\/pages\/jsp\/main\/category\.jsp {
     padding: 15px 10px;
     width: 20%;
     float: left;
@@ -5897,10 +5897,10 @@ button.close {
     height: 50px;
 }
 
-.sidebar-menu ul {
+.body_\/WEB-INF\/pages\/jsp\/main\/category\.jsp-menu ul {
     list-style-type: none;
 }
-.sidebar-menu {
+.body_\/WEB-INF\/pages\/jsp\/main\/category\.jsp-menu {
     border: 1px solid #69CF6D;
 }
 

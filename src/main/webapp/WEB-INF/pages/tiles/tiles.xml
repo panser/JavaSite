@@ -3,11 +3,19 @@
 <tiles-definitions>
     <definition name="baseLayout" template="/WEB-INF/pages/tiles/layout/layout.jsp">
         <put-attribute name="title" value="Simple Tiles page (baseLayout)" />
-        <put-attribute name="header" value="/WEB-INF/pages/tiles/layout/header.jsp" />
-        <put-attribute name="sigin" value="/WEB-INF/pages/tiles/layout/sigin.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/pages/tiles/layout/menu.jsp" />
-        <put-attribute name="category" value="/WEB-INF/pages/tiles/layout/category.jsp" />
-        <put-attribute name="footer" value="/WEB-INF/pages/tiles/layout/footer.jsp" />
+        <put-attribute name="header" value="/WEB-INF/pages/jsp/main/header.jsp" />
+        <put-attribute name="sigin" value="/WEB-INF/pages/jsp/main/sigin.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/pages/jsp/main/menu.jsp" />
+        <!--<put-attribute name="category" value="/WEB-INF/pages/jsp/main/category.jsp" />-->
+        <put-attribute name="footer" value="/WEB-INF/pages/jsp/main/footer.jsp" />
+    </definition>
+
+    <definition name="/main/*" extends="baseLayout">
+        <put-attribute name="title" value="Main" />
+        <!--<put-attribute name="category" value="" />-->
+        <put-list-attribute name="body">
+            <add-attribute value="/WEB-INF/pages/jsp/main/{1}.jsp" />
+        </put-list-attribute>
     </definition>
 
     <definition name="/auth/*" extends="baseLayout">
@@ -26,8 +34,10 @@
 
     <definition name="/article/*" extends="baseLayout">
         <put-attribute name="title" value="Article" />
+        <!--<put-attribute name="category" value="/WEB-INF/pages/jsp/main/category.jsp" />-->
         <put-list-attribute name="body">
             <add-attribute value="/WEB-INF/pages/jsp/article/{1}.jsp" />
+            <add-attribute value="/WEB-INF/pages/jsp/main/category.jsp" />
         </put-list-attribute>
     </definition>
     <definition name="/article/articleRead" extends="baseLayout">

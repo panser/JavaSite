@@ -9,79 +9,75 @@
     <html>
     <head>
 
-        <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.css"/>'>
-        <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/jquery-ui/1.10.4/themes/base/jquery.ui.all.css"/>'>
+            <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.css"/>'>
+            <link rel='stylesheet' type='text/css' href='<c:url value="/webjars/jquery-ui/1.10.4/themes/base/jquery.ui.all.css"/>'>
 
-        <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/thisProject.css"/>">
-        <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/bootstrap_diana.css"/>">
+            <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
+            <link rel="stylesheet" href="<c:url value="/resources/css/codeacademy_main.css"/>">
 
-
-
-        <script src="<c:url value="/webjars/jquery/2.1.1/jquery.js"/>"></script>
-        <script src="<c:url value="/webjars/jquery-ui/1.10.4/ui/jquery-ui.js"/>"></script>
-        <script src="<c:url value="/webjars/jquery-form/3.28.0-2013.02.06/jquery.form.js"/>"></script>
-        <script src="<c:url value="/webjars/ckeditor/4.4.1/ckeditor.js"/>"></script>
-        <script src="<c:url value="/webjars/ckeditor/4.4.1/adapters/jquery.js"/>"></script>
+            <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/thisProject.css"/>">
+            <link rel='stylesheet' type='text/css' href="<c:url value="/resources/css/bootstrap_diana.css"/>">
 
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <meta name="_csrf" content="${_csrf.token}"/>
-        <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-        <title><tiles:insertAttribute name="title" ignore="true"/></title>
+            <script src="<c:url value="/webjars/jquery/2.1.1/jquery.js"/>"></script>
+            <script src="<c:url value="/webjars/jquery-ui/1.10.4/ui/jquery-ui.js"/>"></script>
+            <script src="<c:url value="/webjars/jquery-form/3.28.0-2013.02.06/jquery.form.js"/>"></script>
+            <script src="<c:url value="/webjars/ckeditor/4.4.1/ckeditor.js"/>"></script>
+            <script src="<c:url value="/webjars/ckeditor/4.4.1/adapters/jquery.js"/>"></script>
+
+
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="">
+            <meta name="author" content="">
+            <meta name="_csrf" content="${_csrf.token}"/>
+            <meta name="_csrf_header" content="${_csrf.headerName}"/>
+
+            <title><tiles:insertAttribute name="title" ignore="true"/></title>
 
 
     </head>
     <body>
 
-    <div id="container" class="container-fluid">
+        <div id="container" class="container-fluid">
 
-    <!--Header-->
-        <div id="header">
-            <tiles:insertAttribute name="header"/>
-        </div>
-
-    <!--Login form-->
-        <div id="sigin">
-            <tiles:insertAttribute name="sigin"/>
-        </div>
-
-    <!--Navigation Bar-->
-        <div id="menu">
-            <tiles:insertAttribute name="menu"/>
-        </div>
+            <!--Header-->
+            <div id="header">
+                <tiles:insertAttribute name="header"/>
+            </div>
 </c:if>
 
-    <!--Body content-->
-<div class="container">
-        <div id="content" class="content">
-            <tilesx:useAttribute id="list" name="body" classname="java.util.List" />
-            <c:forEach var="item" items="${list}">
-                <tiles:insertAttribute value="${item}" flush="true" />
-                <br/>
-            </c:forEach>
-        </div>
+            <!--Body content-->
+            <div class="container">
+                <div id="content" class="content">
+                    <tilesx:useAttribute id="list" name="body" classname="java.util.List" />
+                    <c:forEach var="item" items="${list}">
+                        <%--<div class="body_${item}">--%>
+                            <tiles:insertAttribute value="${item}" flush="true"  />
+                        <%--</div>--%>
+                    </c:forEach>
+                </div>
 
-<!--Sidebar content-->
 <c:if test="${!ajaxRequest}">
-        <div id="category" class="sidebar">
-            <tiles:insertAttribute name="category"/>
+<%--
+                <!--Sidebar content-->
+                <div id="category" class="sidebar">
+                    <tiles:insertAttribute name="category"/>
+                </div>
+--%>
+
+                <div class="page-buffer"></div>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer">
+                <tiles:insertAttribute name="footer" />
+            </div>
+
+
         </div>
-
-    <div class="page-buffer"></div>
-    </div>
-
-<!-- Footer -->
-        <div id="footer">
-            <tiles:insertAttribute name="footer" />
-        </div>
-
-
- </div>
     </body>
     </html>
 </c:if>

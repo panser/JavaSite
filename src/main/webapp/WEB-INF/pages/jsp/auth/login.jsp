@@ -47,7 +47,7 @@
                 <td>
                     <input type="submit" value="${button_login}" />
                     <input type="button" class="back-button" onclick="history.back();" value="${button_back}" />
-                    <a href="<c:url value="/user/register"/> ">${button_register}</a>
+                    <%--<a href="<c:url value="/user/register"/> ">${button_register}</a>--%>
                 </td>
             </tr>
         </table>

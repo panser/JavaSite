@@ -2,6 +2,8 @@ JavaSite
 ========
 ####it was test only with `Google Chrome browser`####
 
+Common
+===========
 do practice with Spring to make web application
 
 > Server side: Java7, Spring, Spring MVC, Spring Security, Spring Data
@@ -24,3 +26,8 @@ Responsibilities and accomplishments:
 > - write project from scratch 
 
 > - get practice with Spring and common technologies
+
+
+Screenshots
+===========
+![](/screenshots/index.png)
